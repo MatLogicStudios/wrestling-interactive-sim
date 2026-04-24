@@ -7,7 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0d0d0d; color: #f5f5f5; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        html, body { height: 100%; margin: 0; }
+        body { 
+            background-color: #0d0d0d; 
+            color: #f5f5f5; 
+            font-family: 'Inter', sans-serif; 
+            display: flex;
+            flex-direction: column;
+        }
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
         .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); }
         
@@ -28,22 +35,24 @@
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
             border: 1px solid #333;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
-        /* Chat Lobby Overlay */
         #lobby-overlay { 
             display: none; 
             position: fixed; 
             inset: 0; 
-            background: rgba(0,0,0,0.95); 
+            background: rgba(0,0,0,0.98); 
             z-index: 100;
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen border-t-4 border-red-600">
+<body class="border-t-4 border-red-600">
 
-    <header class="p-6 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black text-left">
+    <header class="p-6 md:p-10 border-b border-neutral-900 flex justify-between items-center bg-black">
         <div>
             <div class="flex items-center gap-3 mb-1">
                 <h1 class="text-xl font-black tracking-tighter text-white heavyweight-font italic">
@@ -53,66 +62,71 @@
                     SYSTEM AUTHENTICATED
                 </span>
             </div>
-            <h2 class="text-3xl md:text-5xl heavyweight-font tracking-tight title-gradient">
+            <h2 class="text-3xl md:text-6xl heavyweight-font tracking-tight title-gradient">
                 WRESTLING INTERACTIVE SIM
             </h2>
         </div>
         
-        <button onclick="toggleLobby()" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-full text-sm tracking-widest transition lobby-pulse border border-red-500 shadow-lg shadow-red-900/20">
+        <button onclick="toggleLobby()" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-sm tracking-[0.2em] transition lobby-pulse border border-red-500 shadow-lg shadow-red-900/20">
             MAT LOBBY
         </button>
     </header>
 
-    <main class="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full">
+    <main class="flex-grow flex flex-col justify-center p-6 md:p-12 max-w-7xl mx-auto w-full">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="mat-border p-6 rounded-sm border-l-4 border-l-neutral-600">
-                <div class="text-xs text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
-                <div class="text-4xl heavyweight-font mt-2">0 / 12</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="mat-border p-8 rounded-sm border-l-4 border-l-neutral-600">
+                <div class="text-sm text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
+                <div class="text-5xl heavyweight-font mt-2">0 / 12</div>
             </div>
-            <div class="mat-border p-6 rounded-sm border-l-4 border-l-red-600">
-                <div class="text-xs text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
-                <div class="text-4xl heavyweight-font mt-2 text-red-600 italic">0 - 0</div>
+            <div class="mat-border p-8 rounded-sm border-l-4 border-l-red-600">
+                <div class="text-sm text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
+                <div class="text-5xl heavyweight-font mt-2 text-red-600 italic">0 - 0</div>
             </div>
-            <div class="mat-border p-6 rounded-sm border-l-4 border-l-green-600">
-                <div class="text-xs text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
-                <div class="text-4xl heavyweight-font mt-2 text-green-500">$500.00</div>
+            <div class="mat-border p-8 rounded-sm border-l-4 border-l-green-600">
+                <div class="text-sm text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
+                <div class="text-5xl heavyweight-font mt-2 text-green-500">$500.00</div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <button class="command-btn p-10 rounded-sm text-left group border-b-4 border-b-neutral-800">
-                <h3 class="text-3xl heavyweight-font mb-2 italic group-hover:text-white">Recruit Prospects</h3>
-                <p class="text-neutral-500 text-xs font-bold uppercase tracking-widest">Acquire new technical prospects for your roster.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[300px]">
+            <button class="command-btn p-12 rounded-sm text-left group border-b-8 border-b-neutral-800">
+                <h3 class="text-5xl heavyweight-font mb-4 italic group-hover:text-white">RECRUIT</h3>
+                <p class="text-neutral-400 text-sm md:text-base font-bold uppercase tracking-widest leading-relaxed">
+                    Scan the technical circuit to acquire elite prospects for your roster.
+                </p>
             </button>
 
-            <button class="command-btn p-10 rounded-sm text-left group border-b-4 border-b-red-900">
-                <h3 class="text-3xl heavyweight-font mb-2 italic text-red-600 group-hover:text-red-500">Enter The Mat</h3>
-                <p class="text-neutral-500 text-xs font-bold uppercase tracking-widest">Initiate technical match simulation.</p>
+            <button class="command-btn p-12 rounded-sm text-left group border-b-8 border-b-red-900">
+                <h3 class="text-5xl heavyweight-font mb-4 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
+                <p class="text-neutral-400 text-sm md:text-base font-bold uppercase tracking-widest leading-relaxed">
+                    Initiate high-stakes match simulations and test your stable's logic.
+                </p>
             </button>
         </div>
     </main>
 
     <div id="lobby-overlay" class="flex flex-col items-center justify-center p-6 text-center">
-        <div class="max-w-2xl w-full mat-border p-10 rounded-lg bg-neutral-900 border-t-8 border-t-red-600">
-            <h3 class="heavyweight-font text-5xl mb-4 text-white">MAT LOBBY</h3>
-            <p class="text-red-600 uppercase tracking-[0.3em] font-bold italic mb-8">Authenticity is the core of the logic.</p>
+        <div class="max-w-3xl w-full mat-border p-12 rounded-lg bg-neutral-900 border-t-8 border-t-red-600 shadow-2xl">
+            <h3 class="heavyweight-font text-6xl mb-4 text-white">MAT LOBBY</h3>
+            <p class="text-red-600 text-xl uppercase tracking-[0.3em] font-bold italic mb-10">Authenticity is the core of the logic.</p>
             
-            <div class="bg-black/50 p-6 rounded mb-8 border border-neutral-800 h-48 flex items-center justify-center">
-                <p class="text-neutral-500 font-mono text-sm uppercase tracking-widest animate-pulse">Establishing secure comm link...</p>
+            <div class="bg-black/80 p-10 rounded mb-10 border border-neutral-800 h-64 flex flex-col items-center justify-center">
+                <div class="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-6"></div>
+                <p class="text-neutral-400 font-mono text-sm uppercase tracking-[0.4em]">Establishing Secure Comm Link...</p>
             </div>
 
-            <button onclick="toggleLobby()" class="border border-neutral-700 px-10 py-4 heavyweight-font text-neutral-400 hover:text-white hover:border-white transition">
-                Return to Command
+            <button onclick="toggleLobby()" class="border-2 border-neutral-700 px-12 py-5 heavyweight-font text-neutral-400 hover:text-white hover:border-red-600 hover:bg-red-900/10 transition rounded-sm">
+                Return to Mat Logic
             </button>
         </div>
     </div>
 
-    <footer class="p-6 border-t border-neutral-900 text-center mt-auto">
-        <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">
-            MAT LOGIC STUDIOS // COMMAND CENTER v1.8
+    <footer class="p-10 border-t border-neutral-900 text-center bg-black">
+        <p class="text-[12px] text-neutral-500 uppercase tracking-[0.5em] font-black mb-2">
+            © 2026 MAT LOGIC STUDIOS // SYSTEM v2.0
         </p>
-        <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">
+        <p class="text-[11px] text-red-600 uppercase tracking-widest font-bold italic">
             Authenticity: The Ultimate Tactical Advantage.
         </p>
     </footer>
