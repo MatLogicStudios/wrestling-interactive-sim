@@ -17,15 +17,12 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Enhanced Breathing Pulse */
-        @keyframes heartbeat {
-            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
-            50% { transform: scale(1.05); opacity: 0.8; box-shadow: 0 0 20px 5px rgba(185, 28, 28, 0.4); }
-            100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(185, 28, 28, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
         }
-        .lobby-pulse {
-            animation: heartbeat 2.5s ease-in-out infinite;
-        }
+        .lobby-pulse { animation: pulse-red 2s infinite; }
 
         .command-btn { 
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
@@ -33,22 +30,26 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
+        #recruit-modal { display: none; background: rgba(0,0,0,0.9); }
     </style>
 </head>
 <body class="flex flex-col min-h-screen border-t-4 border-red-600">
 
     <header class="p-6 md:p-10 border-b border-neutral-900 flex justify-between items-center bg-black">
         <div>
-            <h1 class="text-xl font-black tracking-tighter text-white heavyweight-font italic mb-1">
-                MAT LOGIC <span class="text-red-600">SYSTEMS</span>
-            </h1>
+            <div class="flex items-center gap-3 mb-1">
+                <h1 class="text-xl font-black tracking-tighter text-white heavyweight-font italic">
+                    MAT LOGIC <span class="text-red-600">SYSTEMS</span>
+                </h1>
+                <span class="text-[10px] bg-neutral-800 text-neutral-400 px-2 py-0.5 font-bold uppercase tracking-widest border border-neutral-700">
+                    System Authenticated
+                </span>
+            </div>
             <h2 class="text-3xl md:text-5xl heavyweight-font tracking-tight title-gradient">
                 WRESTLING INTERACTIVE SIM
             </h2>
         </div>
-        
-        <button onclick="alert('LOBBY CONNECTION INITIATED... \nAuthenticity is the highest form of logic.')" 
-                class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-sm text-sm tracking-widest transition lobby-pulse border border-red-500">
+        <button onclick="alert('LOBBY ACCESS GRANTED...\nAuthenticity: The Ultimate Tactical Advantage.')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-sm text-sm tracking-widest transition lobby-pulse border border-red-500 shadow-lg shadow-red-900/20">
             MAT LOBBY
         </button>
     </header>
@@ -57,21 +58,21 @@
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <div class="mat-border p-6 rounded-sm border-l-4 border-l-neutral-600">
-                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest text-neutral-400">Stable Strength</div>
-                <div class="text-4xl heavyweight-font mt-2">0 / 12</div>
+                <div class="text-xs text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
+                <div id="stable-count" class="text-4xl heavyweight-font mt-2">0 / 12</div>
             </div>
             <div class="mat-border p-6 rounded-sm border-l-4 border-l-red-600">
-                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest text-neutral-400">Season Record</div>
+                <div class="text-xs text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
                 <div class="text-4xl heavyweight-font mt-2 text-red-600 italic">0 - 0</div>
             </div>
             <div class="mat-border p-6 rounded-sm border-l-4 border-l-green-600">
-                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest text-neutral-400">Total Credits</div>
-                <div class="text-4xl heavyweight-font mt-2 text-green-500">$500.00</div>
+                <div class="text-xs text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
+                <div id="credits" class="text-4xl heavyweight-font mt-2 text-green-500">$500.00</div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <button class="command-btn p-10 rounded-sm text-left group border-b-4 border-b-neutral-800">
+            <button onclick="openRecruit()" class="command-btn p-10 rounded-sm text-left group border-b-4 border-b-neutral-800">
                 <h3 class="text-3xl heavyweight-font mb-2 italic group-hover:text-white">Recruit Prospects</h3>
                 <p class="text-neutral-500 text-xs font-bold uppercase tracking-widest">Search technical circuit for new roster talent</p>
             </button>
@@ -84,11 +85,56 @@
 
     </main>
 
+    <div id="recruit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="mat-border bg-neutral-900 p-8 max-w-md w-full border-t-8 border-t-red-600 shadow-2xl">
+            <h4 class="heavyweight-font text-2xl text-white mb-6 border-b border-neutral-800 pb-2 italic">Scouting Report</h4>
+            <div class="space-y-4 mb-8 text-left">
+                <div class="flex justify-between"><span class="text-neutral-500 uppercase text-xs font-bold tracking-widest">Athlete Name:</span> <span id="r-name" class="heavyweight-font text-red-500">---</span></div>
+                <div class="flex justify-between"><span class="text-neutral-500 uppercase text-xs font-bold tracking-widest">Technical:</span> <span id="r-tech" class="font-mono text-white">0</span></div>
+                <div class="flex justify-between"><span class="text-neutral-500 uppercase text-xs font-bold tracking-widest">Stamina:</span> <span id="r-stam" class="font-mono text-white">0</span></div>
+                <div class="flex justify-between"><span class="text-neutral-500 uppercase text-xs font-bold tracking-widest">Contract Cost:</span> <span id="r-cost" class="text-green-500 font-mono">$0</span></div>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="closeRecruit()" class="flex-1 border border-neutral-700 py-3 uppercase text-xs font-black hover:bg-neutral-800 transition">Decline</button>
+                <button onclick="signWrestler()" class="flex-1 bg-red-700 py-3 uppercase text-xs font-black hover:bg-red-600 transition text-white">Sign Athlete</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="p-8 border-t border-neutral-900 text-center">
-        <p class="text-[10px] text-neutral-600 uppercase tracking-[0.3em] font-bold">
-            &copy; 2026 MAT LOGIC STUDIOS // V1.5 // AUTHENTICITY IS THE HIGHEST FORM OF LOGIC
+        <p class="text-[11px] text-neutral-400 uppercase tracking-[0.4em] font-black mb-1">
+            MAT LOGIC STUDIOS // COMMAND CENTER v1.7
+        </p>
+        <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">
+            Authenticity: The Ultimate Tactical Advantage.
         </p>
     </footer>
+
+    <script>
+        const names = ["Jackson 'The Hook' Reed", "Technical Tom", "Vince 'The Miller' Miller", "Silas 'The Snake'", "Caleb Stone"];
+        
+        function openRecruit() {
+            const name = names[Math.floor(Math.random() * names.length)];
+            const tech = Math.floor(Math.random() * 40) + 60;
+            const stam = Math.floor(Math.random() * 30) + 70;
+            const cost = Math.floor(Math.random() * 100) + 150;
+
+            document.getElementById('r-name').innerText = name;
+            document.getElementById('r-tech').innerText = tech + "%";
+            document.getElementById('r-stam').innerText = stam + "%";
+            document.getElementById('r-cost').innerText = "$" + cost;
+            document.getElementById('recruit-modal').style.display = 'flex';
+        }
+
+        function closeRecruit() {
+            document.getElementById('recruit-modal').style.display = 'none';
+        }
+
+        function signWrestler() {
+            alert('SYSTEM UPDATE:\nAthlete Signed to Stable.\nAuthenticity Confirmed.');
+            closeRecruit();
+        }
+    </script>
 
 </body>
 </html>
