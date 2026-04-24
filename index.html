@@ -8,37 +8,45 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0d0d0d; color: #f5f5f5; font-family: 'Inter', sans-serif; }
-        .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.02em; }
-        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.03); }
+        .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
+        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); }
+        
+        /* Tactical Gradient for Title */
+        .title-gradient {
+            background: linear-gradient(to right, #ffffff 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .command-btn { 
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
             border: 1px solid #333;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .status-glow { text-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen border-t-4 border-red-600">
 
-    <header class="p-8 border-b border-neutral-900 flex justify-between items-start bg-black">
+    <header class="p-6 md:p-10 border-b border-neutral-900 flex justify-between items-center bg-black">
         <div>
-            <h1 class="text-2xl font-black tracking-tighter text-white heavyweight-font italic">
+            <h1 class="text-xl font-black tracking-tighter text-white heavyweight-font italic mb-1">
                 MAT LOGIC <span class="text-red-600">SYSTEMS</span>
             </h1>
-            <h2 class="text-4xl md:text-6xl heavyweight-font text-neutral-200 mt-2 tracking-tight">
+            <h2 class="text-3xl md:text-5xl heavyweight-font tracking-tight title-gradient">
                 WRESTLING INTERACTIVE SIM
             </h2>
         </div>
-        <button class="text-xs font-bold border border-neutral-700 px-4 py-2 hover:bg-white hover:text-black transition uppercase tracking-widest">
+        
+        <button class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-sm text-sm tracking-widest transition shadow-lg shadow-red-900/20">
             MAT LOBBY
         </button>
     </header>
 
     <main class="flex-grow p-6 md:p-12 max-w-7xl mx-auto w-full">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-            <div class="mat-border p-6 rounded-sm border-l-4 border-l-neutral-700">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="mat-border p-6 rounded-sm border-l-4 border-l-neutral-600">
                 <div class="text-xs text-neutral-500 uppercase font-black tracking-widest">Stable Strength</div>
                 <div class="text-4xl heavyweight-font mt-2">0 / 12</div>
             </div>
@@ -55,12 +63,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <button class="command-btn p-10 rounded-sm text-left group border-b-4 border-b-neutral-800">
                 <h3 class="text-3xl heavyweight-font mb-2 italic group-hover:text-white">Recruit Prospects</h3>
-                <p class="text-neutral-500 text-sm font-medium uppercase tracking-wider">Search technical circuit for new roster talent</p>
+                <p class="text-neutral-500 text-xs font-bold uppercase tracking-widest">Search technical circuit for new roster talent</p>
             </button>
 
             <button class="command-btn p-10 rounded-sm text-left group border-b-4 border-b-red-900">
                 <h3 class="text-3xl heavyweight-font mb-2 italic text-red-600 group-hover:text-red-500">Enter The Mat</h3>
-                <p class="text-neutral-500 text-sm font-medium uppercase tracking-wider">Initiate high-stakes match simulation</p>
+                <p class="text-neutral-500 text-xs font-bold uppercase tracking-widest">Initiate high-stakes match simulation</p>
             </button>
         </div>
 
@@ -68,7 +76,7 @@
 
     <footer class="p-8 border-t border-neutral-900 text-center">
         <p class="text-[10px] text-neutral-600 uppercase tracking-[0.3em] font-bold">
-            &copy; 2026 MAT LOGIC STUDIOS // COMMAND CENTER v1.2 // THE MAT IS YOURS
+            &copy; 2026 MAT LOGIC STUDIOS // COMMAND CENTER v1.3 // THE MAT IS YOURS
         </p>
     </footer>
 
