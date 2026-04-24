@@ -11,11 +11,20 @@
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
         .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); }
         
-        /* Tactical Gradient for Title */
         .title-gradient {
-            background: linear-gradient(to right, #ffffff 0%, #ef4444 100%);
+            background: linear-gradient(to right, #ffffff 20%, #ef4444 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        /* The Pulse Animation */
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(185, 28, 28, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
+        }
+        .lobby-pulse {
+            animation: pulse-red 2s infinite;
         }
 
         .command-btn { 
@@ -38,7 +47,7 @@
             </h2>
         </div>
         
-        <button class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-sm text-sm tracking-widest transition shadow-lg shadow-red-900/20">
+        <button class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-sm text-sm tracking-widest transition lobby-pulse border border-red-500">
             MAT LOBBY
         </button>
     </header>
@@ -47,15 +56,15 @@
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <div class="mat-border p-6 rounded-sm border-l-4 border-l-neutral-600">
-                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest">Stable Strength</div>
+                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest text-neutral-400">Stable Strength</div>
                 <div class="text-4xl heavyweight-font mt-2">0 / 12</div>
             </div>
             <div class="mat-border p-6 rounded-sm border-l-4 border-l-red-600">
-                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest">Season Record</div>
+                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest text-neutral-400">Season Record</div>
                 <div class="text-4xl heavyweight-font mt-2 text-red-600 italic">0 - 0</div>
             </div>
             <div class="mat-border p-6 rounded-sm border-l-4 border-l-green-600">
-                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest">Total Credits</div>
+                <div class="text-xs text-neutral-500 uppercase font-black tracking-widest text-neutral-400">Total Credits</div>
                 <div class="text-4xl heavyweight-font mt-2 text-green-500">$500.00</div>
             </div>
         </div>
@@ -76,7 +85,7 @@
 
     <footer class="p-8 border-t border-neutral-900 text-center">
         <p class="text-[10px] text-neutral-600 uppercase tracking-[0.3em] font-bold">
-            &copy; 2026 MAT LOGIC STUDIOS // COMMAND CENTER v1.3 // THE MAT IS YOURS
+            &copy; 2026 MAT LOGIC STUDIOS // COMMAND CENTER v1.4 // THE MAT IS YOURS
         </p>
     </footer>
 
