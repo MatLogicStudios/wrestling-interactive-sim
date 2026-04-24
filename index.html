@@ -6,7 +6,7 @@
     <title>Wrestling Interactive Sim | Mat Logic Studios</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'Inter', sans-serif; }
+        body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .mat-border { border: 2px solid #262626; }
         .command-btn { 
             background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
@@ -14,103 +14,90 @@
             transition: all 0.2s ease;
         }
         .command-btn:hover { border-color: #ef4444; color: #fff; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
-        .modal { background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
+        #war-room { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .challenge-btn { font-size: 10px; border: 1px solid #991b1b; padding: 4px 8px; border-radius: 4px; color: #ef4444; font-weight: bold; }
+        .challenge-btn:hover { background: #991b1b; color: white; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+        .online { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+        .busy { background: #ef4444; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <header class="p-6 border-b border-neutral-800 flex justify-between items-center bg-black">
+    <header class="p-6 border-b border-neutral-800 flex justify-between items-center bg-black relative z-10">
         <h1 class="text-xl font-bold tracking-tighter text-white">MAT LOGIC <span class="text-red-600">SYSTEMS</span></h1>
-        <div class="text-xs uppercase tracking-widest text-neutral-500">Command Center v1.0</div>
+        <button onclick="toggleWarRoom()" class="px-4 py-2 bg-neutral-900 border border-neutral-700 rounded text-xs uppercase tracking-widest hover:bg-neutral-800">
+            Tactical Lobby
+        </button>
     </header>
 
     <main class="flex-grow p-4 md:p-10 max-w-6xl mx-auto w-full">
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center md:text-left">
             <div class="mat-border p-4 bg-neutral-900/50 rounded-lg">
-                <div class="text-xs text-neutral-500 uppercase text-[10px]">Stable Strength</div>
-                <div id="stable-count" class="text-2xl font-mono mt-1 text-white">0 / 12</div>
+                <div class="text-xs text-neutral-500 uppercase tracking-tighter">Stable Strength</div>
+                <div class="text-2xl font-mono mt-1">0 / 12</div>
             </div>
             <div class="mat-border p-4 bg-neutral-900/50 rounded-lg">
-                <div class="text-xs text-neutral-500 uppercase text-[10px]">Season Record</div>
-                <div class="text-2xl font-mono mt-1 text-red-500 italic">ACTIVE</div>
+                <div class="text-xs text-neutral-500 uppercase tracking-tighter">Season Record</div>
+                <div class="text-2xl font-mono mt-1 text-red-500">0 - 0</div>
             </div>
             <div class="mat-border p-4 bg-neutral-900/50 rounded-lg">
-                <div class="text-xs text-neutral-500 uppercase text-[10px]">Budget</div>
-                <div id="budget" class="text-2xl font-mono mt-1 text-green-500">$500.00</div>
+                <div class="text-xs text-neutral-500 uppercase tracking-tighter">Credits</div>
+                <div class="text-2xl font-mono mt-1 text-green-500">$500.00</div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <button onclick="recruitScout()" class="command-btn p-8 rounded-xl text-left group">
-                <h2 class="text-2xl font-bold mb-2 uppercase italic tracking-tight">Recruit Athletes</h2>
-                <p class="text-neutral-400 text-sm italic">Scan the circuit for new technical prospects.</p>
+            <button class="command-btn p-10 rounded-xl text-left border-neutral-800">
+                <h2 class="text-2xl font-bold mb-2 uppercase italic tracking-tight">Recruit</h2>
+                <p class="text-neutral-500 text-sm">Scan the circuit for technical prospects.</p>
             </button>
-
-            <button class="command-btn p-8 rounded-xl text-left border-red-900/30 opacity-50 cursor-not-allowed">
-                <h2 class="text-2xl font-bold mb-2 uppercase italic tracking-tight text-red-600 underline">Enter The Mat</h2>
-                <p class="text-neutral-400 text-sm">Match logic loading...</p>
+            <button class="command-btn p-10 rounded-xl text-left border-red-900/30">
+                <h2 class="text-2xl font-bold mb-2 uppercase italic tracking-tight text-red-600">The Mat</h2>
+                <p class="text-neutral-500 text-sm">Launch active match simulation.</p>
             </button>
         </div>
     </main>
 
-    <div id="scoutModal" class="hidden fixed inset-0 modal flex items-center justify-center p-4">
-        <div class="mat-border bg-neutral-900 p-8 rounded-2xl max-w-md w-full shadow-2xl">
-            <h3 class="text-red-600 uppercase tracking-tighter font-bold text-sm mb-4 italic">Scouting Report Found</h3>
-            <div id="scoutName" class="text-3xl font-bold text-white mb-6 uppercase">---</div>
-            
-            <div class="space-y-4 mb-8">
-                <div>
-                    <div class="flex justify-between text-xs mb-1 uppercase tracking-widest text-neutral-500">Technical Skill <span id="val1">0</span></div>
-                    <div class="w-full bg-neutral-800 h-1.5"><div id="bar1" class="bg-blue-500 h-1.5" style="width: 0%"></div></div>
-                </div>
-                <div>
-                    <div class="flex justify-between text-xs mb-1 uppercase tracking-widest text-neutral-500">Stamina <span id="val2">0</span></div>
-                    <div class="w-full bg-neutral-800 h-1.5"><div id="bar2" class="bg-green-500 h-1.5" style="width: 0%"></div></div>
-                </div>
-            </div>
-
-            <div class="flex gap-4">
-                <button onclick="signWrestler()" class="flex-grow bg-white text-black font-bold py-3 uppercase text-sm hover:bg-red-600 hover:text-white transition">Sign ($100)</button>
-                <button onclick="closeModal()" class="flex-grow border border-neutral-700 py-3 uppercase text-sm text-neutral-400 hover:bg-neutral-800">Pass</button>
+    <aside id="war-room" class="fixed top-0 right-0 h-full w-80 bg-neutral-950 border-l border-neutral-800 z-50 transform translate-x-full shadow-2xl flex flex-col">
+        <div class="p-4 border-b border-neutral-800 flex justify-between items-center bg-black">
+            <span class="text-xs font-bold uppercase tracking-widest text-red-600">Matchmaking Lobby</span>
+            <button onclick="toggleWarRoom()" class="text-neutral-500 hover:text-white">&times;</button>
+        </div>
+        
+        <div class="p-4 bg-neutral-900/30 border-b border-neutral-800">
+            <div class="flex justify-between items-center">
+                <span class="text-xs uppercase text-neutral-400">Your Status:</span>
+                <select id="statusSelect" onchange="updateStatus()" class="bg-black border border-neutral-700 text-xs rounded px-2 py-1 outline-none">
+                    <option value="online">Available</option>
+                    <option value="busy">Invisible / Busy</option>
+                </select>
             </div>
         </div>
-    </div>
+
+        <div class="p-4 text-xs font-bold text-neutral-600 uppercase border-b border-neutral-900">Active Managers</div>
+        
+        <div id="lobby-list" class="flex-grow p-2 overflow-y-auto space-y-2">
+            <div class="bg-neutral-900/50 p-3 rounded border border-neutral-800 flex justify-between items-center">
+                <div>
+                    <div class="text-sm font-bold text-neutral-200"><span class="status-dot online"></span>Manager_Alpha</div>
+                    <div class="text-[10px] text-neutral-500">Record: 14-2</div>
+                </div>
+                <button class="challenge-btn">INVITE</button>
+            </div>
+        </div>
+    </aside>
 
     <script>
-        let stable = 0;
-        let budget = 500;
-
-        function recruitScout() {
-            const names = ["Cade Miller", "Vance 'The Viper'", "Jaxson Rigg", "Colt 'The Hammer'", "Sterling Sage", "Gunnar Galt"];
-            const name = names[Math.floor(Math.random() * names.length)];
-            
-            const skill = Math.floor(Math.random() * 60) + 40;
-            const stamina = Math.floor(Math.random() * 70) + 30;
-
-            document.getElementById('scoutName').innerText = name;
-            document.getElementById('val1').innerText = skill;
-            document.getElementById('bar1').style.width = skill + "%";
-            document.getElementById('val2').innerText = stamina;
-            document.getElementById('bar2').style.width = stamina + "%";
-            
-            document.getElementById('scoutModal').classList.remove('hidden');
+        function toggleWarRoom() {
+            const warRoom = document.getElementById('war-room');
+            warRoom.classList.toggle('translate-x-full');
         }
 
-        function signWrestler() {
-            if (budget >= 100 && stable < 12) {
-                stable++;
-                budget -= 100;
-                document.getElementById('stable-count').innerText = stable + " / 12";
-                document.getElementById('budget').innerText = "$" + budget + ".00";
-                closeModal();
-            } else {
-                alert("Insufficient funds or stable full.");
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('scoutModal').classList.add('hidden');
+        function updateStatus() {
+            const status = document.getElementById('statusSelect').value;
+            // This is where we'll eventually send the "status" to the server
+            alert("Your status is now: " + status);
         }
     </script>
 </body>
