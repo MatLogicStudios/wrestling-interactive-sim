@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wrestling Interactive Sim | Mat Logic Studios</title>
+    <title>Wrestling Interactive Sim | Mat Logic Systems</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'Inter', sans-serif; overflow-x: hidden; }
@@ -25,14 +25,17 @@
 <body class="flex flex-col min-h-screen">
 
     <header class="p-6 border-b border-neutral-800 flex justify-between items-center bg-black relative z-10">
-        <h1 class="text-xl font-bold tracking-tighter text-white">MAT LOGIC <span class="text-red-600">SYSTEMS</span></h1>
+        <div>
+            <h1 class="text-xl font-bold tracking-tighter text-white">MAT LOGIC <span class="text-red-600">SYSTEMS</span></h1>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-semibold">Wrestling Interactive Sim</p>
+        </div>
         <button onclick="toggleWarRoom()" class="px-4 py-2 bg-neutral-900 border border-neutral-700 rounded text-xs uppercase tracking-widest hover:bg-neutral-800">
-            Tactical Lobby
+            Mat Lobby
         </button>
     </header>
 
     <main class="flex-grow p-4 md:p-10 max-w-6xl mx-auto w-full">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center md:text-left">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <div class="mat-border p-4 bg-neutral-900/50 rounded-lg">
                 <div class="text-xs text-neutral-500 uppercase tracking-tighter">Stable Strength</div>
                 <div class="text-2xl font-mono mt-1">0 / 12</div>
@@ -50,27 +53,27 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <button class="command-btn p-10 rounded-xl text-left border-neutral-800">
                 <h2 class="text-2xl font-bold mb-2 uppercase italic tracking-tight">Recruit</h2>
-                <p class="text-neutral-500 text-sm">Scan the circuit for technical prospects.</p>
+                <p class="text-neutral-500 text-sm font-light">Acquire new technical prospects for your roster.</p>
             </button>
             <button class="command-btn p-10 rounded-xl text-left border-red-900/30">
                 <h2 class="text-2xl font-bold mb-2 uppercase italic tracking-tight text-red-600">The Mat</h2>
-                <p class="text-neutral-500 text-sm">Launch active match simulation.</p>
+                <p class="text-neutral-500 text-sm font-light">Initiate technical match simulation.</p>
             </button>
         </div>
     </main>
 
     <aside id="war-room" class="fixed top-0 right-0 h-full w-80 bg-neutral-950 border-l border-neutral-800 z-50 transform translate-x-full shadow-2xl flex flex-col">
         <div class="p-4 border-b border-neutral-800 flex justify-between items-center bg-black">
-            <span class="text-xs font-bold uppercase tracking-widest text-red-600">Matchmaking Lobby</span>
+            <span class="text-xs font-bold uppercase tracking-widest text-red-600">Mat Lobby</span>
             <button onclick="toggleWarRoom()" class="text-neutral-500 hover:text-white">&times;</button>
         </div>
         
         <div class="p-4 bg-neutral-900/30 border-b border-neutral-800">
             <div class="flex justify-between items-center">
-                <span class="text-xs uppercase text-neutral-400">Your Status:</span>
-                <select id="statusSelect" onchange="updateStatus()" class="bg-black border border-neutral-700 text-xs rounded px-2 py-1 outline-none">
+                <span class="text-xs uppercase text-neutral-400">Manager Status:</span>
+                <select id="statusSelect" class="bg-black border border-neutral-700 text-xs rounded px-2 py-1 outline-none text-white">
                     <option value="online">Available</option>
-                    <option value="busy">Invisible / Busy</option>
+                    <option value="busy">Busy / DND</option>
                 </select>
             </div>
         </div>
@@ -88,16 +91,14 @@
         </div>
     </aside>
 
+    <footer class="p-6 border-t border-neutral-800 text-center text-xs text-neutral-600 uppercase tracking-widest">
+        &copy; 2026 Mat Logic Studios | Wrestling Interactive Sim v1.0
+    </footer>
+
     <script>
         function toggleWarRoom() {
             const warRoom = document.getElementById('war-room');
             warRoom.classList.toggle('translate-x-full');
-        }
-
-        function updateStatus() {
-            const status = document.getElementById('statusSelect').value;
-            // This is where we'll eventually send the "status" to the server
-            alert("Your status is now: " + status);
         }
     </script>
 </body>
