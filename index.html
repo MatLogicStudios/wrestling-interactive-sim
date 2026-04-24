@@ -17,14 +17,14 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* The Pulse Animation */
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(185, 28, 28, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
+        /* Enhanced Breathing Pulse */
+        @keyframes heartbeat {
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
+            50% { transform: scale(1.05); opacity: 0.8; box-shadow: 0 0 20px 5px rgba(185, 28, 28, 0.4); }
+            100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
         }
         .lobby-pulse {
-            animation: pulse-red 2s infinite;
+            animation: heartbeat 2.5s ease-in-out infinite;
         }
 
         .command-btn { 
@@ -47,7 +47,8 @@
             </h2>
         </div>
         
-        <button class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-sm text-sm tracking-widest transition lobby-pulse border border-red-500">
+        <button onclick="alert('LOBBY CONNECTION INITIATED... \nAuthenticity is the highest form of logic.')" 
+                class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-sm text-sm tracking-widest transition lobby-pulse border border-red-500">
             MAT LOBBY
         </button>
     </header>
@@ -85,7 +86,7 @@
 
     <footer class="p-8 border-t border-neutral-900 text-center">
         <p class="text-[10px] text-neutral-600 uppercase tracking-[0.3em] font-bold">
-            &copy; 2026 MAT LOGIC STUDIOS // COMMAND CENTER v1.4 // THE MAT IS YOURS
+            &copy; 2026 MAT LOGIC STUDIOS // V1.5 // AUTHENTICITY IS THE HIGHEST FORM OF LOGIC
         </p>
     </footer>
 
