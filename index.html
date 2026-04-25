@@ -3,35 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wrestling Interactive Sim | Mat Logic Studios</title>
+    <title>Wrestling Interactive Sim | Mat Logic Systems</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Zero scroll protocol for Chromebook screens */
+        /* Strict screen-fit protocol for Dell 3100 */
         html, body { height: 100vh; margin: 0; padding: 0; overflow: hidden; background-color: #0d0d0d; } 
         body { color: #f5f5f5; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; }
 
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
         
-        /* HEADER: Compact height */
+        /* HEADER: Scaled up for better presence */
         header { 
-            height: 12vh; 
+            height: 18vh; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 0 2.5rem;
+            padding: 0 3rem;
             background: #000;
             border-bottom: 2px solid #1a1a1a;
         }
 
-        /* DATA ROW: 25% height */
-        .stats-row { height: 22vh; padding: 1rem 2rem; }
+        /* DATA ROW: Compact at 20% */
+        .stats-row { height: 20vh; padding: 1rem 2rem; }
 
-        /* ACTION ROW: Sized to match the stats row for symmetry */
+        /* ACTION ROW: Sized specifically to match the top row's feel */
         .action-row { height: 42vh; padding: 0 2rem; }
 
-        /* FOOTER: Fixed to stay above the Chromebook shelf */
-        footer { height: 14vh; background: #000; border-top: 1px solid #1a1a1a; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        /* FOOTER: Combined branding/legal to save vertical space */
+        footer { 
+            height: 20vh; 
+            background: #000; 
+            border-top: 1px solid #1a1a1a; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 4px;
+        }
 
         .title-gradient {
             background: linear-gradient(to right, #ffffff 20%, #ef4444 100%);
@@ -39,20 +48,19 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Logo box with breathing room on the right */
-        .logo-container {
-            padding-right: 1.5rem;
+        /* Isolated Logo container for max right-side clearance */
+        .logo-block {
+            padding-right: 2rem;
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
-        .logo-img {
-            height: 85px;
+        .logo-display {
+            height: 95px;
             width: auto;
             border: 1px solid #333;
-            padding: 4px;
-            background: #0a0a0a;
+            background: #050505;
         }
 
         .mat-card { 
@@ -62,14 +70,13 @@
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
-            padding: 1.25rem; 
+            padding: 1.5rem; 
         }
 
         .action-btn { 
             background: #111; 
             border: 1px solid #333; 
-            transition: 0.2s; 
-            cursor: pointer;
+            transition: 0.2s;
         }
         .action-btn:hover { border-color: #ef4444; background: #151515; }
     </style>
@@ -78,58 +85,60 @@
 
     <header>
         <div class="flex flex-col">
-            <h1 class="text-xs font-black tracking-[0.3em] text-red-600 heavyweight-font italic leading-none mb-1">
+            <h1 class="text-sm font-black tracking-[0.4em] text-red-600 heavyweight-font italic leading-none mb-2">
                 MAT LOGIC SYSTEMS
             </h1>
-            <h2 class="text-3xl md:text-5xl heavyweight-font tracking-tighter title-gradient leading-none">
+            <h2 class="text-5xl md:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
                 WRESTLING INTERACTIVE SIM
             </h2>
         </div>
         
-        <div class="logo-container">
-            <button class="heavyweight-font bg-red-700 text-white px-5 py-2 rounded-full text-[10px] tracking-widest border border-red-500 shadow-lg hover:bg-red-600 transition-all">
+        <div class="logo-block">
+            <button class="heavyweight-font bg-red-700 text-white px-6 py-3 rounded-full text-xs tracking-widest border border-red-500 shadow-lg hover:bg-red-600 transition-all">
                 MAT LOBBY
             </button>
-            <img src="logo.png" alt="Mat Logic Logo" class="logo-img">
+            <img src="logo.png" alt="Mat Logic Logo" class="logo-display">
         </div>
     </header>
 
     <div class="stats-row">
-        <div class="grid grid-cols-3 gap-4 h-full">
+        <div class="grid grid-cols-3 gap-6 h-full">
             <div class="mat-card border-l-4 border-l-neutral-700">
-                <div class="text-[9px] text-neutral-500 uppercase font-black tracking-widest">Stable Strength</div>
-                <div class="text-4xl heavyweight-font text-white leading-none mt-1">0 / 12</div>
+                <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">Stable Strength</div>
+                <div class="text-4xl heavyweight-font text-white mt-1">0 / 12</div>
             </div>
             <div class="mat-card border-l-4 border-l-red-600">
-                <div class="text-[9px] text-neutral-500 uppercase font-black tracking-widest">Season Record</div>
-                <div class="text-4xl heavyweight-font text-red-600 italic leading-none mt-1">0 - 0</div>
+                <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">Season Record</div>
+                <div class="text-4xl heavyweight-font text-red-600 italic mt-1">0 - 0</div>
             </div>
             <div class="mat-card border-l-4 border-l-green-600">
-                <div class="text-[9px] text-neutral-500 uppercase font-black tracking-widest">Total Credits</div>
-                <div class="text-4xl heavyweight-font text-green-500 leading-none mt-1">$500.00</div>
+                <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">Total Credits</div>
+                <div class="text-4xl heavyweight-font text-green-500 mt-1">$500.00</div>
             </div>
         </div>
     </div>
 
     <div class="action-row">
-        <div class="grid grid-cols-2 gap-4 h-full">
+        <div class="grid grid-cols-2 gap-6 h-full">
             <button class="action-btn mat-card text-left group">
-                <h3 class="text-4xl heavyweight-font mb-1 italic group-hover:text-red-500">RECRUIT</h3>
-                <p class="text-neutral-500 text-[10px] font-bold uppercase tracking-wide leading-tight">Acquire elite prospects for your roster.</p>
+                <h3 class="text-4xl heavyweight-font italic group-hover:text-red-500">RECRUIT</h3>
+                <p class="text-neutral-500 text-[11px] font-bold uppercase tracking-wide">Enter the technical circuit.</p>
             </button>
 
             <button class="action-btn mat-card text-left group border-b-2 border-b-red-900">
-                <h3 class="text-4xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
-                <p class="text-neutral-500 text-[10px] font-bold uppercase tracking-wide leading-tight">Initiate high-stakes simulations.</p>
+                <h3 class="text-4xl heavyweight-font italic text-red-600 group-hover:text-red-500">THE MAT</h3>
+                <p class="text-neutral-500 text-[11px] font-bold uppercase tracking-wide">Start high-stakes simulation.</p>
             </button>
         </div>
     </div>
 
     <footer>
-        <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-2">
-            © 2026 MAT LOGIC STUDIOS // SYSTEM v2.1
-        </p>
-        <p class="text-[9px] text-red-900 uppercase font-black tracking-[0.2em] border border-red-900/30 px-4 py-1 rounded-sm">
+        <div class="flex items-baseline gap-4">
+            <span class="text-xs font-black text-white tracking-[0.2em] heavyweight-font italic">MAT LOGIC SYSTEMS</span>
+            <span class="h-[1px] w-12 bg-red-900"></span>
+            <span class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-bold">© 2026 MAT LOGIC STUDIOS // SYSTEM v2.1</span>
+        </div>
+        <p class="text-[9px] text-red-900 uppercase font-black tracking-[0.3em] mt-2">
             AUTHENTICITY: THE ULTIMATE TACTICAL ADVANTAGE
         </p>
     </footer>
