@@ -18,7 +18,6 @@
             position: relative;
         }
 
-        /* Tactical Header Styling */
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
         .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); }
         
@@ -52,35 +51,38 @@
             background: rgba(0,0,0,0.98); 
             z-index: 100;
         }
+
+        /* BLENDING TRICK: Hides black background without needing a transparent PNG */
+        .logo-blend {
+            mix-blend-mode: screen;
+        }
     </style>
 </head>
-<body class="border-t-4 border-red-600">
+<body class="border-t-4 border-red-600 relative">
 
-    <header class="p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
-        <div class="flex items-center">
-            <div class="mr-6 -my-4"> 
-                <img src="logo.png" alt="Mat Logic Shield" 
-                     class="h-24 md:h-36 w-auto object-contain drop-shadow-[0_0_15px_rgba(239,68,68,0.4)]">
-            </div>
-            
-            <div class="flex flex-col justify-center">
-                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
-                    MAT LOGIC <span class="text-red-600">SYSTEMS</span>
-                </h1>
-                <h2 class="text-3xl md:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
-                    WRESTLING INTERACTIVE SIM
-                </h2>
-            </div>
+    <img src="logo.png" alt="Mat Logic Seal" 
+         class="logo-blend absolute top-4 right-4 md:top-12 md:right-12 h-32 md:h-72 w-auto object-contain opacity-80 z-0 pointer-events-none drop-shadow-[0_0_25px_rgba(239,68,68,0.4)]">
+
+    <header class="p-4 md:p-12 border-b border-neutral-900 flex justify-between items-center bg-black/90 relative z-10">
+        <div class="flex flex-col justify-center">
+            <h1 class="text-3xl md:text-5xl font-black tracking-tighter text-white heavyweight-font italic leading-none mb-1">
+                MAT LOGIC <span class="text-red-600">SYSTEMS</span>
+            </h1>
+            <h2 class="text-3xl md:text-7xl heavyweight-font tracking-tighter title-gradient leading-none">
+                WRESTLING INTERACTIVE SIM
+            </h2>
         </div>
         
-        <button onclick="toggleLobby()" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition lobby-pulse border border-red-500 shadow-lg shadow-red-900/20">
-            MAT LOBBY
-        </button>
+        <div class="flex items-center gap-12 relative z-20">
+            <button onclick="toggleLobby()" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-10 py-5 rounded-full text-sm tracking-[0.2em] transition lobby-pulse border border-red-500 shadow-lg shadow-red-900/20">
+                MAT LOBBY
+            </button>
+        </div>
     </header>
 
     <main class="flex-grow flex flex-col justify-center p-4 md:p-8 max-w-7xl mx-auto w-full relative z-10">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 relative">
             <div class="mat-border p-6 rounded-sm border-l-4 border-l-neutral-600">
                 <div class="text-xs text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
                 <div class="text-4xl heavyweight-font mt-1">0 / 12</div>
@@ -112,23 +114,7 @@
         </div>
     </main>
 
-    <div id="lobby-overlay" class="flex flex-col items-center justify-center p-6 text-center">
-        <div class="max-w-2xl w-full mat-border p-8 rounded-lg bg-neutral-900 border-t-8 border-t-red-600 shadow-2xl">
-            <h3 class="heavyweight-font text-5xl mb-2 text-white">MAT LOBBY</h3>
-            <p class="text-red-600 text-lg uppercase tracking-[0.2em] font-bold italic mb-6">Authenticity is the core of the logic.</p>
-            
-            <div class="bg-black/80 p-8 rounded mb-8 border border-neutral-800 h-48 flex flex-col items-center justify-center">
-                <div class="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p class="text-neutral-400 font-mono text-xs uppercase tracking-[0.3em]">Establishing Secure Comm Link...</p>
-            </div>
-
-            <button onclick="toggleLobby()" class="bg-red-700 border border-red-500 px-10 py-4 heavyweight-font text-white hover:bg-red-600 transition rounded-full tracking-widest text-sm">
-                Return to Mat Logic Systems
-            </button>
-        </div>
-    </div>
-
-    <footer class="p-6 border-t border-neutral-900 text-center bg-black">
+    <footer class="p-6 border-t border-neutral-900 text-center bg-black relative z-10">
         <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">
             © 2026 MAT LOGIC STUDIOS // SYSTEM v2.1
         </p>
