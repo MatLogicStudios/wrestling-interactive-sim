@@ -7,21 +7,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #0d0d0d; } 
+        /* Force the app to stay inside the screen limits */
+        html, body { height: 100vh; margin: 0; padding: 0; overflow: hidden; background-color: #0d0d0d; } 
         body { color: #f5f5f5; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; }
 
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
         
-        /* Fixed Header height to prevent "pushing" the fold */
+        /* HEADER: Locked at 15% of screen */
         header { 
-            height: 100px; 
-            display: grid; 
-            grid-template-columns: 1fr auto; 
+            height: 15vh; 
+            min-height: 90px;
+            display: flex; 
+            justify-content: space-between; 
             align-items: center; 
             padding: 0 2rem;
             background: #000;
-            border-bottom: 2px solid #1a1a1a;
+            border-bottom: 2px solid #222;
         }
+
+        /* DATA ROW: Locked at 25% of screen */
+        .stats-row { height: 25vh; padding: 1rem 2rem; }
+
+        /* ACTION ROW: Locked at 45% of screen to prevent pushing footer */
+        .action-row { height: 45vh; padding: 0 2rem 1rem 2rem; }
+
+        /* FOOTER: Locked at 10% of screen */
+        footer { height: 10vh; background: #000; border-top: 1px solid #222; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
         .title-gradient {
             background: linear-gradient(to right, #ffffff 20%, #ef4444 100%);
@@ -29,93 +40,74 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Large branding on the right as requested */
-        .right-brand-stack {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+        .logo-large {
+            height: 100px; /* Massive Logo Increase */
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.4));
         }
 
-        .logo-box {
-            height: 75px;
-            width: 75px;
-            border: 1px solid #333;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Restoration of the working card style */
-        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); }
-        
-        main { flex-grow: 1; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
-
-        .command-btn { 
-            background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
-            border: 1px solid #444;
-            transition: all 0.2s ease;
-        }
+        .mat-card { border: 1px solid #262626; background: rgba(255,255,255,0.02); height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 1.5rem; }
+        .action-btn { background: #111; border: 1px solid #333; height: 100%; transition: 0.2s; }
+        .action-btn:hover { border-color: #ef4444; background: #1a1a1a; }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
 
     <header>
         <div class="flex flex-col">
-            <h1 class="text-lg font-black tracking-widest text-red-600 heavyweight-font italic leading-none mb-1">
+            <h1 class="text-sm font-black tracking-widest text-red-600 heavyweight-font italic leading-none mb-1">
                 MAT LOGIC SYSTEMS
             </h1>
-            <h2 class="text-5xl heavyweight-font tracking-tighter title-gradient leading-none">
+            <h2 class="text-4xl heavyweight-font tracking-tighter title-gradient leading-none">
                 WRESTLING INTERACTIVE SIM
             </h2>
         </div>
         
-        <div class="right-brand-stack">
+        <div class="flex items-center gap-8">
             <button class="heavyweight-font bg-red-700 text-white px-6 py-3 rounded-full text-xs tracking-widest border border-red-500 shadow-lg">
                 MAT LOBBY
             </button>
-            <div class="logo-box">
-                <img src="logo.png" alt="Mat Logic Logo" class="h-16 w-auto">
-            </div>
+            <img src="logo.png" alt="Mat Logic Logo" class="logo-large">
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto w-full">
-        <div class="grid grid-cols-3 gap-6 h-32">
-            <div class="mat-border p-6 rounded-sm border-l-4 border-l-neutral-700 flex flex-col justify-center">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest mb-1">Stable Strength</div>
-                <div class="text-5xl heavyweight-font text-white leading-none">0 / 12</div>
+    <div class="stats-row">
+        <div class="grid grid-cols-3 gap-6 h-full">
+            <div class="mat-card border-l-4 border-l-neutral-700">
+                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
+                <div class="text-5xl heavyweight-font text-white leading-none mt-1">0 / 12</div>
             </div>
-            <div class="mat-border p-6 rounded-sm border-l-4 border-l-red-600 flex flex-col justify-center">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest mb-1">Season Record</div>
-                <div class="text-5xl heavyweight-font text-red-600 italic leading-none">0 - 0</div>
+            <div class="mat-card border-l-4 border-l-red-600">
+                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
+                <div class="text-5xl heavyweight-font text-red-600 italic leading-none mt-1">0 - 0</div>
             </div>
-            <div class="mat-border p-6 rounded-sm border-l-4 border-l-green-600 flex flex-col justify-center">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest mb-1">Total Credits</div>
-                <div class="text-5xl heavyweight-font text-green-500 leading-none">$500.00</div>
+            <div class="mat-card border-l-4 border-l-green-600">
+                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
+                <div class="text-5xl heavyweight-font text-green-500 leading-none mt-1">$500.00</div>
             </div>
         </div>
+    </div>
 
-        <div class="flex gap-6 flex-grow pb-4">
-            <button class="command-btn p-10 rounded-sm text-left group border-b-4 border-b-neutral-800 flex-1 flex flex-col justify-center">
+    <div class="action-row">
+        <div class="grid grid-cols-2 gap-6 h-full">
+            <button class="action-btn mat-card text-left group">
                 <h3 class="text-5xl heavyweight-font mb-2 italic group-hover:text-red-500">RECRUIT</h3>
-                <p class="text-neutral-300 text-sm font-bold uppercase tracking-wide">
-                    Acquire elite prospects for your roster.
-                </p>
+                <p class="text-neutral-400 text-xs font-bold uppercase tracking-wide">Acquire elite prospects for your roster.</p>
             </button>
 
-            <button class="command-btn p-10 rounded-sm text-left group border-b-4 border-b-red-900 flex-1 flex flex-col justify-center">
+            <button class="action-btn mat-card text-left group border-b-2 border-b-red-900">
                 <h3 class="text-5xl heavyweight-font mb-2 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
-                <p class="text-neutral-300 text-sm font-bold uppercase tracking-wide">
-                    Initiate high-stakes simulations.
-                </p>
+                <p class="text-neutral-300 text-xs font-bold uppercase tracking-wide">Initiate high-stakes simulations.</p>
             </button>
         </div>
-    </main>
+    </div>
 
-    <footer class="p-3 border-t border-neutral-900 text-center bg-black">
-        <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black">
+    <footer>
+        <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">
             © 2026 MAT LOGIC STUDIOS // SYSTEM v2.1
+        </p>
+        <p class="text-[9px] text-red-900 uppercase font-black tracking-widest">
+            AUTHENTICITY: THE ULTIMATE TACTICAL ADVANTAGE
         </p>
     </footer>
 
