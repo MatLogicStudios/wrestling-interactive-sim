@@ -8,15 +8,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         html, body { height: 100%; margin: 0; overflow: hidden; } /* Prevents scrolling */
+        
         body { 
             background-color: #0d0d0d; 
             color: #f5f5f5; 
             font-family: 'Inter', sans-serif; 
             display: flex;
             flex-direction: column;
+            position: relative; /* Necessary for the watermark positioning */
         }
+
+        /* TACTICAL WATERMARK LOGIC */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Sits behind everything */
+            background-image: url('logo.png'); /* Points to the file you uploaded */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 500px; /* Perfect size for your Dell Chromebook screen */
+            opacity: 0.12; /* High-end ghost effect */
+            pointer-events: none; /* Allows you to click buttons through the image */
+        }
+
+        /* Ensure main content stays above the watermark */
+        header, main, footer, #lobby-overlay {
+            position: relative;
+            z-index: 10; 
+        }
+
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
-        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); }
+        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); }
         
         .title-gradient {
             background: linear-gradient(to right, #ffffff 20%, #ef4444 100%);
@@ -32,12 +58,13 @@
         .lobby-pulse { animation: pulse-red 2s infinite; }
 
         .command-btn { 
-            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
             border: 1px solid #333;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            backdrop-filter: blur(4px); /* Makes the watermark look cool behind the buttons */
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
@@ -52,7 +79,7 @@
 </head>
 <body class="border-t-4 border-red-600">
 
-    <header class="p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+    <header class="p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black/80">
         <div>
             <h1 class="text-xl font-black tracking-tighter text-white heavyweight-font italic mb-1">
                 MAT LOGIC <span class="text-red-600">SYSTEMS</span>
@@ -117,7 +144,7 @@
         </div>
     </div>
 
-    <footer class="p-6 border-t border-neutral-900 text-center bg-black">
+    <footer class="p-6 border-t border-neutral-900 text-center bg-black/80">
         <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">
             © 2026 MAT LOGIC STUDIOS // SYSTEM v2.1
         </p>
