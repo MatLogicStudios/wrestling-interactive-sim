@@ -27,6 +27,20 @@
             -webkit-text-fill-color: transparent;
         }
 
+        /* NEW TACTICAL SHIELD LOGO REPLACEMENT */
+        .tactical-shield {
+            border: 2px solid #ef4444;
+            background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+            padding: 10px 15px;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+        }
+
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(185, 28, 28, 0); }
@@ -69,15 +83,16 @@
             <button onclick="toggleLobby()" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition lobby-pulse border border-red-500 shadow-lg shadow-red-900/20 mr-12">
                 MAT LOBBY
             </button>
-            <div class="-my-4"> 
-                <img src="logo.png" alt="Mat Logic Shield" 
-                     class="h-24 md:h-36 w-auto object-contain drop-shadow-[0_0_15px_rgba(239,68,68,0.4)]">
+            
+            <div class="tactical-shield">
+                <span class="text-[10px] heavyweight-font text-white leading-none">MAT LOGIC</span>
+                <span class="text-[14px] heavyweight-font text-red-600 leading-none">STUDIOS</span>
+                <span class="text-[8px] font-bold text-neutral-500 mt-1 uppercase tracking-tighter">Verified</span>
             </div>
         </div>
     </header>
 
     <main class="flex-grow flex flex-col justify-center p-4 md:p-8 max-w-7xl mx-auto w-full relative z-10">
-        
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="mat-border p-6 rounded-sm border-l-4 border-l-neutral-600">
                 <div class="text-xs text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
