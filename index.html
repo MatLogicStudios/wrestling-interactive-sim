@@ -8,37 +8,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         html, body { height: 100vh; margin: 0; overflow: hidden; } 
-        body { 
-            background-color: #0d0d0d; 
-            color: #f5f5f5; 
-            font-family: 'Inter', sans-serif; 
-            display: flex;
-            flex-direction: column;
-        }
+        body { background-color: #0d0d0d; color: #f5f5f5; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; }
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
         .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); }
-        .title-gradient {
-            background: linear-gradient(to right, #ffffff 20%, #ef4444 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .title-gradient { background: linear-gradient(to right, #ffffff 20%, #ef4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(185, 28, 28, 0); }
             100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
         }
         .lobby-pulse { animation: pulse-red 2s infinite; }
+
         .command-btn { 
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
             border: 1px solid #333;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
+            display: flex; flex-direction: column; justify-content: center; height: 100%;
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
+        .modal-overlay { 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); 
+            z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+        }
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: #000; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #ef4444; }
@@ -46,8 +39,8 @@
 </head>
 <body class="border-t-4 border-red-600">
 
-    <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-        <div>
+    <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
+        <div class="flex flex-col justify-center">
             <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
                 MAT LOGIC <span class="text-red-600">STUDIOS</span>
             </h1>
@@ -56,7 +49,7 @@
             </h2>
         </div>
         <div class="flex items-center">
-            <button onclick="alert('Entering Mat Lobby...')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-full text-[10px] tracking-[0.2em] transition lobby-pulse border border-red-500 mr-12 md:mr-40">
+            <button onclick="toggleOverlay('lobby-overlay')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 md:px-8 md:py-4 rounded-full text-[10px] md:text-xs tracking-[0.2em] transition lobby-pulse border border-red-500 shadow-lg mr-12 md:mr-40">
                 MAT LOBBY
             </button>
             <div class="-my-6 mt-4"> 
@@ -67,36 +60,33 @@
 
     <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div class="mat-border p-4 rounded-sm border-l-4 border-l-neutral-600">
+            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-neutral-600">
                 <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
                 <div id="stable-count" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
             </div>
-            <div class="mat-border p-4 rounded-sm border-l-4 border-l-red-600">
+            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-red-600">
                 <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
                 <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
             </div>
-            <div class="mat-border p-4 rounded-sm border-l-4 border-l-green-600">
+            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-green-600">
                 <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
                 <div id="credit-display" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
             </div>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow max-h-[40vh]">
-            <button onclick="recruitProspect()" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
+            <button onclick="toggleOverlay('recruit-modal')" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
                 <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
                 <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
             </button>
-
-            <button onclick="openWrestlingRoom()" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-600">
+            <button onclick="toggleOverlay('wrestling-room')" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-600">
                 <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                 <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
             </button>
-
             <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-900">
                 <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
-                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Local Simulations</p>
+                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
             </button>
-
             <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-green-900">
                 <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
                 <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
@@ -104,122 +94,85 @@
         </div>
     </main>
 
-    <div id="wrestling-room" class="hidden fixed inset-0 bg-[#0d0d0d] z-50 flex flex-col p-4 md:p-8">
-        <div class="flex justify-between items-end border-b border-red-900/50 pb-4 mb-6">
-            <div>
-                <h3 class="heavyweight-font text-4xl md:text-6xl text-white italic">THE WRESTLING ROOM</h3>
-                <p class="text-red-600 text-xs uppercase tracking-[0.3em] font-bold italic">Authentic Skill Development Cycle</p>
-            </div>
-            <button onclick="closeWrestlingRoom()" class="mat-border px-6 py-2 text-[10px] heavyweight-font hover:bg-red-600 transition tracking-widest">CLOSE ROOM</button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto custom-scroll pr-2">
-            
-            <div class="mat-border p-6 border-t-4 border-t-neutral-600 relative">
-                <h4 class="heavyweight-font text-2xl italic mb-1">CAELUN SANDERS</h4>
-                <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Unbeaten One</span>
-                <div class="mt-6 space-y-4">
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Neutral Scrambling</span> <span>72</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-500 h-full w-[72%]"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Mat Control Logic</span> <span>85</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[85%]"></div></div>
-                    </div>
-                </div>
-                <button onclick="runDrill('Caelun Sanders')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8">Run Technical Drill</button>
-            </div>
-
-            <div class="mat-border p-6 border-t-4 border-t-red-600 relative">
-                <h4 class="heavyweight-font text-2xl italic mb-1">JACE BARRON</h4>
-                <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Power Takedown Machine</span>
-                <div class="mt-6 space-y-4">
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-white mb-1"><span>Attack Velocity</span> <span>82</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-white h-full w-[82%]"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Transition Scoring</span> <span>88</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[88%]"></div></div>
-                    </div>
-                </div>
-                <button onclick="runDrill('Jace Barron')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8">Run Explosive Drill</button>
-            </div>
-
-            <div class="mat-border p-6 border-t-4 border-t-red-900 relative">
-                <h4 class="heavyweight-font text-2xl italic mb-1">ALEXEI KARELAN</h4>
-                <span class="bg-red-900 text-white text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Phenom</span>
-                <div class="mt-6 space-y-4">
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-500 mb-1 italic"><span>Upper Body Leverage</span> <span>80</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-red-900 h-full w-[80%]"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Vertical Lift Logic</span> <span>92</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[92%]"></div></div>
-                    </div>
-                </div>
-                <button onclick="runDrill('Alexei Karelan')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8">Run Heavy Lift Drill</button>
-            </div>
-        </div>
-    </div>
-
     <footer class="flex-none py-4 border-t border-neutral-900 text-center bg-black">
         <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">© 2026 MAT LOGIC STUDIOS</p>
         <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">Authenticity: The Ultimate Tactical Advantage.</p>
     </footer>
 
+    <div id="recruit-modal" class="modal-overlay">
+        <div class="mat-border bg-neutral-950 p-8 rounded-lg border-t-4 border-t-red-600 max-w-sm w-full text-center">
+            <h3 class="heavyweight-font text-3xl mb-2 italic text-white">Scout Prospect?</h3>
+            <p class="text-neutral-400 text-xs uppercase tracking-widest mb-6">Investment: <span class="text-green-500 font-bold">$150.00</span></p>
+            <div class="flex gap-4">
+                <button onclick="toggleOverlay('recruit-modal')" class="flex-1 py-3 bg-neutral-800 hover:bg-neutral-700 heavyweight-font text-xs tracking-widest uppercase transition">Cancel</button>
+                <button onclick="processRecruit()" class="flex-1 py-3 bg-red-700 hover:bg-red-600 heavyweight-font text-xs tracking-widest uppercase transition">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="wrestling-room" class="modal-overlay overflow-y-auto">
+        <div class="min-h-screen w-full bg-[#0d0d0d] p-4 md:p-8 flex flex-col">
+            <div class="flex justify-between items-end border-b border-red-900/50 pb-4 mb-6">
+                <div>
+                    <h3 class="heavyweight-font text-4xl md:text-6xl text-white italic">THE WRESTLING ROOM</h3>
+                    <p class="text-red-600 text-xs uppercase tracking-[0.3em] font-bold italic">Authentic Skill Development Cycle</p>
+                </div>
+                <button onclick="toggleOverlay('wrestling-room')" class="mat-border px-6 py-2 text-[10px] heavyweight-font hover:bg-red-600 transition tracking-widest">CLOSE ROOM</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 custom-scroll">
+                <div class="mat-border p-6 border-t-4 border-t-red-600">
+                    <h4 class="heavyweight-font text-2xl italic mb-1 text-white">JACE BARRON</h4>
+                    <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Power Machine</span>
+                    <button onclick="runDrill('Jace Barron')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Explosive Drill</button>
+                </div>
+                </div>
+        </div>
+    </div>
+
+    <div id="lobby-overlay" class="modal-overlay">
+        <div class="max-w-2xl w-full mat-border p-8 rounded-lg bg-neutral-950 border-t-8 border-t-red-600 text-center">
+            <h3 class="heavyweight-font text-5xl mb-2">MAT LOBBY</h3>
+            <p class="text-red-600 text-lg uppercase tracking-[0.2em] font-bold italic mb-6">Authenticity is the core of the logic.</p>
+            <div class="bg-black/80 p-8 rounded mb-8 border border-neutral-800 h-48 flex flex-col items-center justify-center">
+                <div class="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p class="text-neutral-400 font-mono text-xs tracking-[0.3em]">SECURE COMM LINK ACTIVE</p>
+            </div>
+            <button onclick="toggleOverlay('lobby-overlay')" class="bg-red-700 border border-red-500 px-10 py-4 heavyweight-font text-white hover:bg-red-600 transition rounded-full tracking-widest text-sm">Return</button>
+        </div>
+    </div>
+
     <script>
         let credits = 500;
         let stableCount = 3;
 
-        function openWrestlingRoom() {
-            document.getElementById('wrestling-room').classList.remove('hidden');
+        function toggleOverlay(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        function closeWrestlingRoom() {
-            document.getElementById('wrestling-room').classList.add('hidden');
-        }
-
-        function updateCreditDisplay() {
+        function updateDisplay() {
             document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
+            document.getElementById('stable-count').innerText = `${stableCount} / 12`;
         }
 
-        function recruitProspect() {
+        function processRecruit() {
             const cost = 150;
-            if (credits < cost) {
-                alert("Insufficient credits to scout talent!");
-                return;
-            }
-            if (stableCount >= 12) {
-                alert("Your stable is at maximum capacity!");
-                return;
-            }
-            
-            if (confirm(`Scout new prospect for $${cost}?`)) {
+            if (credits >= cost && stableCount < 12) {
                 credits -= cost;
                 stableCount++;
-                updateCreditDisplay();
-                document.getElementById('stable-count').innerText = `${stableCount} / 12`;
-                alert("New prospect scouted and added to the roster.");
+                updateDisplay();
+                toggleOverlay('recruit-modal');
+                // You could add a custom "Success" toast here
+            } else {
+                alert("Insufficient Credits or Stable Capacity!");
             }
         }
 
         function runDrill(name) {
-            if (credits < 25) {
-                alert("Insufficient credits for training!");
-                return;
-            }
-            
-            const choice = prompt(`Training session for ${name}:\n1. Technical (+1)\n2. Logic (+1)\n3. Velocity (+1)\n\nEnter 1, 2, or 3:`);
-            
-            if (choice === "1" || choice === "2" || choice === "3") {
+            if (credits >= 25) {
                 credits -= 25;
-                updateCreditDisplay();
-                alert(`${name} has completed the drill. Skill increased!`);
-            } else {
-                alert("Drill cancelled.");
+                updateDisplay();
+                alert(`${name} Skill Increased!`);
             }
         }
     </script>
