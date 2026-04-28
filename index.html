@@ -7,37 +7,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Force the body to be exactly the height of the screen with no scroll */
-        html, body { 
-            height: 100vh; 
-            margin: 0; 
-            overflow: hidden; 
-        } 
-        
+        html, body { height: 100vh; margin: 0; overflow: hidden; } 
         body { 
             background-color: #0d0d0d; 
             color: #f5f5f5; 
             font-family: 'Inter', sans-serif; 
             display: flex;
-            flex-direction: column; /* Stacks Header, Main, Footer vertically */
+            flex-direction: column;
         }
-
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
         .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); }
-        
         .title-gradient {
             background: linear-gradient(to right, #ffffff 20%, #ef4444 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(185, 28, 28, 0); }
             100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
         }
         .lobby-pulse { animation: pulse-red 2s infinite; }
-
         .command-btn { 
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
             border: 1px solid #333;
@@ -45,23 +35,15 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            height: 100%; /* Makes buttons fill their grid space */
+            height: 100%;
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
-        
-        #lobby-overlay { 
-            display: none; 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0,0,0,0.98); 
-            z-index: 100;
-        }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
 
-    <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
-        <div class="flex flex-col justify-center">
+    <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+        <div>
             <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
                 MAT LOGIC <span class="text-red-600">STUDIOS</span>
             </h1>
@@ -69,81 +51,54 @@
                 WRESTLING INTERACTIVE SIM
             </h2>
         </div>
-
         <div class="flex items-center">
-            <button onclick="toggleLobby()" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 md:px-8 md:py-4 rounded-full text-[10px] md:text-xs tracking-[0.2em] transition lobby-pulse border border-red-500 shadow-lg shadow-red-900/20 mr-12 md:mr-40">
+            <button onclick="alert('Searching for Online Opponents...')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-full text-[10px] tracking-[0.2em] transition lobby-pulse border border-red-500 mr-12 md:mr-40">
                 MAT LOBBY
             </button>
             <div class="-my-6 mt-4"> 
-                <img src="logo.png" alt="Mat Logic Shield" 
-                     class="h-20 md:h-48 w-auto object-contain drop-shadow-[0_0_15px_rgba(239,68,68,0.4)]">
+                <img src="logo.png" alt="Mat Logic Shield" class="h-20 md:h-48 w-auto object-contain">
             </div>
         </div>
     </header>
 
     <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full overflow-hidden">
-        
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-neutral-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
-                <div class="text-3xl md:text-4xl heavyweight-font mt-1">0 / 12</div>
+            <div class="mat-border p-4 rounded-sm border-l-4 border-l-neutral-600">
+                <div class="text-[10px] text-neutral-400 uppercase font-black">Stable Strength</div>
+                <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
             </div>
-            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-red-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
+            <div class="mat-border p-4 rounded-sm border-l-4 border-l-red-600">
+                <div class="text-[10px] text-neutral-400 uppercase font-black">Season Record</div>
                 <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
             </div>
-            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-green-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
+            <div class="mat-border p-4 rounded-sm border-l-4 border-l-green-600">
+                <div class="text-[10px] text-neutral-400 uppercase font-black">Total Credits</div>
                 <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow max-h-[40vh]">
-            <button class="command-btn p-6 md:p-8 rounded-sm text-left group border-b-4 border-b-neutral-800">
-                <h3 class="text-3xl md:text-4xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
-                <p class="text-neutral-400 text-[10px] md:text-xs font-bold uppercase tracking-widest leading-snug">
-                    Scan the technical circuit to acquire elite prospects for your roster.
-                </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-grow max-h-[40vh]">
+            <button class="command-btn p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
+                <h3 class="text-2xl md:text-3xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
+                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-snug">Acquire elite prospects.</p>
             </button>
 
-            <button class="command-btn p-6 md:p-8 rounded-sm text-left group border-b-4 border-b-red-900">
-                <h3 class="text-3xl md:text-4xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
-                <p class="text-neutral-400 text-[10px] md:text-xs font-bold uppercase tracking-widest leading-snug">
-                    Initiate high-stakes match simulations and test your stable's logic.
-                </p>
+            <button class="command-btn p-6 rounded-sm text-left group border-b-4 border-b-red-600">
+                <h3 class="text-2xl md:text-3xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
+                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-snug">Train and level up your stable.</p>
+            </button>
+
+            <button class="command-btn p-6 rounded-sm text-left group border-b-4 border-b-red-900">
+                <h3 class="text-2xl md:text-3xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
+                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-snug">Initiate match simulations.</p>
             </button>
         </div>
     </main>
 
     <footer class="flex-none py-4 border-t border-neutral-900 text-center bg-black">
-        <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">
-            © 2026 MAT LOGIC STUDIOS
-        </p>
-        <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">
-            Authenticity: The Ultimate Tactical Advantage.
-        </p>
+        <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">© 2026 MAT LOGIC STUDIOS</p>
+        <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">Authenticity: The Ultimate Tactical Advantage.</p>
     </footer>
-
-    <div id="lobby-overlay" class="flex flex-col items-center justify-center p-6 text-center">
-        <div class="max-w-2xl w-full mat-border p-8 rounded-lg bg-neutral-900 border-t-8 border-t-red-600 shadow-2xl">
-            <h3 class="heavyweight-font text-5xl mb-2 text-white">MAT LOBBY</h3>
-            <p class="text-red-600 text-lg uppercase tracking-[0.2em] font-bold italic mb-6">Authenticity is the core of the logic.</p>
-            <div class="bg-black/80 p-8 rounded mb-8 border border-neutral-800 h-48 flex flex-col items-center justify-center">
-                <div class="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p class="text-neutral-400 font-mono text-xs uppercase tracking-[0.3em]">Establishing Secure Comm Link...</p>
-            </div>
-            <button onclick="toggleLobby()" class="bg-red-700 border border-red-500 px-10 py-4 heavyweight-font text-white hover:bg-red-600 transition rounded-full tracking-widest text-sm">
-                Return to Mat Logic Studios
-            </button>
-        </div>
-    </div>
-
-    <script>
-        function toggleLobby() {
-            const overlay = document.getElementById('lobby-overlay');
-            overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
-        }
-    </script>
 
 </body>
 </html>
