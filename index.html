@@ -52,7 +52,7 @@
             </h2>
         </div>
         <div class="flex items-center">
-            <button onclick="alert('Searching for Online Opponents...')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-full text-[10px] tracking-[0.2em] transition lobby-pulse border border-red-500 mr-12 md:mr-40">
+            <button onclick="alert('Entering Mat Lobby...')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 rounded-full text-[10px] tracking-[0.2em] transition lobby-pulse border border-red-500 mr-12 md:mr-40">
                 MAT LOBBY
             </button>
             <div class="-my-6 mt-4"> 
@@ -64,33 +64,38 @@
     <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div class="mat-border p-4 rounded-sm border-l-4 border-l-neutral-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black">Stable Strength</div>
+                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
                 <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
             </div>
             <div class="mat-border p-4 rounded-sm border-l-4 border-l-red-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black">Season Record</div>
+                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
                 <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
             </div>
             <div class="mat-border p-4 rounded-sm border-l-4 border-l-green-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black">Total Credits</div>
+                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
                 <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-grow max-h-[40vh]">
-            <button class="command-btn p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
-                <h3 class="text-2xl md:text-3xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
-                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-snug">Acquire elite prospects.</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow max-h-[40vh]">
+            <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
+                <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
+                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
             </button>
 
-            <button class="command-btn p-6 rounded-sm text-left group border-b-4 border-b-red-600">
-                <h3 class="text-2xl md:text-3xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
-                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-snug">Train and level up your stable.</p>
+            <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-600">
+                <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
+                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
             </button>
 
-            <button class="command-btn p-6 rounded-sm text-left group border-b-4 border-b-red-900">
-                <h3 class="text-2xl md:text-3xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
-                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-snug">Initiate match simulations.</p>
+            <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-900">
+                <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
+                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Local Simulations</p>
+            </button>
+
+            <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-green-900">
+                <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
+                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
             </button>
         </div>
     </main>
