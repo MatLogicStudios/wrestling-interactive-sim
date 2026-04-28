@@ -39,7 +39,6 @@
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
-        /* Custom Scrollbar for Wrestling Room */
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: #000; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #ef4444; }
@@ -70,7 +69,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div class="mat-border p-4 rounded-sm border-l-4 border-l-neutral-600">
                 <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
-                <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
+                <div id="stable-count" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
             </div>
             <div class="mat-border p-4 rounded-sm border-l-4 border-l-red-600">
                 <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
@@ -78,7 +77,7 @@
             </div>
             <div class="mat-border p-4 rounded-sm border-l-4 border-l-green-600">
                 <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
-                <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+                <div id="credit-display" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
             </div>
         </div>
 
@@ -117,92 +116,52 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto custom-scroll pr-2">
             
             <div class="mat-border p-6 border-t-4 border-t-neutral-600 relative">
-                <div class="absolute top-2 right-4 text-[10px] font-black text-neutral-700 italic">ACTIVE ROSTER</div>
-                <h4 class="heavyweight-font text-2xl italic mb-1">PROSPECT #712</h4>
-                <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">Folkstyle Specialist</span>
-                
+                <h4 class="heavyweight-font text-2xl italic mb-1">CAELUN SANDERS</h4>
+                <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Undefeated</span>
                 <div class="mt-6 space-y-4">
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Neutral (Legs)</span> <span>72</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Neutral Scrambling</span> <span>72</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-500 h-full w-[72%]"></div></div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Control (Riding)</span> <span>85</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Top Control Logic</span> <span>85</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[85%]"></div></div>
                     </div>
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Defense / Escape</span> <span>78</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-300 h-full w-[78%]"></div></div>
-                    </div>
                 </div>
-
-                <div class="mt-8 pt-4 border-t border-neutral-900">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-[10px] font-black uppercase text-neutral-500 italic">Cycle Stamina</span>
-                        <span class="text-xs text-white heavyweight-font">85%</span>
-                    </div>
-                    <button class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest">Run Technical Drill</button>
-                </div>
+                <button onclick="runDrill('Caelun Sanders')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8">Run Technical Drill</button>
             </div>
 
             <div class="mat-border p-6 border-t-4 border-t-red-600 relative">
-                <div class="absolute top-2 right-4 text-[10px] font-black text-neutral-700 italic">ACTIVE ROSTER</div>
-                <h4 class="heavyweight-font text-2xl italic mb-1">PROSPECT #402</h4>
-                <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">Freestyle Specialist</span>
-                
+                <h4 class="heavyweight-font text-2xl italic mb-1">JACE BARRON</h4>
+                <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">Power Takedowns</span>
                 <div class="mt-6 space-y-4">
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-white mb-1"><span>Neutral (Legs)</span> <span>82</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-white mb-1"><span>Neutral Speed</span> <span>82</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-white h-full w-[82%]"></div></div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Exposure (Turns)</span> <span>88</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Explosive Exposure</span> <span>88</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[88%]"></div></div>
                     </div>
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Par Terre Defense</span> <span>70</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-600 h-full w-[70%]"></div></div>
-                    </div>
                 </div>
-
-                <div class="mt-8 pt-4 border-t border-neutral-900">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-[10px] font-black uppercase text-neutral-500 italic">Cycle Stamina</span>
-                        <span class="text-xs text-white heavyweight-font">92%</span>
-                    </div>
-                    <button class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest">Run Explosive Drill</button>
-                </div>
+                <button onclick="runDrill('Jace Barron')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8">Run Explosive Drill</button>
             </div>
 
             <div class="mat-border p-6 border-t-4 border-t-red-900 relative">
-                <div class="absolute top-2 right-4 text-[10px] font-black text-neutral-700 italic">ACTIVE ROSTER</div>
-                <h4 class="heavyweight-font text-2xl italic mb-1">PROSPECT #911</h4>
-                <span class="bg-red-900 text-white text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">Greco-Roman Specialist</span>
-                
+                <h4 class="heavyweight-font text-2xl italic mb-1">ALEXEI KARELAN</h4>
+                <span class="bg-red-900 text-white text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Phenom</span>
                 <div class="mt-6 space-y-4">
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-500 mb-1 italic"><span>Upper Body (No Legs)</span> <span>80</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-500 mb-1"><span>Upper Body Clinch</span> <span>80</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-red-900 h-full w-[80%]"></div></div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Exposure (Lifts)</span> <span>92</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Reverse Lift Logic</span> <span>92</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[92%]"></div></div>
                     </div>
-                    <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Defense (Stave)</span> <span>65</span></div>
-                        <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-600 h-full w-[65%]"></div></div>
-                    </div>
                 </div>
-
-                <div class="mt-8 pt-4 border-t border-neutral-900">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-[10px] font-black uppercase text-neutral-500 italic">Cycle Stamina</span>
-                        <span class="text-xs text-red-600 heavyweight-font">LOW (40%)</span>
-                    </div>
-                    <button class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest">Run Heavy Lift Drill</button>
-                </div>
+                <button onclick="runDrill('Alexei Karelan')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8">Run Heavy Lift Drill</button>
             </div>
-
         </div>
     </div>
 
@@ -212,11 +171,31 @@
     </footer>
 
     <script>
+        let credits = 500;
+
         function openWrestlingRoom() {
             document.getElementById('wrestling-room').classList.remove('hidden');
         }
+
         function closeWrestlingRoom() {
             document.getElementById('wrestling-room').classList.add('hidden');
+        }
+
+        function runDrill(name) {
+            if (credits < 25) {
+                alert("Insufficient credits for training!");
+                return;
+            }
+            
+            const choice = prompt(`Training session for ${name}:\n1. Neutral (+1)\n2. Exposure/Control (+1)\n3. Defense/Lifts (+1)\n\nEnter 1, 2, or 3:`);
+            
+            if (choice === "1" || choice === "2" || choice === "3") {
+                credits -= 25;
+                document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
+                alert(`${name} has completed the drill. Skill increased! Credits remaining: $${credits}`);
+            } else {
+                alert("Drill cancelled.");
+            }
         }
     </script>
 </body>
