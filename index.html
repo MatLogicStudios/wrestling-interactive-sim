@@ -82,7 +82,7 @@
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow max-h-[40vh]">
-            <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
+            <button onclick="recruitProspect()" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
                 <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
                 <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
             </button>
@@ -117,14 +117,14 @@
             
             <div class="mat-border p-6 border-t-4 border-t-neutral-600 relative">
                 <h4 class="heavyweight-font text-2xl italic mb-1">CAELUN SANDERS</h4>
-                <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Undefeated</span>
+                <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Unbeaten One</span>
                 <div class="mt-6 space-y-4">
                     <div>
                         <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Neutral Scrambling</span> <span>72</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-500 h-full w-[72%]"></div></div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Top Control Logic</span> <span>85</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Mat Control Logic</span> <span>85</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[85%]"></div></div>
                     </div>
                 </div>
@@ -133,14 +133,14 @@
 
             <div class="mat-border p-6 border-t-4 border-t-red-600 relative">
                 <h4 class="heavyweight-font text-2xl italic mb-1">JACE BARRON</h4>
-                <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">Power Takedowns</span>
+                <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Power Takedown Machine</span>
                 <div class="mt-6 space-y-4">
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-white mb-1"><span>Neutral Speed</span> <span>82</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-white mb-1"><span>Attack Velocity</span> <span>82</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-white h-full w-[82%]"></div></div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Explosive Exposure</span> <span>88</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Transition Scoring</span> <span>88</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[88%]"></div></div>
                     </div>
                 </div>
@@ -152,11 +152,11 @@
                 <span class="bg-red-900 text-white text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Phenom</span>
                 <div class="mt-6 space-y-4">
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-500 mb-1"><span>Upper Body Clinch</span> <span>80</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-500 mb-1 italic"><span>Upper Body Leverage</span> <span>80</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-red-900 h-full w-[80%]"></div></div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Reverse Lift Logic</span> <span>92</span></div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Vertical Lift Logic</span> <span>92</span></div>
                         <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[92%]"></div></div>
                     </div>
                 </div>
@@ -172,6 +172,7 @@
 
     <script>
         let credits = 500;
+        let stableCount = 3;
 
         function openWrestlingRoom() {
             document.getElementById('wrestling-room').classList.remove('hidden');
@@ -181,18 +182,42 @@
             document.getElementById('wrestling-room').classList.add('hidden');
         }
 
+        function updateCreditDisplay() {
+            document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
+        }
+
+        function recruitProspect() {
+            const cost = 150;
+            if (credits < cost) {
+                alert("Insufficient credits to scout talent!");
+                return;
+            }
+            if (stableCount >= 12) {
+                alert("Your stable is at maximum capacity!");
+                return;
+            }
+            
+            if (confirm(`Scout new prospect for $${cost}?`)) {
+                credits -= cost;
+                stableCount++;
+                updateCreditDisplay();
+                document.getElementById('stable-count').innerText = `${stableCount} / 12`;
+                alert("New prospect scouted and added to the roster.");
+            }
+        }
+
         function runDrill(name) {
             if (credits < 25) {
                 alert("Insufficient credits for training!");
                 return;
             }
             
-            const choice = prompt(`Training session for ${name}:\n1. Neutral (+1)\n2. Exposure/Control (+1)\n3. Defense/Lifts (+1)\n\nEnter 1, 2, or 3:`);
+            const choice = prompt(`Training session for ${name}:\n1. Technical (+1)\n2. Logic (+1)\n3. Velocity (+1)\n\nEnter 1, 2, or 3:`);
             
             if (choice === "1" || choice === "2" || choice === "3") {
                 credits -= 25;
-                document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
-                alert(`${name} has completed the drill. Skill increased! Credits remaining: $${credits}`);
+                updateCreditDisplay();
+                alert(`${name} has completed the drill. Skill increased!`);
             } else {
                 alert("Drill cancelled.");
             }
