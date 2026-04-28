@@ -38,6 +38,11 @@
             height: 100%;
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
+        
+        /* Custom Scrollbar for Wrestling Room */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #000; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #ef4444; }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
@@ -83,7 +88,7 @@
                 <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
             </button>
 
-            <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-600">
+            <button onclick="openWrestlingRoom()" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-600">
                 <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                 <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
             </button>
@@ -100,10 +105,119 @@
         </div>
     </main>
 
+    <div id="wrestling-room" class="hidden fixed inset-0 bg-[#0d0d0d] z-50 flex flex-col p-4 md:p-8">
+        <div class="flex justify-between items-end border-b border-red-900/50 pb-4 mb-6">
+            <div>
+                <h3 class="heavyweight-font text-4xl md:text-6xl text-white italic">THE WRESTLING ROOM</h3>
+                <p class="text-red-600 text-xs uppercase tracking-[0.3em] font-bold italic">Authentic Skill Development Cycle</p>
+            </div>
+            <button onclick="closeWrestlingRoom()" class="mat-border px-6 py-2 text-[10px] heavyweight-font hover:bg-red-600 transition tracking-widest">CLOSE ROOM</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto custom-scroll pr-2">
+            
+            <div class="mat-border p-6 border-t-4 border-t-neutral-600 relative">
+                <div class="absolute top-2 right-4 text-[10px] font-black text-neutral-700 italic">ACTIVE ROSTER</div>
+                <h4 class="heavyweight-font text-2xl italic mb-1">PROSPECT #712</h4>
+                <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">Folkstyle Specialist</span>
+                
+                <div class="mt-6 space-y-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Neutral (Legs)</span> <span>72</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-500 h-full w-[72%]"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Control (Riding)</span> <span>85</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[85%]"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Defense / Escape</span> <span>78</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-300 h-full w-[78%]"></div></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-neutral-900">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[10px] font-black uppercase text-neutral-500 italic">Cycle Stamina</span>
+                        <span class="text-xs text-white heavyweight-font">85%</span>
+                    </div>
+                    <button class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest">Run Technical Drill</button>
+                </div>
+            </div>
+
+            <div class="mat-border p-6 border-t-4 border-t-red-600 relative">
+                <div class="absolute top-2 right-4 text-[10px] font-black text-neutral-700 italic">ACTIVE ROSTER</div>
+                <h4 class="heavyweight-font text-2xl italic mb-1">PROSPECT #402</h4>
+                <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">Freestyle Specialist</span>
+                
+                <div class="mt-6 space-y-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-white mb-1"><span>Neutral (Legs)</span> <span>82</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-white h-full w-[82%]"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Exposure (Turns)</span> <span>88</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[88%]"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Par Terre Defense</span> <span>70</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-600 h-full w-[70%]"></div></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-neutral-900">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[10px] font-black uppercase text-neutral-500 italic">Cycle Stamina</span>
+                        <span class="text-xs text-white heavyweight-font">92%</span>
+                    </div>
+                    <button class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest">Run Explosive Drill</button>
+                </div>
+            </div>
+
+            <div class="mat-border p-6 border-t-4 border-t-red-900 relative">
+                <div class="absolute top-2 right-4 text-[10px] font-black text-neutral-700 italic">ACTIVE ROSTER</div>
+                <h4 class="heavyweight-font text-2xl italic mb-1">PROSPECT #911</h4>
+                <span class="bg-red-900 text-white text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">Greco-Roman Specialist</span>
+                
+                <div class="mt-6 space-y-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-500 mb-1 italic"><span>Upper Body (No Legs)</span> <span>80</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-red-900 h-full w-[80%]"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-red-600 mb-1"><span>Exposure (Lifts)</span> <span>92</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-red-600 h-full w-[92%]"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-neutral-400 mb-1"><span>Defense (Stave)</span> <span>65</span></div>
+                        <div class="w-full bg-neutral-900 h-1"><div class="bg-neutral-600 h-full w-[65%]"></div></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-neutral-900">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[10px] font-black uppercase text-neutral-500 italic">Cycle Stamina</span>
+                        <span class="text-xs text-red-600 heavyweight-font">LOW (40%)</span>
+                    </div>
+                    <button class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest">Run Heavy Lift Drill</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <footer class="flex-none py-4 border-t border-neutral-900 text-center bg-black">
         <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">© 2026 MAT LOGIC STUDIOS</p>
         <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">Authenticity: The Ultimate Tactical Advantage.</p>
     </footer>
 
+    <script>
+        function openWrestlingRoom() {
+            document.getElementById('wrestling-room').classList.remove('hidden');
+        }
+        function closeWrestlingRoom() {
+            document.getElementById('wrestling-room').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
