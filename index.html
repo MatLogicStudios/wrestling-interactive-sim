@@ -119,18 +119,31 @@
                 </div>
                 <button onclick="toggleOverlay('wrestling-room')" class="mat-border px-6 py-2 text-[10px] heavyweight-font hover:bg-red-600 transition tracking-widest">CLOSE ROOM</button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 custom-scroll">
-                <div class="mat-border p-6 border-t-4 border-t-red-600">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 custom-scroll overflow-y-auto">
+                <div class="mat-border p-6 border-t-4 border-t-neutral-600 relative">
+                    <h4 class="heavyweight-font text-2xl italic mb-1 text-white">CAELUN SANDERS</h4>
+                    <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Unbeaten One</span>
+                    <button onclick="runDrill('Caelun Sanders')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Technical Drill</button>
+                </div>
+
+                <div class="mat-border p-6 border-t-4 border-t-red-600 relative">
                     <h4 class="heavyweight-font text-2xl italic mb-1 text-white">JACE BARRON</h4>
                     <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Power Machine</span>
                     <button onclick="runDrill('Jace Barron')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Explosive Drill</button>
                 </div>
+
+                <div class="mat-border p-6 border-t-4 border-t-red-900 relative">
+                    <h4 class="heavyweight-font text-2xl italic mb-1 text-white">ALEXEI KARELAN</h4>
+                    <span class="bg-red-900 text-white text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Phenom</span>
+                    <button onclick="runDrill('Alexei Karelan')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Heavy Lift Drill</button>
                 </div>
+            </div>
         </div>
     </div>
 
     <div id="lobby-overlay" class="modal-overlay">
-        <div class="max-w-2xl w-full mat-border p-8 rounded-lg bg-neutral-950 border-t-8 border-t-red-600 text-center">
+        <div class="max-w-2xl w-full mat-border p-8 rounded-lg bg-neutral-950 border-t-8 border-t-red-600 text-center shadow-2xl">
             <h3 class="heavyweight-font text-5xl mb-2">MAT LOBBY</h3>
             <p class="text-red-600 text-lg uppercase tracking-[0.2em] font-bold italic mb-6">Authenticity is the core of the logic.</p>
             <div class="bg-black/80 p-8 rounded mb-8 border border-neutral-800 h-48 flex flex-col items-center justify-center">
@@ -162,9 +175,9 @@
                 stableCount++;
                 updateDisplay();
                 toggleOverlay('recruit-modal');
-                // You could add a custom "Success" toast here
+                alert("New prospect scouted and added to the roster.");
             } else {
-                alert("Insufficient Credits or Stable Capacity!");
+                alert(stableCount >= 12 ? "Stable Capacity Reached!" : "Insufficient Credits!");
             }
         }
 
@@ -172,7 +185,9 @@
             if (credits >= 25) {
                 credits -= 25;
                 updateDisplay();
-                alert(`${name} Skill Increased!`);
+                alert(`${name} has completed the drill. Skill increased!`);
+            } else {
+                alert("Insufficient credits for training!");
             }
         }
     </script>
