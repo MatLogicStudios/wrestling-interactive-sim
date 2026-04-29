@@ -83,7 +83,7 @@
                 <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                 <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
             </button>
-            <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-900">
+            <button onclick="startSim()" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-900">
                 <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
                 <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
             </button>
@@ -98,6 +98,52 @@
         <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">© 2026 MAT LOGIC STUDIOS</p>
         <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">Authenticity: The Ultimate Tactical Advantage.</p>
     </footer>
+
+    <div id="the-mat-sim" class="modal-overlay">
+        <div class="min-h-screen w-full bg-[#050505] p-4 flex flex-col">
+            <div class="grid grid-cols-3 gap-4 mb-6 border-b-2 border-red-900 pb-4">
+                <div class="text-center">
+                    <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">RED WRESTLER</div>
+                    <div id="red-score" class="text-5xl md:text-7xl heavyweight-font text-red-600">00</div>
+                </div>
+                <div class="text-center flex flex-col justify-center">
+                    <div id="match-timer" class="text-4xl md:text-6xl heavyweight-font text-white italic">3:00</div>
+                    <div id="riding-time" class="text-xs md:text-sm text-yellow-500 font-mono mt-2 uppercase tracking-[0.2em]">RT: 0:00</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">BLUE WRESTLER</div>
+                    <div id="blue-score" class="text-5xl md:text-7xl heavyweight-font text-blue-600">00</div>
+                </div>
+            </div>
+            <div class="flex-grow mat-border rounded-sm relative overflow-hidden bg-black flex items-center justify-center">
+                <div id="sim-log" class="absolute top-4 left-4 z-10 text-[10px] text-red-500 font-mono uppercase bg-black/60 p-2 border border-red-900/30">
+                    [SYSTEM]: READY FOR WHISTLE...
+                </div>
+                <div id="shot-clock-container" class="absolute bottom-8 right-8 text-right">
+                    <div class="text-[10px] text-neutral-400 uppercase font-black mb-1">Decide:</div>
+                    <div id="shot-clock" class="text-6xl heavyweight-font text-red-600 italic">10</div>
+                </div>
+                <div id="stalemate-counter" class="absolute top-4 right-4 text-[10px] text-neutral-500 uppercase font-bold">STALEMATE COUNT: 0</div>
+            </div>
+            <div id="action-commands" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 h-24">
+                <button onclick="executeMove('Stand Up', 'neutral')" class="command-btn p-2 rounded-sm border-b-4 border-b-blue-600">
+                    <h3 class="text-lg heavyweight-font italic">STAND UP</h3>
+                    <p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">Folkstyle Bottom</p>
+                </button>
+                <button onclick="executeMove('Hand Peel', 'folkstyle_bottom')" class="command-btn p-2 rounded-sm border-b-4 border-b-blue-900">
+                    <h3 class="text-lg heavyweight-font italic text-blue-400">HAND PEEL</h3>
+                    <p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">Defend Nelson</p>
+                </button>
+                <button onclick="executeMove('Power Half', 'folkstyle_top')" class="command-btn p-2 rounded-sm border-b-4 border-b-red-900">
+                    <h3 class="text-lg heavyweight-font italic text-red-600">POWER HALF</h3>
+                    <p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">Folkstyle Top</p>
+                </button>
+                 <button onclick="stopSim()" class="bg-neutral-900 text-white heavyweight-font text-xs tracking-widest hover:bg-red-600 transition uppercase">
+                    End Match
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div id="recruit-modal" class="modal-overlay">
         <div class="mat-border bg-neutral-950 p-8 rounded-lg border-t-4 border-t-red-600 max-w-sm w-full text-center">
@@ -119,20 +165,17 @@
                 </div>
                 <button onclick="toggleOverlay('wrestling-room')" class="mat-border px-6 py-2 text-[10px] heavyweight-font hover:bg-red-600 transition tracking-widest">CLOSE ROOM</button>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 custom-scroll overflow-y-auto">
                 <div class="mat-border p-6 border-t-4 border-t-neutral-600 relative">
                     <h4 class="heavyweight-font text-2xl italic mb-1 text-white">CAELUN SANDERS</h4>
                     <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Unbeaten One</span>
                     <button onclick="runDrill('Caelun Sanders')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Technical Drill</button>
                 </div>
-
                 <div class="mat-border p-6 border-t-4 border-t-red-600 relative">
                     <h4 class="heavyweight-font text-2xl italic mb-1 text-white">JACE BARRON</h4>
                     <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Power Machine</span>
                     <button onclick="runDrill('Jace Barron')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Explosive Drill</button>
                 </div>
-
                 <div class="mat-border p-6 border-t-4 border-t-red-900 relative">
                     <h4 class="heavyweight-font text-2xl italic mb-1 text-white">ALEXEI KARELAN</h4>
                     <span class="bg-red-900 text-white text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Phenom</span>
@@ -158,6 +201,17 @@
         let credits = 500;
         let stableCount = 3;
 
+        // SIMULATION STATE
+        let isMatchRunning = false;
+        let matchTime = 180; 
+        let rtValue = 0; 
+        let shotClock = 10;
+        let currentPosition = 'folkstyle_top'; 
+        let redScore = 0;
+        let blueScore = 0;
+        let stalemateCount = 0;
+        let engineInterval;
+
         function toggleOverlay(id) {
             const el = document.getElementById(id);
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
@@ -168,6 +222,92 @@
             document.getElementById('stable-count').innerText = `${stableCount} / 12`;
         }
 
+        function startSim() {
+            toggleOverlay('the-mat-sim');
+            isMatchRunning = true;
+            matchTime = 180;
+            shotClock = 10;
+            rtValue = 0;
+            stalemateCount = 0;
+            runMatchEngine();
+        }
+
+        function stopSim() {
+            isMatchRunning = false;
+            clearInterval(engineInterval);
+            toggleOverlay('the-mat-sim');
+        }
+
+        function runMatchEngine() {
+            engineInterval = setInterval(() => {
+                if(!isMatchRunning) return;
+                if(matchTime <= 0) {
+                    stopSim();
+                    alert("Match Conclusion.");
+                    return;
+                }
+
+                matchTime--;
+                shotClock--;
+
+                // 1. Update Match Clock
+                let mins = Math.floor(matchTime / 60);
+                let secs = matchTime % 60;
+                document.getElementById('match-timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+                // 2. Handle Shot Clock
+                if(shotClock <= 0) {
+                    handleStalemate();
+                    shotClock = 10;
+                }
+                document.getElementById('shot-clock').innerText = shotClock;
+
+                // 3. Handle Net Riding Time
+                if(currentPosition === 'folkstyle_top') rtValue++;
+                else if (currentPosition === 'folkstyle_bottom') rtValue--;
+                updateRTDisplay();
+
+            }, 1000);
+        }
+
+        function updateRTDisplay() {
+            const rtElement = document.getElementById('riding-time');
+            let displayTime = Math.abs(rtValue);
+            let mins = Math.floor(displayTime / 60);
+            let secs = displayTime % 60;
+            let colorStr = rtValue >= 0 ? "RED" : "BLUE";
+            rtElement.innerText = `RT: ${mins}:${secs < 10 ? '0' : ''}${secs} (${colorStr})`;
+            rtElement.style.color = rtValue >= 0 ? "#ef4444" : "#3b82f6";
+        }
+
+        function executeMove(moveName, newPos) {
+            shotClock = 10;
+            stalemateCount = 0; 
+            document.getElementById('stalemate-counter').innerText = `STALEMATE COUNT: ${stalemateCount}`;
+            currentPosition = newPos;
+            document.getElementById('sim-log').innerText = `[LOG]: EXECUTING ${moveName.toUpperCase()}...`;
+        }
+
+        function handleStalemate() {
+            stalemateCount++;
+            document.getElementById('stalemate-counter').innerText = `STALEMATE COUNT: ${stalemateCount}`;
+            
+            if(stalemateCount === 1) {
+                document.getElementById('sim-log').innerText = `[REF]: STALEMATE. RESET TO POSITION.`;
+            } else if (stalemateCount === 2) {
+                document.getElementById('sim-log').innerText = `[REF]: WARNING - PASSIVITY.`;
+            } else if (stalemateCount >= 3) {
+                document.getElementById('sim-log').innerText = `[REF]: PASSIVITY PENALTY - 1PT.`;
+                // Logic to award point to opponent based on current position
+                if(currentPosition === 'folkstyle_top') blueScore++;
+                else redScore++;
+                
+                document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
+                document.getElementById('blue-score').innerText = blueScore.toString().padStart(2, '0');
+                stalemateCount = 0; 
+            }
+        }
+
         function processRecruit() {
             const cost = 150;
             if (credits >= cost && stableCount < 12) {
@@ -175,7 +315,7 @@
                 stableCount++;
                 updateDisplay();
                 toggleOverlay('recruit-modal');
-                alert("New prospect scouted and added to the roster.");
+                alert("New prospect scouted.");
             } else {
                 alert(stableCount >= 12 ? "Stable Capacity Reached!" : "Insufficient Credits!");
             }
@@ -185,9 +325,9 @@
             if (credits >= 25) {
                 credits -= 25;
                 updateDisplay();
-                alert(`${name} has completed the drill. Skill increased!`);
+                alert(`${name} has completed the drill.`);
             } else {
-                alert("Insufficient credits for training!");
+                alert("Insufficient credits!");
             }
         }
     </script>
