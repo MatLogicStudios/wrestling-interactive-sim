@@ -67,8 +67,9 @@
                 <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-40">
                     MAT LOBBY
                 </button>
+                <!-- RESTORED LOGO CONTAINER -->
                 <div class="-my-6 mt-4"> 
-                    <div class="h-20 md:h-48 w-32 bg-neutral-900 flex items-center justify-center text-[10px] text-neutral-600">LOGO</div>
+                    <img src="https://raw.githubusercontent.com/Deines1/KPI-Command-Center/main/MLS_LOGO.png" alt="Mat Logic Studios" class="h-24 md:h-52 w-auto object-contain">
                 </div>
             </div>
         </header>
@@ -121,50 +122,10 @@
         </div>
     </div>
 
-    <!-- WRESTLING ROOM SCREEN -->
-    <div id="wrestling-room-screen" class="screen bg-neutral-950 p-10">
-        <div class="flex justify-between items-start mb-12">
-            <h1 class="heavyweight-font text-5xl italic">WRESTLING ROOM</h1>
-            <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-4 text-sm">CLOSE ROOM</button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="mat-border p-6 border-t-4 border-t-red-600">
-                <h3 class="heavyweight-font text-2xl mb-4 italic">CAELUN SANDERS</h3>
-                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">THE UNBEATEN ONE</span>
-                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">ENDURANCE DRILL</button>
-            </div>
-            <div class="mat-border p-6 border-t-4 border-t-red-600">
-                <h3 class="heavyweight-font text-2xl mb-4 italic">JACE BARRON</h3>
-                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">POWER TAKEDOWN MACHINE</span>
-                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">EXPLOSIVE POWER</button>
-            </div>
-            <div class="mat-border p-6 border-t-4 border-t-red-600">
-                <h3 class="heavyweight-font text-2xl mb-4 italic">ALEXEI KARELAN</h3>
-                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">THE PHENOM</span>
-                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">TECHNIQUE DRILL</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- RECRUIT MODAL -->
-    <div id="recruit-modal" class="modal-overlay">
-        <div class="mat-border bg-neutral-950 p-8 border-t-4 border-t-red-600 max-w-sm w-full text-center shadow-2xl">
-            <h3 class="heavyweight-font text-3xl mb-2 italic text-white">Scout Prospect?</h3>
-            <p class="text-neutral-400 text-xs uppercase tracking-widest mb-6">Investment: <span class="text-green-500 font-bold">$150.00</span></p>
-            <div class="flex gap-4">
-                <button onclick="toggleOverlay('recruit-modal')" class="flex-1 py-4 bg-neutral-800 heavyweight-font text-xs tracking-widest uppercase rounded-[15px]">Cancel</button>
-                <button onclick="processRecruit()" class="flex-1 py-4 bg-red-700 heavyweight-font text-xs tracking-widest uppercase shadow-lg rounded-[15px]">Confirm</button>
-            </div>
-        </div>
-    </div>
-
     <!-- SIMULATION OVERLAY -->
     <div id="the-mat-sim" class="modal-overlay">
         <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col relative">
-            
-            <button onclick="stopSim()" class="danger-btn-large absolute top-6 right-6 px-10 py-4 text-xs z-50">
-                END MATCH
-            </button>
+            <button onclick="stopSim()" class="danger-btn-large absolute top-6 right-6 px-10 py-4 text-xs z-50">END MATCH</button>
 
             <div class="grid grid-cols-3 gap-4 mb-6 border-b-2 border-red-900 pb-4 pr-32">
                 <div class="text-center">
@@ -192,8 +153,7 @@
                 <div id="position-badge" class="heavyweight-font text-2xl text-neutral-600 italic tracking-widest">NEUTRAL</div>
             </div>
             
-            <div id="action-commands" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            </div>
+            <div id="action-commands" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6"></div>
         </div>
     </div>
 
@@ -201,28 +161,29 @@
         let credits = 500;
         let stableCount = 3;
         let isMatchRunning = false;
-        let matchSeconds = 180; // Total Period Time (Simulated)
-        let ridingTimeSeconds = 0; // Riding Time (Simulated)
+        let matchSeconds = 180;
+        let ridingTimeSeconds = 0;
         let currentPosition = 'neutral'; 
         let redScore = 0;
         let blueScore = 0;
         
-        let actionSeconds = 15; // Real-time Action Clock
+        let actionSeconds = 15;
         let actionInterval;
-        const SIM_TIME_PER_MOVE = 12; // Every move burns 12 simulated seconds
+        // REDUCED SIM TIME FROM 12 TO 1 PER MOVE FOR SLOWER CLOCK
+        const SIM_TIME_PER_MOVE = 1; 
 
         const decks = {
             neutral: [
                 { name: "Power Takedown", nextPos: "folkstyle_top", points: 2, sub: "Jace Barron Style" },
-                { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Takedown" },
+                { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
                 { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
                 { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
             ],
             folkstyle_top: [
-                { name: "Power Half", nextPos: "folkstyle_top", points: 2, sub: "Near Fall" },
-                { name: "Crossface", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
-                { name: "Leg Ride", nextPos: "folkstyle_top", points: 0, sub: "Ride" },
-                { name: "Mat Return", nextPos: "folkstyle_top", points: 0, sub: "Control" }
+                { name: "Ankle Pick", nextPos: "folkstyle_top", points: 0, sub: "Standup Counter" },
+                { name: "Waist-Lock Return", nextPos: "folkstyle_top", points: 0, sub: "Control Return" },
+                { name: "Forward Trip", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
+                { name: "Tight-Waist Chop", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" }
             ]
         };
 
@@ -255,12 +216,10 @@
             redScore = 0;
             blueScore = 0;
             currentPosition = 'neutral';
-            
             document.getElementById('red-score').innerText = "00";
             document.getElementById('blue-score').innerText = "00";
             document.getElementById('sim-log').innerText = "[SYSTEM]: MATCH STARTED - NEUTRAL";
             document.getElementById('position-badge').innerText = "NEUTRAL";
-            
             updateClockDisplays();
             renderCommands();
             startActionClock();
@@ -278,13 +237,10 @@
             const clockEl = document.getElementById('action-clock');
             clockEl.classList.remove('clock-pulse');
             clockEl.innerText = actionSeconds;
-
             actionInterval = setInterval(() => {
                 actionSeconds--;
                 clockEl.innerText = actionSeconds;
-
                 if(actionSeconds <= 5) clockEl.classList.add('clock-pulse');
-
                 if (actionSeconds <= 0) {
                     clearInterval(actionInterval);
                     document.getElementById('sim-log').innerText = "[SYSTEM]: STALEMATE - ACTION REQUIRED";
@@ -293,25 +249,16 @@
         }
 
         function handleMove(move) {
-            // Update Position and Score
             currentPosition = move.nextPos;
             redScore += move.points;
-            
-            // Advance Simulated Match Time
             matchSeconds = Math.max(0, matchSeconds - SIM_TIME_PER_MOVE);
-            
-            // Logic for Riding Time (only if Red is on Top)
             if (currentPosition === 'folkstyle_top') {
                 ridingTimeSeconds += SIM_TIME_PER_MOVE;
             }
-
-            // Update UI
             document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
             document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
             document.getElementById('sim-log').innerText = `[SYSTEM]: RED EXECUTES ${move.name.toUpperCase()}`;
-            
             updateClockDisplays();
-
             if (matchSeconds <= 0) {
                 document.getElementById('sim-log').innerText = "[SYSTEM]: TIME EXPIRED - MATCH ENDED";
                 clearInterval(actionInterval);
@@ -325,27 +272,13 @@
             const container = document.getElementById('action-commands');
             container.innerHTML = '';
             const currentDeck = decks[currentPosition] || decks['neutral'];
-
             currentDeck.forEach(move => {
                 const btn = document.createElement('button');
                 btn.className = "command-btn p-4 border-b-4 border-b-red-600";
-                btn.innerHTML = `
-                    <h3 class="text-xl heavyweight-font italic">${move.name}</h3>
-                    <p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">${move.sub}</p>
-                `;
+                btn.innerHTML = `<h3 class="text-xl heavyweight-font italic">${move.name}</h3><p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">${move.sub}</p>`;
                 btn.onclick = () => handleMove(move);
                 container.appendChild(btn);
             });
-        }
-
-        function processRecruit() {
-            if (credits >= 150 && stableCount < 12) {
-                credits -= 150;
-                stableCount++;
-                document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
-                document.getElementById('stable-count').innerText = `${stableCount} / 12`;
-                toggleOverlay('recruit-modal');
-            }
         }
     </script>
 </body>
