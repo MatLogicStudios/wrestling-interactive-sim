@@ -13,8 +13,8 @@
         .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); border-radius: 15px; }
         .title-gradient { background: linear-gradient(to right, #ffffff 20%, #ef4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Global Button Rounding */
-        button, .command-btn { border-radius: 15px !important; }
+        /* Global Button Rounding - 15px */
+        button, .command-btn, .mat-border { border-radius: 15px !important; }
 
         .command-btn { 
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
@@ -36,11 +36,20 @@
             text-transform: uppercase;
             letter-spacing: 0.1em;
             transition: 0.2s;
+            border-radius: 15px !important;
         }
         .danger-btn-large:hover { background-color: #ef4444 !important; transform: scale(1.05); }
 
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
+
+        /* Animation for the Clock */
+        .clock-pulse { animation: pulse 1s infinite; color: #ff0000; }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
@@ -57,11 +66,12 @@
                 </h2>
             </div>
             <div class="flex items-center">
-                <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-40">
+                <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-40">
                     MAT LOBBY
                 </button>
                 <div class="-my-6 mt-4"> 
-                    <img src="logo.png" alt="Mat Logic Shield" class="h-20 md:h-48 w-auto object-contain">
+                    <!-- Image placeholder for logo.png -->
+                    <div class="h-20 md:h-48 w-32 bg-neutral-900 flex items-center justify-center text-[10px] text-neutral-600">LOGO</div>
                 </div>
             </div>
         </header>
@@ -83,19 +93,19 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow max-h-[40vh]">
-                <button onclick="toggleOverlay('recruit-modal')" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
+                <button onclick="toggleOverlay('recruit-modal')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-neutral-800">
                     <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
                 </button>
-                <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-600">
+                <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-red-600">
                     <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
                 </button>
-                <button onclick="startSim()" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-900">
+                <button onclick="startSim()" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-red-900">
                     <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
                 </button>
-                <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-green-900">
+                <button class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-green-900">
                     <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
                 </button>
@@ -110,7 +120,7 @@
         <div class="mat-border p-10 max-w-2xl mx-auto flex flex-col items-center">
              <div class="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-6"></div>
              <p class="text-neutral-500 uppercase tracking-widest font-black">Secure Comm Link Active</p>
-             <button onclick="showScreen('main-dashboard')" class="mt-10 px-12 py-4 bg-neutral-800 heavyweight-font text-sm tracking-widest">RETURN</button>
+             <button onclick="showScreen('main-dashboard')" class="mt-10 px-12 py-4 bg-red-700 hover:bg-red-600 text-white heavyweight-font text-sm tracking-widest rounded-[15px]">RETURN</button>
         </div>
     </div>
 
@@ -120,11 +130,22 @@
             <h1 class="heavyweight-font text-5xl italic">WRESTLING ROOM</h1>
             <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-4 text-sm">CLOSE ROOM</button>
         </div>
+        <!-- Roster Grid - Ensuring all 3 show -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="mat-border p-6 border-t-4 border-t-red-600">
                 <h3 class="heavyweight-font text-2xl mb-4 italic">ALEXEI KARELAN</h3>
                 <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">THE PHENOM</span>
                 <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">RUN HEAVY LIFT DRILL</button>
+            </div>
+            <div class="mat-border p-6 border-t-4 border-t-red-600">
+                <h3 class="heavyweight-font text-2xl mb-4 italic">MEGAN MILLER</h3>
+                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">AFFILIATE PRO</span>
+                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">ENDURANCE RUN</button>
+            </div>
+            <div class="mat-border p-6 border-t-4 border-t-neutral-600">
+                <h3 class="heavyweight-font text-2xl mb-4 italic">NEW PROSPECT</h3>
+                <span class="bg-neutral-800 text-neutral-400 px-2 py-1 text-[10px] font-black rounded-sm">UNRANKED</span>
+                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest italic opacity-50">LOCKED</button>
             </div>
         </div>
     </div>
@@ -135,17 +156,23 @@
             <h3 class="heavyweight-font text-3xl mb-2 italic text-white">Scout Prospect?</h3>
             <p class="text-neutral-400 text-xs uppercase tracking-widest mb-6">Investment: <span class="text-green-500 font-bold">$150.00</span></p>
             <div class="flex gap-4">
-                <button onclick="toggleOverlay('recruit-modal')" class="flex-1 py-4 bg-neutral-800 heavyweight-font text-xs tracking-widest uppercase">Cancel</button>
-                <button onclick="processRecruit()" class="flex-1 py-4 bg-red-700 heavyweight-font text-xs tracking-widest uppercase shadow-lg">Confirm</button>
+                <button onclick="toggleOverlay('recruit-modal')" class="flex-1 py-4 bg-neutral-800 heavyweight-font text-xs tracking-widest uppercase rounded-[15px]">Cancel</button>
+                <button onclick="processRecruit()" class="flex-1 py-4 bg-red-700 heavyweight-font text-xs tracking-widest uppercase shadow-lg rounded-[15px]">Confirm</button>
             </div>
         </div>
     </div>
 
     <!-- SIMULATION OVERLAY -->
     <div id="the-mat-sim" class="modal-overlay">
-        <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col">
+        <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col relative">
+            
+            <!-- End Match Moved to Top Right -->
+            <button onclick="stopSim()" class="danger-btn-large absolute top-6 right-6 px-10 py-4 text-xs z-50">
+                END MATCH
+            </button>
+
             <!-- Scoreboard -->
-            <div class="grid grid-cols-3 gap-4 mb-6 border-b-2 border-red-900 pb-4">
+            <div class="grid grid-cols-3 gap-4 mb-6 border-b-2 border-red-900 pb-4 pr-32">
                 <div class="text-center">
                     <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">RED WRESTLER</div>
                     <div id="red-score" class="text-5xl md:text-7xl heavyweight-font text-red-600">00</div>
@@ -164,9 +191,9 @@
                 <div id="sim-log" class="absolute top-4 left-4 z-10 text-[10px] text-red-500 font-mono uppercase bg-black/60 p-2 border border-red-900/30">
                     [SYSTEM]: READY FOR WHISTLE...
                 </div>
-                <div id="shot-clock-container" class="absolute bottom-8 right-8 text-right">
-                    <div class="text-[10px] text-neutral-400 uppercase font-black mb-1">Decide:</div>
-                    <div id="shot-clock" class="text-6xl heavyweight-font text-red-600 italic">15</div>
+                <div id="action-clock-container" class="absolute bottom-8 right-8 text-right">
+                    <div class="text-[10px] text-neutral-400 uppercase font-black mb-1">Action Clock:</div>
+                    <div id="action-clock" class="text-7xl heavyweight-font text-red-600 italic">15</div>
                 </div>
                 <div id="position-badge" class="heavyweight-font text-2xl text-neutral-600 italic tracking-widest">NEUTRAL</div>
             </div>
@@ -174,13 +201,6 @@
             <!-- Moves Row -->
             <div id="action-commands" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                 <!-- Buttons injected by JS -->
-            </div>
-
-            <!-- Danger Zone Row (Safe Spacing) -->
-            <div class="flex justify-end mt-6">
-                <button onclick="stopSim()" class="danger-btn-large px-12 py-5 text-sm">
-                    END MATCH
-                </button>
             </div>
         </div>
     </div>
@@ -193,7 +213,10 @@
         let currentPosition = 'neutral'; 
         let redScore = 0;
         let blueScore = 0;
-        let shotClockInterval;
+        
+        // Action Clock Variables
+        let clockSeconds = 15;
+        let clockInterval;
 
         const decks = {
             neutral: [
@@ -226,12 +249,36 @@
             matchTime = 180;
             currentPosition = 'neutral';
             renderCommands();
+            startActionClock();
         }
 
         function stopSim() {
             isMatchRunning = false;
-            clearInterval(shotClockInterval);
+            clearInterval(clockInterval);
             toggleOverlay('the-mat-sim');
+        }
+
+        function startActionClock() {
+            clearInterval(clockInterval);
+            clockSeconds = 15;
+            const clockEl = document.getElementById('action-clock');
+            clockEl.classList.remove('clock-pulse');
+            clockEl.innerText = clockSeconds;
+
+            clockInterval = setInterval(() => {
+                clockSeconds--;
+                clockEl.innerText = clockSeconds;
+
+                if(clockSeconds <= 5) {
+                    clockEl.classList.add('clock-pulse');
+                }
+
+                if (clockSeconds <= 0) {
+                    clearInterval(clockInterval);
+                    // System penalty logic can go here
+                    document.getElementById('sim-log').innerText = "[SYSTEM]: STALEMATE - ACTION REQUIRED";
+                }
+            }, 1000);
         }
 
         function renderCommands() {
@@ -252,6 +299,7 @@
                     document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
                     document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
                     renderCommands();
+                    startActionClock(); // Reset clock on move
                 };
                 container.appendChild(btn);
             });
