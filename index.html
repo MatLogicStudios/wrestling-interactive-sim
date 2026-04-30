@@ -10,15 +10,11 @@
         html, body { height: 100vh; margin: 0; overflow: hidden; } 
         body { background-color: #0d0d0d; color: #f5f5f5; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; }
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: -0.01em; }
-        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); }
+        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); border-radius: 15px; }
         .title-gradient { background: linear-gradient(to right, #ffffff 20%, #ef4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(185, 28, 28, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
-        }
-        .lobby-pulse { animation: pulse-red 2s infinite; }
+        /* Global Button Rounding */
+        button, .command-btn { border-radius: 15px !important; }
 
         .command-btn { 
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
@@ -29,79 +25,126 @@
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
         .modal-overlay { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); 
-            z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
+            z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(8px);
         }
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #000; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #ef4444; }
+
+        .danger-btn-large {
+            background-color: #dc2626 !important;
+            color: white !important;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: 0.2s;
+        }
+        .danger-btn-large:hover { background-color: #ef4444 !important; transform: scale(1.05); }
+
+        .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
+        .active-screen { display: flex; }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
 
-    <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
-        <div class="flex flex-col justify-center">
-            <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
-                MAT LOGIC <span class="text-red-600">STUDIOS</span>
-            </h1>
-            <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
-                WRESTLING INTERACTIVE SIM
-            </h2>
-        </div>
-        <div class="flex items-center">
-            <button onclick="toggleOverlay('lobby-overlay')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-6 py-3 md:px-8 md:py-4 rounded-full text-[10px] md:text-xs tracking-[0.2em] transition lobby-pulse border border-red-500 shadow-lg mr-12 md:mr-40">
-                MAT LOBBY
-            </button>
-            <div class="-my-6 mt-4"> 
-                <img src="logo.png" alt="Mat Logic Shield" class="h-20 md:h-48 w-auto object-contain">
+    <!-- MAIN DASHBOARD -->
+    <div id="main-dashboard" class="screen active-screen">
+        <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
+            <div class="flex flex-col justify-center">
+                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
+                    MAT LOGIC <span class="text-red-600">STUDIOS</span>
+                </h1>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
+                    WRESTLING INTERACTIVE SIM
+                </h2>
             </div>
-        </div>
-    </header>
+            <div class="flex items-center">
+                <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-40">
+                    MAT LOBBY
+                </button>
+                <div class="-my-6 mt-4"> 
+                    <img src="logo.png" alt="Mat Logic Shield" class="h-20 md:h-48 w-auto object-contain">
+                </div>
+            </div>
+        </header>
 
-    <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full overflow-hidden">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-neutral-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
-                <div id="stable-count" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
+        <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-neutral-600">
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
+                    <div id="stable-count" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
+                </div>
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600">
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
+                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
+                </div>
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600">
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
+                    <div id="credit-display" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+                </div>
             </div>
-            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-red-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
-                <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow max-h-[40vh]">
+                <button onclick="toggleOverlay('recruit-modal')" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
+                    <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
+                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
+                </button>
+                <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-600">
+                    <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
+                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
+                </button>
+                <button onclick="startSim()" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-900">
+                    <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
+                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
+                </button>
+                <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-green-900">
+                    <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
+                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
+                </button>
             </div>
-            <div class="mat-border p-4 md:p-6 rounded-sm border-l-4 border-l-green-600">
-                <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
-                <div id="credit-display" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+        </main>
+    </div>
+
+    <!-- MAT LOBBY SCREEN -->
+    <div id="mat-lobby-screen" class="screen bg-black p-12 text-center">
+        <h1 class="heavyweight-font text-6xl mb-2 italic">MAT LOBBY</h1>
+        <p class="text-red-600 heavyweight-font text-xl tracking-[0.3em] mb-12">AUTHENTICITY: THE ULTIMATE TACTICAL ADVANTAGE.</p>
+        <div class="mat-border p-10 max-w-2xl mx-auto flex flex-col items-center">
+             <div class="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-6"></div>
+             <p class="text-neutral-500 uppercase tracking-widest font-black">Secure Comm Link Active</p>
+             <button onclick="showScreen('main-dashboard')" class="mt-10 px-12 py-4 bg-neutral-800 heavyweight-font text-sm tracking-widest">RETURN</button>
+        </div>
+    </div>
+
+    <!-- WRESTLING ROOM SCREEN -->
+    <div id="wrestling-room-screen" class="screen bg-neutral-950 p-10">
+        <div class="flex justify-between items-start mb-12">
+            <h1 class="heavyweight-font text-5xl italic">WRESTLING ROOM</h1>
+            <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-4 text-sm">CLOSE ROOM</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="mat-border p-6 border-t-4 border-t-red-600">
+                <h3 class="heavyweight-font text-2xl mb-4 italic">ALEXEI KARELAN</h3>
+                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">THE PHENOM</span>
+                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">RUN HEAVY LIFT DRILL</button>
             </div>
         </div>
+    </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow max-h-[40vh]">
-            <button onclick="toggleOverlay('recruit-modal')" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-neutral-800">
-                <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
-                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
-            </button>
-            <button onclick="toggleOverlay('wrestling-room')" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-600">
-                <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
-                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
-            </button>
-            <button onclick="startSim()" class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-red-900">
-                <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
-                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
-            </button>
-            <button class="command-btn p-4 md:p-6 rounded-sm text-left group border-b-4 border-b-green-900">
-                <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
-                <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
-            </button>
+    <!-- RECRUIT MODAL -->
+    <div id="recruit-modal" class="modal-overlay">
+        <div class="mat-border bg-neutral-950 p-8 border-t-4 border-t-red-600 max-w-sm w-full text-center shadow-2xl">
+            <h3 class="heavyweight-font text-3xl mb-2 italic text-white">Scout Prospect?</h3>
+            <p class="text-neutral-400 text-xs uppercase tracking-widest mb-6">Investment: <span class="text-green-500 font-bold">$150.00</span></p>
+            <div class="flex gap-4">
+                <button onclick="toggleOverlay('recruit-modal')" class="flex-1 py-4 bg-neutral-800 heavyweight-font text-xs tracking-widest uppercase">Cancel</button>
+                <button onclick="processRecruit()" class="flex-1 py-4 bg-red-700 heavyweight-font text-xs tracking-widest uppercase shadow-lg">Confirm</button>
+            </div>
         </div>
-    </main>
-
-    <footer class="flex-none py-4 border-t border-neutral-900 text-center bg-black">
-        <p class="text-[10px] text-neutral-500 uppercase tracking-[0.4em] font-black mb-1">© 2026 MAT LOGIC STUDIOS</p>
-        <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">Authenticity: The Ultimate Tactical Advantage.</p>
-    </footer>
+    </div>
 
     <!-- SIMULATION OVERLAY -->
     <div id="the-mat-sim" class="modal-overlay">
-        <div class="min-h-screen w-full bg-[#050505] p-4 flex flex-col">
+        <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col">
+            <!-- Scoreboard -->
             <div class="grid grid-cols-3 gap-4 mb-6 border-b-2 border-red-900 pb-4">
                 <div class="text-center">
                     <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">RED WRESTLER</div>
@@ -117,36 +160,27 @@
                 </div>
             </div>
             
-            <div class="flex-grow mat-border rounded-sm relative overflow-hidden bg-black flex flex-col items-center justify-center">
+            <div class="flex-grow mat-border relative overflow-hidden bg-black flex flex-col items-center justify-center">
                 <div id="sim-log" class="absolute top-4 left-4 z-10 text-[10px] text-red-500 font-mono uppercase bg-black/60 p-2 border border-red-900/30">
                     [SYSTEM]: READY FOR WHISTLE...
                 </div>
-                
                 <div id="shot-clock-container" class="absolute bottom-8 right-8 text-right">
                     <div class="text-[10px] text-neutral-400 uppercase font-black mb-1">Decide:</div>
                     <div id="shot-clock" class="text-6xl heavyweight-font text-red-600 italic">15</div>
                 </div>
-                <div id="stalemate-counter" class="absolute top-4 right-4 text-[10px] text-neutral-500 uppercase font-bold">STALEMATE COUNT: 0</div>
-                
-                <!-- Position Indicator -->
                 <div id="position-badge" class="heavyweight-font text-2xl text-neutral-600 italic tracking-widest">NEUTRAL</div>
             </div>
             
-            <!-- ACTION COMMANDS DYNAMIC CONTAINER -->
-            <div id="action-commands" class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6 h-24">
+            <!-- Moves Row -->
+            <div id="action-commands" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                 <!-- Buttons injected by JS -->
             </div>
-        </div>
-    </div>
 
-    <!-- RECRUIT MODAL -->
-    <div id="recruit-modal" class="modal-overlay">
-        <div class="mat-border bg-neutral-950 p-8 rounded-lg border-t-4 border-t-red-600 max-w-sm w-full text-center">
-            <h3 class="heavyweight-font text-3xl mb-2 italic text-white">Scout Prospect?</h3>
-            <p class="text-neutral-400 text-xs uppercase tracking-widest mb-6">Investment: <span class="text-green-500 font-bold">$150.00</span></p>
-            <div class="flex gap-4">
-                <button onclick="toggleOverlay('recruit-modal')" class="flex-1 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest uppercase">Cancel</button>
-                <button onclick="processRecruit()" class="flex-1 py-3 bg-red-700 heavyweight-font text-xs tracking-widest uppercase">Confirm</button>
+            <!-- Danger Zone Row (Safe Spacing) -->
+            <div class="flex justify-end mt-6">
+                <button onclick="stopSim()" class="danger-btn-large px-12 py-5 text-sm">
+                    END MATCH
+                </button>
             </div>
         </div>
     </div>
@@ -154,39 +188,32 @@
     <script>
         let credits = 500;
         let stableCount = 3;
-
-        // SIMULATION STATE
         let isMatchRunning = false;
         let matchTime = 180; 
-        let rtValue = 0; 
-        let shotClock = 15;
         let currentPosition = 'neutral'; 
         let redScore = 0;
         let blueScore = 0;
-        let stalemateCount = 0;
         let shotClockInterval;
 
-        // COMMAND DECKS
         const decks = {
             neutral: [
                 { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Takedown" },
                 { name: "Double Leg", nextPos: "folkstyle_top", points: 2, sub: "Takedown" },
                 { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
-                { name: "Tie Up", nextPos: "neutral", points: 0, sub: "Struggle" }
-            ],
-            folkstyle_bottom: [
-                { name: "Stand Up", nextPos: "neutral", points: 1, sub: "Escape" },
-                { name: "Sit Out", nextPos: "neutral", points: 1, sub: "Escape" },
-                { name: "Hip Heist", nextPos: "folkstyle_top", points: 2, sub: "Reversal" },
-                { name: "Hand Peel", nextPos: "folkstyle_bottom", points: 0, sub: "Defensive" }
+                { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
             ],
             folkstyle_top: [
-                { name: "Mat Return", nextPos: "folkstyle_top", points: 0, sub: "Control" },
                 { name: "Power Half", nextPos: "folkstyle_top", points: 2, sub: "Near Fall" },
                 { name: "Crossface", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
+                { name: "Tight Waist", nextPos: "folkstyle_top", points: 0, sub: "Control" },
                 { name: "Leg Ride", nextPos: "folkstyle_top", points: 0, sub: "Ride" }
             ]
         };
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+            document.getElementById(screenId).classList.add('active-screen');
+        }
 
         function toggleOverlay(id) {
             const el = document.getElementById(id);
@@ -197,16 +224,8 @@
             toggleOverlay('the-mat-sim');
             isMatchRunning = true;
             matchTime = 180;
-            shotClock = 15;
-            rtValue = 0;
-            stalemateCount = 0;
             currentPosition = 'neutral';
-            redScore = 0;
-            blueScore = 0;
-            updateClock();
-            updateScoreboard();
             renderCommands();
-            startDecisionTimer();
         }
 
         function stopSim() {
@@ -215,110 +234,35 @@
             toggleOverlay('the-mat-sim');
         }
 
-        function startDecisionTimer() {
-            clearInterval(shotClockInterval);
-            shotClockInterval = setInterval(() => {
-                if(!isMatchRunning) return;
-                shotClock--;
-                document.getElementById('shot-clock').innerText = shotClock;
-                if(shotClock <= 0) {
-                    handleStalemate();
-                    shotClock = 15;
-                }
-            }, 1000);
-        }
-
         function renderCommands() {
             const container = document.getElementById('action-commands');
             container.innerHTML = '';
-            const currentDeck = decks[currentPosition];
+            const currentDeck = decks[currentPosition] || decks['neutral'];
 
             currentDeck.forEach(move => {
                 const btn = document.createElement('button');
-                btn.className = "command-btn p-2 rounded-sm border-b-4 border-b-red-600";
+                btn.className = "command-btn p-4 border-b-4 border-b-red-600";
                 btn.innerHTML = `
-                    <h3 class="text-lg heavyweight-font italic">${move.name}</h3>
+                    <h3 class="text-xl heavyweight-font italic">${move.name}</h3>
                     <p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">${move.sub}</p>
                 `;
-                btn.onclick = () => executeMove(move);
+                btn.onclick = () => {
+                    currentPosition = move.nextPos;
+                    redScore += move.points;
+                    document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
+                    document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
+                    renderCommands();
+                };
                 container.appendChild(btn);
             });
-
-            const endBtn = document.createElement('button');
-            endBtn.className = "bg-neutral-900 text-white heavyweight-font text-xs tracking-widest hover:bg-red-600 transition";
-            endBtn.innerText = "END MATCH";
-            endBtn.onclick = stopSim;
-            container.appendChild(endBtn);
-            
-            document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
-        }
-
-        function executeMove(move) {
-            const timeLoss = Math.floor(Math.random() * 8) + 5; 
-            matchTime = Math.max(0, matchTime - timeLoss);
-            
-            if(currentPosition === 'folkstyle_top') rtValue += timeLoss;
-
-            redScore += move.points;
-            currentPosition = move.nextPos;
-            shotClock = 15;
-            stalemateCount = 0;
-
-            updateClock();
-            updateScoreboard();
-            updateRTDisplay();
-            renderCommands();
-            document.getElementById('stalemate-counter').innerText = `STALEMATE COUNT: 0`;
-            document.getElementById('sim-log').innerText = `[LOG]: ${move.name.toUpperCase()} EXECUTED.`;
-
-            if(matchTime <= 0) {
-                alert("FINAL WHISTLE: Match Complete.");
-                stopSim();
-            }
-        }
-
-        function handleStalemate() {
-            stalemateCount++;
-            document.getElementById('stalemate-counter').innerText = `STALEMATE COUNT: ${stalemateCount}`;
-            if (stalemateCount >= 3) {
-                blueScore++;
-                document.getElementById('sim-log').innerText = `[REF]: PASSIVITY POINT TO BLUE.`;
-                updateScoreboard();
-                stalemateCount = 0;
-            } else {
-                document.getElementById('sim-log').innerText = `[REF]: STALEMATE.`;
-            }
-        }
-
-        function updateClock() {
-            let mins = Math.floor(matchTime / 60);
-            let secs = matchTime % 60;
-            document.getElementById('match-timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function updateScoreboard() {
-            document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
-            document.getElementById('blue-score').innerText = blueScore.toString().padStart(2, '0');
-        }
-
-        function updateRTDisplay() {
-            const rtElement = document.getElementById('riding-time');
-            let displayTime = Math.abs(rtValue);
-            let mins = Math.floor(displayTime / 60);
-            let secs = displayTime % 60;
-            rtElement.innerText = `RT: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function updateDisplay() {
-            document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
-            document.getElementById('stable-count').innerText = `${stableCount} / 12`;
         }
 
         function processRecruit() {
             if (credits >= 150 && stableCount < 12) {
                 credits -= 150;
                 stableCount++;
-                updateDisplay();
+                document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
+                document.getElementById('stable-count').innerText = `${stableCount} / 12`;
                 toggleOverlay('recruit-modal');
             }
         }
