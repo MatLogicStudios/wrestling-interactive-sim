@@ -129,19 +129,19 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="mat-border p-6 border-t-4 border-t-red-600">
-                <h3 class="heavyweight-font text-2xl mb-4 italic">CHAOS</h3>
-                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">HEAVYWEIGHT</span>
-                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">DRILL FINGERTIP GRIP</button>
+                <h3 class="heavyweight-font text-2xl mb-4 italic">CAELUN SANDERS</h3>
+                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">THE UNBEATEN ONE</span>
+                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">ENDURANCE DRILL</button>
             </div>
             <div class="mat-border p-6 border-t-4 border-t-red-600">
-                <h3 class="heavyweight-font text-2xl mb-4 italic">FUGITIVE</h3>
-                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">STRIKER</span>
-                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">SPEED DRILL</button>
+                <h3 class="heavyweight-font text-2xl mb-4 italic">JACE BARRON</h3>
+                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">POWER TAKEDOWN MACHINE</span>
+                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">EXPLOSIVE POWER</button>
             </div>
-            <div class="mat-border p-6 border-t-4 border-t-neutral-600">
-                <h3 class="heavyweight-font text-2xl mb-4 italic">NEW PROSPECT</h3>
-                <span class="bg-neutral-800 text-neutral-400 px-2 py-1 text-[10px] font-black rounded-sm">UNRANKED</span>
-                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest italic opacity-50">LOCKED</button>
+            <div class="mat-border p-6 border-t-4 border-t-red-600">
+                <h3 class="heavyweight-font text-2xl mb-4 italic">ALEXEI KARELAN</h3>
+                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">THE PHENOM</span>
+                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">TECHNIQUE DRILL</button>
             </div>
         </div>
     </div>
@@ -201,27 +201,28 @@
         let credits = 500;
         let stableCount = 3;
         let isMatchRunning = false;
-        let matchSeconds = 180; 
+        let matchSeconds = 180; // Total Period Time (Simulated)
+        let ridingTimeSeconds = 0; // Riding Time (Simulated)
         let currentPosition = 'neutral'; 
         let redScore = 0;
         let blueScore = 0;
         
-        let matchInterval;
-        let clockSeconds = 15;
-        let clockInterval;
+        let actionSeconds = 15; // Real-time Action Clock
+        let actionInterval;
+        const SIM_TIME_PER_MOVE = 12; // Every move burns 12 simulated seconds
 
         const decks = {
             neutral: [
+                { name: "Power Takedown", nextPos: "folkstyle_top", points: 2, sub: "Jace Barron Style" },
                 { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Takedown" },
-                { name: "Double Leg", nextPos: "folkstyle_top", points: 2, sub: "Takedown" },
                 { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
                 { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
             ],
             folkstyle_top: [
                 { name: "Power Half", nextPos: "folkstyle_top", points: 2, sub: "Near Fall" },
                 { name: "Crossface", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
-                { name: "Tight Waist", nextPos: "folkstyle_top", points: 0, sub: "Control" },
-                { name: "Leg Ride", nextPos: "folkstyle_top", points: 0, sub: "Ride" }
+                { name: "Leg Ride", nextPos: "folkstyle_top", points: 0, sub: "Ride" },
+                { name: "Mat Return", nextPos: "folkstyle_top", points: 0, sub: "Control" }
             ]
         };
 
@@ -235,59 +236,89 @@
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
         }
 
+        function formatTime(totalSeconds) {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateClockDisplays() {
+            document.getElementById('match-timer').innerText = formatTime(matchSeconds);
+            document.getElementById('riding-time').innerText = `RT: ${formatTime(ridingTimeSeconds)}`;
+        }
+
         function startSim() {
             toggleOverlay('the-mat-sim');
             isMatchRunning = true;
             matchSeconds = 180;
+            ridingTimeSeconds = 0;
             redScore = 0;
-            document.getElementById('red-score').innerText = "00";
-            document.getElementById('sim-log').innerText = "[SYSTEM]: MATCH STARTED";
+            blueScore = 0;
             currentPosition = 'neutral';
+            
+            document.getElementById('red-score').innerText = "00";
+            document.getElementById('blue-score').innerText = "00";
+            document.getElementById('sim-log').innerText = "[SYSTEM]: MATCH STARTED - NEUTRAL";
+            document.getElementById('position-badge').innerText = "NEUTRAL";
+            
+            updateClockDisplays();
             renderCommands();
-            startMatchTimer();
             startActionClock();
         }
 
         function stopSim() {
             isMatchRunning = false;
-            clearInterval(matchInterval);
-            clearInterval(clockInterval);
+            clearInterval(actionInterval);
             toggleOverlay('the-mat-sim');
         }
 
-        function startMatchTimer() {
-            clearInterval(matchInterval);
-            matchInterval = setInterval(() => {
-                if (matchSeconds > 0) {
-                    matchSeconds--;
-                    const mins = Math.floor(matchSeconds / 60);
-                    const secs = matchSeconds % 60;
-                    document.getElementById('match-timer').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
-                } else {
-                    stopSim();
-                    document.getElementById('sim-log').innerText = "[SYSTEM]: TIME EXPIRED";
+        function startActionClock() {
+            clearInterval(actionInterval);
+            actionSeconds = 15;
+            const clockEl = document.getElementById('action-clock');
+            clockEl.classList.remove('clock-pulse');
+            clockEl.innerText = actionSeconds;
+
+            actionInterval = setInterval(() => {
+                actionSeconds--;
+                clockEl.innerText = actionSeconds;
+
+                if(actionSeconds <= 5) clockEl.classList.add('clock-pulse');
+
+                if (actionSeconds <= 0) {
+                    clearInterval(actionInterval);
+                    document.getElementById('sim-log').innerText = "[SYSTEM]: STALEMATE - ACTION REQUIRED";
                 }
             }, 1000);
         }
 
-        function startActionClock() {
-            clearInterval(clockInterval);
-            clockSeconds = 15;
-            const clockEl = document.getElementById('action-clock');
-            clockEl.classList.remove('clock-pulse');
-            clockEl.innerText = clockSeconds;
+        function handleMove(move) {
+            // Update Position and Score
+            currentPosition = move.nextPos;
+            redScore += move.points;
+            
+            // Advance Simulated Match Time
+            matchSeconds = Math.max(0, matchSeconds - SIM_TIME_PER_MOVE);
+            
+            // Logic for Riding Time (only if Red is on Top)
+            if (currentPosition === 'folkstyle_top') {
+                ridingTimeSeconds += SIM_TIME_PER_MOVE;
+            }
 
-            clockInterval = setInterval(() => {
-                clockSeconds--;
-                clockEl.innerText = clockSeconds;
+            // Update UI
+            document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
+            document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
+            document.getElementById('sim-log').innerText = `[SYSTEM]: RED EXECUTES ${move.name.toUpperCase()}`;
+            
+            updateClockDisplays();
 
-                if(clockSeconds <= 5) clockEl.classList.add('clock-pulse');
-
-                if (clockSeconds <= 0) {
-                    clearInterval(clockInterval);
-                    document.getElementById('sim-log').innerText = "[SYSTEM]: STALEMATE - ACTION REQUIRED";
-                }
-            }, 1000);
+            if (matchSeconds <= 0) {
+                document.getElementById('sim-log').innerText = "[SYSTEM]: TIME EXPIRED - MATCH ENDED";
+                clearInterval(actionInterval);
+            } else {
+                renderCommands();
+                startActionClock(); 
+            }
         }
 
         function renderCommands() {
@@ -302,15 +333,7 @@
                     <h3 class="text-xl heavyweight-font italic">${move.name}</h3>
                     <p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">${move.sub}</p>
                 `;
-                btn.onclick = () => {
-                    currentPosition = move.nextPos;
-                    redScore += move.points;
-                    document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
-                    document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
-                    document.getElementById('sim-log').innerText = `[SYSTEM]: RED EXECUTES ${move.name.toUpperCase()}`;
-                    renderCommands();
-                    startActionClock(); 
-                };
+                btn.onclick = () => handleMove(move);
                 container.appendChild(btn);
             });
         }
