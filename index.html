@@ -13,7 +13,6 @@
         .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); border-radius: 15px; }
         .title-gradient { background: linear-gradient(to right, #ffffff 20%, #ef4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Global Button Rounding - 15px */
         button, .command-btn, .mat-border { border-radius: 15px !important; }
 
         .command-btn { 
@@ -43,7 +42,6 @@
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
 
-        /* Animation for the Clock */
         .clock-pulse { animation: pulse 1s infinite; color: #ff0000; }
         @keyframes pulse {
             0% { opacity: 1; }
@@ -70,7 +68,6 @@
                     MAT LOBBY
                 </button>
                 <div class="-my-6 mt-4"> 
-                    <!-- Image placeholder for logo.png -->
                     <div class="h-20 md:h-48 w-32 bg-neutral-900 flex items-center justify-center text-[10px] text-neutral-600">LOGO</div>
                 </div>
             </div>
@@ -130,17 +127,16 @@
             <h1 class="heavyweight-font text-5xl italic">WRESTLING ROOM</h1>
             <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-4 text-sm">CLOSE ROOM</button>
         </div>
-        <!-- Roster Grid - Ensuring all 3 show -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="mat-border p-6 border-t-4 border-t-red-600">
-                <h3 class="heavyweight-font text-2xl mb-4 italic">ALEXEI KARELAN</h3>
-                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">THE PHENOM</span>
-                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">RUN HEAVY LIFT DRILL</button>
+                <h3 class="heavyweight-font text-2xl mb-4 italic">CHAOS</h3>
+                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">HEAVYWEIGHT</span>
+                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">DRILL FINGERTIP GRIP</button>
             </div>
             <div class="mat-border p-6 border-t-4 border-t-red-600">
-                <h3 class="heavyweight-font text-2xl mb-4 italic">MEGAN MILLER</h3>
-                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">AFFILIATE PRO</span>
-                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">ENDURANCE RUN</button>
+                <h3 class="heavyweight-font text-2xl mb-4 italic">FUGITIVE</h3>
+                <span class="bg-red-900/50 text-red-500 px-2 py-1 text-[10px] font-black rounded-sm">STRIKER</span>
+                <button class="w-full mt-6 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest">SPEED DRILL</button>
             </div>
             <div class="mat-border p-6 border-t-4 border-t-neutral-600">
                 <h3 class="heavyweight-font text-2xl mb-4 italic">NEW PROSPECT</h3>
@@ -166,12 +162,10 @@
     <div id="the-mat-sim" class="modal-overlay">
         <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col relative">
             
-            <!-- End Match Moved to Top Right -->
             <button onclick="stopSim()" class="danger-btn-large absolute top-6 right-6 px-10 py-4 text-xs z-50">
                 END MATCH
             </button>
 
-            <!-- Scoreboard -->
             <div class="grid grid-cols-3 gap-4 mb-6 border-b-2 border-red-900 pb-4 pr-32">
                 <div class="text-center">
                     <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">RED WRESTLER</div>
@@ -198,9 +192,7 @@
                 <div id="position-badge" class="heavyweight-font text-2xl text-neutral-600 italic tracking-widest">NEUTRAL</div>
             </div>
             
-            <!-- Moves Row -->
             <div id="action-commands" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                <!-- Buttons injected by JS -->
             </div>
         </div>
     </div>
@@ -209,12 +201,12 @@
         let credits = 500;
         let stableCount = 3;
         let isMatchRunning = false;
-        let matchTime = 180; 
+        let matchSeconds = 180; 
         let currentPosition = 'neutral'; 
         let redScore = 0;
         let blueScore = 0;
         
-        // Action Clock Variables
+        let matchInterval;
         let clockSeconds = 15;
         let clockInterval;
 
@@ -246,16 +238,36 @@
         function startSim() {
             toggleOverlay('the-mat-sim');
             isMatchRunning = true;
-            matchTime = 180;
+            matchSeconds = 180;
+            redScore = 0;
+            document.getElementById('red-score').innerText = "00";
+            document.getElementById('sim-log').innerText = "[SYSTEM]: MATCH STARTED";
             currentPosition = 'neutral';
             renderCommands();
+            startMatchTimer();
             startActionClock();
         }
 
         function stopSim() {
             isMatchRunning = false;
+            clearInterval(matchInterval);
             clearInterval(clockInterval);
             toggleOverlay('the-mat-sim');
+        }
+
+        function startMatchTimer() {
+            clearInterval(matchInterval);
+            matchInterval = setInterval(() => {
+                if (matchSeconds > 0) {
+                    matchSeconds--;
+                    const mins = Math.floor(matchSeconds / 60);
+                    const secs = matchSeconds % 60;
+                    document.getElementById('match-timer').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+                } else {
+                    stopSim();
+                    document.getElementById('sim-log').innerText = "[SYSTEM]: TIME EXPIRED";
+                }
+            }, 1000);
         }
 
         function startActionClock() {
@@ -269,13 +281,10 @@
                 clockSeconds--;
                 clockEl.innerText = clockSeconds;
 
-                if(clockSeconds <= 5) {
-                    clockEl.classList.add('clock-pulse');
-                }
+                if(clockSeconds <= 5) clockEl.classList.add('clock-pulse');
 
                 if (clockSeconds <= 0) {
                     clearInterval(clockInterval);
-                    // System penalty logic can go here
                     document.getElementById('sim-log').innerText = "[SYSTEM]: STALEMATE - ACTION REQUIRED";
                 }
             }, 1000);
@@ -298,8 +307,9 @@
                     redScore += move.points;
                     document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
                     document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
+                    document.getElementById('sim-log').innerText = `[SYSTEM]: RED EXECUTES ${move.name.toUpperCase()}`;
                     renderCommands();
-                    startActionClock(); // Reset clock on move
+                    startActionClock(); 
                 };
                 container.appendChild(btn);
             });
