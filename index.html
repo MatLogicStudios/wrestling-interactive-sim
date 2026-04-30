@@ -99,6 +99,7 @@
         <p class="text-[10px] text-red-600 uppercase tracking-widest font-bold italic">Authenticity: The Ultimate Tactical Advantage.</p>
     </footer>
 
+    <!-- SIMULATION OVERLAY -->
     <div id="the-mat-sim" class="modal-overlay">
         <div class="min-h-screen w-full bg-[#050505] p-4 flex flex-col">
             <div class="grid grid-cols-3 gap-4 mb-6 border-b-2 border-red-900 pb-4">
@@ -115,19 +116,24 @@
                     <div id="blue-score" class="text-5xl md:text-7xl heavyweight-font text-blue-600">00</div>
                 </div>
             </div>
-            <div class="flex-grow mat-border rounded-sm relative overflow-hidden bg-black flex items-center justify-center">
+            
+            <div class="flex-grow mat-border rounded-sm relative overflow-hidden bg-black flex flex-col items-center justify-center">
                 <div id="sim-log" class="absolute top-4 left-4 z-10 text-[10px] text-red-500 font-mono uppercase bg-black/60 p-2 border border-red-900/30">
                     [SYSTEM]: READY FOR WHISTLE...
                 </div>
+                
                 <div id="shot-clock-container" class="absolute bottom-8 right-8 text-right">
                     <div class="text-[10px] text-neutral-400 uppercase font-black mb-1">Decide:</div>
                     <div id="shot-clock" class="text-6xl heavyweight-font text-red-600 italic">15</div>
                 </div>
                 <div id="stalemate-counter" class="absolute top-4 right-4 text-[10px] text-neutral-500 uppercase font-bold">STALEMATE COUNT: 0</div>
+                
+                <!-- Position Indicator -->
+                <div id="position-badge" class="heavyweight-font text-2xl text-neutral-600 italic tracking-widest">NEUTRAL</div>
             </div>
             
             <!-- ACTION COMMANDS DYNAMIC CONTAINER -->
-            <div id="action-commands" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 h-24">
+            <div id="action-commands" class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6 h-24">
                 <!-- Buttons injected by JS -->
             </div>
         </div>
@@ -139,52 +145,9 @@
             <h3 class="heavyweight-font text-3xl mb-2 italic text-white">Scout Prospect?</h3>
             <p class="text-neutral-400 text-xs uppercase tracking-widest mb-6">Investment: <span class="text-green-500 font-bold">$150.00</span></p>
             <div class="flex gap-4">
-                <button onclick="toggleOverlay('recruit-modal')" class="flex-1 py-3 bg-neutral-800 hover:bg-neutral-700 heavyweight-font text-xs tracking-widest uppercase transition">Cancel</button>
-                <button onclick="processRecruit()" class="flex-1 py-3 bg-red-700 hover:bg-red-600 heavyweight-font text-xs tracking-widest uppercase transition">Confirm</button>
+                <button onclick="toggleOverlay('recruit-modal')" class="flex-1 py-3 bg-neutral-800 heavyweight-font text-xs tracking-widest uppercase">Cancel</button>
+                <button onclick="processRecruit()" class="flex-1 py-3 bg-red-700 heavyweight-font text-xs tracking-widest uppercase">Confirm</button>
             </div>
-        </div>
-    </div>
-
-    <!-- WRESTLING ROOM -->
-    <div id="wrestling-room" class="modal-overlay overflow-y-auto">
-        <div class="min-h-screen w-full bg-[#0d0d0d] p-4 md:p-8 flex flex-col">
-            <div class="flex justify-between items-end border-b border-red-900/50 pb-4 mb-6">
-                <div>
-                    <h3 class="heavyweight-font text-4xl md:text-6xl text-white italic">THE WRESTLING ROOM</h3>
-                    <p class="text-red-600 text-xs uppercase tracking-[0.3em] font-bold italic">Authentic Skill Development Cycle</p>
-                </div>
-                <button onclick="toggleOverlay('wrestling-room')" class="mat-border px-6 py-2 text-[10px] heavyweight-font hover:bg-red-600 transition tracking-widest">CLOSE ROOM</button>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 custom-scroll overflow-y-auto">
-                <div class="mat-border p-6 border-t-4 border-t-neutral-600 relative">
-                    <h4 class="heavyweight-font text-2xl italic mb-1 text-white">CAELUN SANDERS</h4>
-                    <span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Unbeaten One</span>
-                    <button onclick="runDrill('Caelun Sanders')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Technical Drill</button>
-                </div>
-                <div class="mat-border p-6 border-t-4 border-t-red-600 relative">
-                    <h4 class="heavyweight-font text-2xl italic mb-1 text-white">JACE BARRON</h4>
-                    <span class="bg-red-950 text-red-400 text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Power Machine</span>
-                    <button onclick="runDrill('Jace Barron')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Explosive Drill</button>
-                </div>
-                <div class="mat-border p-6 border-t-4 border-t-red-900 relative">
-                    <h4 class="heavyweight-font text-2xl italic mb-1 text-white">ALEXEI KARELAN</h4>
-                    <span class="bg-red-900 text-white text-[9px] px-2 py-0.5 rounded uppercase font-black tracking-widest">The Phenom</span>
-                    <button onclick="runDrill('Alexei KARELAN')" class="w-full bg-white text-black py-3 heavyweight-font text-xs hover:bg-red-600 hover:text-white transition uppercase tracking-widest mt-8 italic">Run Heavy Lift Drill</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- LOBBY -->
-    <div id="lobby-overlay" class="modal-overlay">
-        <div class="max-w-2xl w-full mat-border p-8 rounded-lg bg-neutral-950 border-t-8 border-t-red-600 text-center shadow-2xl">
-            <h3 class="heavyweight-font text-5xl mb-2">MAT LOBBY</h3>
-            <p class="text-red-600 text-lg uppercase tracking-[0.2em] font-bold italic mb-6">Authenticity is the core of the logic.</p>
-            <div class="bg-black/80 p-8 rounded mb-8 border border-neutral-800 h-48 flex flex-col items-center justify-center">
-                <div class="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p class="text-neutral-400 font-mono text-xs tracking-[0.3em]">SECURE COMM LINK ACTIVE</p>
-            </div>
-            <button onclick="toggleOverlay('lobby-overlay')" class="bg-red-700 border border-red-500 px-10 py-4 heavyweight-font text-white hover:bg-red-600 transition rounded-full tracking-widest text-sm">Return</button>
         </div>
     </div>
 
@@ -196,7 +159,7 @@
         let isMatchRunning = false;
         let matchTime = 180; 
         let rtValue = 0; 
-        let shotClock = 15; // 15-second decision timer
+        let shotClock = 15;
         let currentPosition = 'neutral'; 
         let redScore = 0;
         let blueScore = 0;
@@ -230,11 +193,6 @@
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        function updateDisplay() {
-            document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
-            document.getElementById('stable-count').innerText = `${stableCount} / 12`;
-        }
-
         function startSim() {
             toggleOverlay('the-mat-sim');
             isMatchRunning = true;
@@ -261,15 +219,75 @@
             clearInterval(shotClockInterval);
             shotClockInterval = setInterval(() => {
                 if(!isMatchRunning) return;
-                
                 shotClock--;
                 document.getElementById('shot-clock').innerText = shotClock;
-
                 if(shotClock <= 0) {
                     handleStalemate();
                     shotClock = 15;
                 }
             }, 1000);
+        }
+
+        function renderCommands() {
+            const container = document.getElementById('action-commands');
+            container.innerHTML = '';
+            const currentDeck = decks[currentPosition];
+
+            currentDeck.forEach(move => {
+                const btn = document.createElement('button');
+                btn.className = "command-btn p-2 rounded-sm border-b-4 border-b-red-600";
+                btn.innerHTML = `
+                    <h3 class="text-lg heavyweight-font italic">${move.name}</h3>
+                    <p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">${move.sub}</p>
+                `;
+                btn.onclick = () => executeMove(move);
+                container.appendChild(btn);
+            });
+
+            const endBtn = document.createElement('button');
+            endBtn.className = "bg-neutral-900 text-white heavyweight-font text-xs tracking-widest hover:bg-red-600 transition";
+            endBtn.innerText = "END MATCH";
+            endBtn.onclick = stopSim;
+            container.appendChild(endBtn);
+            
+            document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
+        }
+
+        function executeMove(move) {
+            const timeLoss = Math.floor(Math.random() * 8) + 5; 
+            matchTime = Math.max(0, matchTime - timeLoss);
+            
+            if(currentPosition === 'folkstyle_top') rtValue += timeLoss;
+
+            redScore += move.points;
+            currentPosition = move.nextPos;
+            shotClock = 15;
+            stalemateCount = 0;
+
+            updateClock();
+            updateScoreboard();
+            updateRTDisplay();
+            renderCommands();
+            document.getElementById('stalemate-counter').innerText = `STALEMATE COUNT: 0`;
+            document.getElementById('sim-log').innerText = `[LOG]: ${move.name.toUpperCase()} EXECUTED.`;
+
+            if(matchTime <= 0) {
+                alert("FINAL WHISTLE: Match Complete.");
+                stopSim();
+            }
+        }
+
+        function handleStalemate() {
+            stalemateCount++;
+            document.getElementById('stalemate-counter').innerText = `STALEMATE COUNT: ${stalemateCount}`;
+            if (stalemateCount >= 3) {
+                blueScore++;
+                document.getElementById('sim-log').innerText = `[REF]: PASSIVITY POINT TO BLUE.`;
+                updateScoreboard();
+                stalemateCount = 0;
+            } else {
+                document.getElementById('sim-log').innerText = `[REF]: STALEMATE.`;
+            }
         }
 
         function updateClock() {
@@ -283,84 +301,17 @@
             document.getElementById('blue-score').innerText = blueScore.toString().padStart(2, '0');
         }
 
-        function renderCommands() {
-            const container = document.getElementById('action-commands');
-            container.innerHTML = ''; // Clear old buttons
-
-            const currentDeck = decks[currentPosition] || decks.neutral;
-
-            currentDeck.forEach(move => {
-                const btn = document.createElement('button');
-                btn.className = "command-btn p-2 rounded-sm border-b-4 " + 
-                                (currentPosition === 'neutral' ? "border-b-neutral-600" : 
-                                 currentPosition === 'folkstyle_top' ? "border-b-red-600" : "border-b-blue-600");
-                
-                btn.innerHTML = `
-                    <h3 class="text-lg heavyweight-font italic">${move.name}</h3>
-                    <p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">${move.sub}</p>
-                `;
-                btn.onclick = () => executeMove(move);
-                container.appendChild(btn);
-            });
-
-            // Add the End Match button at the end
-            const endBtn = document.createElement('button');
-            endBtn.className = "bg-neutral-900 text-white heavyweight-font text-xs tracking-widest hover:bg-red-600 transition uppercase";
-            endBtn.innerText = "End Match";
-            endBtn.onclick = stopSim;
-            container.appendChild(endBtn);
-        }
-
-        function executeMove(move) {
-            // Action-driven clock: Match time decreases only on action
-            const timeLoss = Math.floor(Math.random() * 8) + 5; // Move takes 5-12 seconds
-            matchTime = Math.max(0, matchTime - timeLoss);
-            
-            // Riding time logic (Red is Top)
-            if(currentPosition === 'folkstyle_top') rtValue += timeLoss;
-
-            // Update state
-            redScore += move.points;
-            currentPosition = move.nextPos;
-            shotClock = 15;
-            stalemateCount = 0;
-
-            // UI Refresh
-            updateClock();
-            updateScoreboard();
-            updateRTDisplay();
-            renderCommands();
-            document.getElementById('stalemate-counter').innerText = `STALEMATE COUNT: 0`;
-            document.getElementById('sim-log').innerText = `[LOG]: ${move.name.toUpperCase()} SUCCESSFUL.`;
-
-            if(matchTime <= 0) {
-                alert("Match Over!");
-                stopSim();
-            }
-        }
-
-        function handleStalemate() {
-            stalemateCount++;
-            document.getElementById('stalemate-counter').innerText = `STALEMATE COUNT: ${stalemateCount}`;
-            
-            if(stalemateCount === 1) {
-                document.getElementById('sim-log').innerText = `[REF]: STALEMATE. RESET.`;
-            } else if (stalemateCount >= 3) {
-                document.getElementById('sim-log').innerText = `[REF]: PASSIVITY PENALTY.`;
-                blueScore++;
-                updateScoreboard();
-                stalemateCount = 0; 
-            }
-        }
-
         function updateRTDisplay() {
             const rtElement = document.getElementById('riding-time');
             let displayTime = Math.abs(rtValue);
             let mins = Math.floor(displayTime / 60);
             let secs = displayTime % 60;
-            let owner = rtValue >= 0 ? "RED" : "BLUE";
-            rtElement.innerText = `RT: ${mins}:${secs < 10 ? '0' : ''}${secs} (${owner})`;
-            rtElement.style.color = rtValue >= 0 ? "#ef4444" : "#3b82f6";
+            rtElement.innerText = `RT: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function updateDisplay() {
+            document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
+            document.getElementById('stable-count').innerText = `${stableCount} / 12`;
         }
 
         function processRecruit() {
@@ -369,17 +320,6 @@
                 stableCount++;
                 updateDisplay();
                 toggleOverlay('recruit-modal');
-                alert("New prospect scouted.");
-            } else {
-                alert("Cannot recruit!");
-            }
-        }
-
-        function runDrill(name) {
-            if (credits >= 25) {
-                credits -= 25;
-                updateDisplay();
-                alert(`${name} trained.`);
             }
         }
     </script>
