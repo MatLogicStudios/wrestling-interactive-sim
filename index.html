@@ -20,7 +20,7 @@
             border: 1px solid #333;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column; justify-content: center;
-            height: 110px; /* Reduced further to prevent overlap */
+            height: 110px;
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
@@ -45,7 +45,7 @@
         .log-red { color: #ef4444; }
         .log-blue { color: #3b82f6; }
 
-        /* Centering Footer Trick */
+        /* Centered Footer Logic */
         .footer-container {
             display: flex;
             justify-content: space-between;
@@ -133,7 +133,7 @@
                 </div>
             </div>
             
-            <div class="w-32"></div> <!-- Spacer for balance -->
+            <div class="w-32"></div> 
         </footer>
     </div>
 
@@ -158,14 +158,11 @@
             </div>
 
             <div class="flex-grow mat-border relative overflow-hidden bg-black flex flex-col items-center justify-center">
-                <!-- MOVE LOG WINDOW -->
                 <div id="sim-log" class="absolute top-4 left-4 z-10 text-[11px] font-mono uppercase bg-black/80 p-4 border border-neutral-800 w-64 h-32 overflow-hidden flex flex-col justify-end">
                     <div class="text-neutral-500">[SYSTEM]: READY...</div>
                 </div>
                 <div id="action-clock" class="absolute bottom-8 right-8 text-7xl heavyweight-font text-red-600 italic">15</div>
                 <div id="position-badge" class="heavyweight-font text-2xl text-neutral-600 italic tracking-widest">NEUTRAL</div>
-                
-                <!-- Added a test button for Blue so you can see the log color work -->
                 <button onclick="testBlueMove()" class="absolute bottom-4 left-4 text-[8px] bg-blue-900/20 text-blue-500 p-1 border border-blue-900/50">TEST BLUE ACTION</button>
             </div>
 
@@ -179,13 +176,17 @@
                 { name: "Power Takedown", nextPos: "folkstyle_top", points: 2, sub: "High C" },
                 { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
                 { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
-                { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
+                { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
+                { name: "Low Single", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
+                { name: "Arm Drag", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
             ],
             folkstyle_top: [
                 { name: "Waist Lock", nextPos: "folkstyle_top", points: 0, sub: "Control" },
                 { name: "Forward Trip", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
                 { name: "Arm Chop", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
-                { name: "Spiral Ride", nextPos: "folkstyle_top", points: 0, sub: "Pressure" }
+                { name: "Spiral Ride", nextPos: "folkstyle_top", points: 0, sub: "Pressure" },
+                { name: "Crossface", nextPos: "folkstyle_top", points: 0, sub: "Control" },
+                { name: "Half Nelson", nextPos: "folkstyle_top", points: 0, sub: "Turn Attempt" }
             ]
         };
 
@@ -205,7 +206,7 @@
 
         function handleMove(move, isRed = true) {
             const colorClass = isRed ? 'log-red' : 'log-blue';
-            updateLog(`${isRed ? 'RED' : 'BLUE'} ATTEMPTS ${move.name}`, colorClass);
+            updateLog(`${isRed ? 'RED' : 'BLUE'} ATTEMPTS ${move.name.toUpperCase()}`, colorClass);
             
             currentPosition = move.nextPos;
             if(isRed) {
