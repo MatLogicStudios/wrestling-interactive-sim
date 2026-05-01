@@ -39,6 +39,16 @@
             border-radius: 15px !important;
         }
 
+        .success-btn-large {
+            background-color: #16a34a !important;
+            color: white !important;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: 0.2s;
+            border-radius: 15px !important;
+        }
+
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
 
@@ -115,10 +125,13 @@
 
         <footer class="flex-none p-6 border-t border-neutral-900 bg-black footer-container">
             <div class="text-xs font-black tracking-widest text-white heavyweight-font italic mb-1">
-                MAT LOGIC STUDIOS // V 1.04
+                MAT LOGIC STUDIOS // V 1.0.4
             </div>
             <div class="text-[10px] text-red-600 heavyweight-font italic tracking-[0.2em] uppercase">
-                AUTHENTICITY VERIFIED © 2026 ALL RIGHTS RESERVED
+                AUTHENTICITY VERIFIED // TACTICAL ADVANTAGE ACTIVE
+            </div>
+            <div class="text-[10px] text-neutral-500 heavyweight-font tracking-[0.1em] uppercase mt-1">
+                © 2026 ALL RIGHTS RESERVED
             </div>
         </footer>
     </div>
@@ -127,7 +140,7 @@
     <div id="wrestling-room-screen" class="screen bg-[#050505]">
         <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
             <h2 class="text-4xl heavyweight-font title-gradient italic">WRESTLING ROOM</h2>
-            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-neutral-800 text-white px-6 py-2 rounded-full text-xs tracking-widest">BACK TO DASHBOARD</button>
+            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full text-xs tracking-widest border border-red-500">BACK TO DASHBOARD</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
@@ -165,12 +178,16 @@
         </main>
     </div>
 
-    <!-- RECRUIT MODAL (Placeholder) -->
+    <!-- RECRUIT MODAL -->
     <div id="recruit-modal" class="modal-overlay">
         <div class="mat-border bg-black p-10 max-w-lg w-full text-center">
             <h2 class="text-3xl heavyweight-font italic mb-4">PROSPECT SCOUTING</h2>
-            <p class="text-neutral-400 text-sm mb-8">No new recruits available at this time. Check back after your next simulation.</p>
-            <button onclick="toggleOverlay('recruit-modal')" class="danger-btn-large px-8 py-3 text-xs">CLOSE</button>
+            <p class="text-neutral-400 text-sm mb-8 italic">WOULD YOU LIKE TO SCOUT FOR NEW RECRUITS FOR <span class="text-green-500 font-black">$150.00</span>?</p>
+            
+            <div class="flex flex-col gap-3">
+                <button onclick="toggleOverlay('recruit-modal')" class="success-btn-large px-8 py-4 text-xs">PURCHASE SCOUTING REPORT</button>
+                <button onclick="toggleOverlay('recruit-modal')" class="danger-btn-large px-8 py-4 text-xs">RETURN</button>
+            </div>
         </div>
     </div>
 
@@ -195,7 +212,8 @@
             </div>
 
             <div class="flex-grow mat-border relative overflow-hidden bg-black flex flex-col items-center justify-center">
-                <div id="sim-log" class="absolute top-4 left-4 z-10 text-[11px] font-mono uppercase bg-black/80 p-4 border border-neutral-800 w-64 h-32 overflow-hidden flex flex-col justify-end">
+                <!-- ENLARGED SIM LOG WINDOW -->
+                <div id="sim-log" class="absolute top-4 left-4 z-10 text-[13px] font-mono uppercase bg-black/90 p-6 border border-neutral-700 w-80 h-48 overflow-hidden flex flex-col justify-end shadow-2xl">
                     <div class="text-neutral-500">[SYSTEM]: READY...</div>
                 </div>
                 <div id="action-clock" class="absolute bottom-8 right-8 text-7xl heavyweight-font text-red-600 italic">15</div>
@@ -235,10 +253,10 @@
         function updateLog(message, colorClass = '') {
             const log = document.getElementById('sim-log');
             const entry = document.createElement('div');
-            entry.className = colorClass;
+            entry.className = colorClass + " py-0.5 border-b border-white/5";
             entry.innerText = `> ${message}`;
             log.appendChild(entry);
-            if(log.childNodes.length > 6) log.removeChild(log.firstChild);
+            if(log.childNodes.length > 8) log.removeChild(log.firstChild);
         }
 
         function handleMove(move, isRed = true) {
@@ -277,6 +295,8 @@
             document.getElementById('the-mat-sim').style.display = 'flex';
             currentPosition = 'neutral';
             redScore = 0;
+            document.getElementById('red-score').innerText = "00";
+            document.getElementById('sim-log').innerHTML = '<div class="text-neutral-500">[SYSTEM]: READY...</div>';
             updateLog("MATCH STARTED");
             renderCommands();
             startActionClock();
