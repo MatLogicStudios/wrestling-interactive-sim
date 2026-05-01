@@ -32,8 +32,8 @@
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
 
-        .log-red { color: #ef4444; }
-        .log-blue { color: #3b82f6; width: 100%; display: block; }
+        .log-red { color: #ef4444; margin-bottom: 2px; }
+        .log-blue { color: #3b82f6; margin-bottom: 2px; }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
@@ -151,12 +151,17 @@
                 </div>
             </div>
 
-            <div class="flex-grow mat-border relative bg-black flex flex-col items-center justify-center p-6">
-                <div id="sim-log" class="absolute top-4 left-4 z-10 text-[13px] font-mono uppercase bg-black/90 p-6 border border-neutral-700 w-full max-w-4xl h-64 overflow-y-hidden flex flex-col justify-end shadow-2xl">
-                    <div class="text-neutral-500">[SYSTEM]: MAT READY...</div>
+            <div class="flex-grow mat-border relative bg-black flex flex-col p-6 overflow-hidden">
+                <button onclick="stopSim()" class="absolute top-4 right-4 bg-red-600 text-white font-black px-6 py-2 text-[10px] tracking-widest z-50">END MATCH</button>
+                
+                <div class="flex flex-col items-center justify-center h-full w-full">
+                    <!-- STRETCHED SIM LOG -->
+                    <div id="sim-log" class="text-[13px] font-mono uppercase bg-black/90 p-6 border border-neutral-700 w-full max-w-4xl h-80 overflow-y-auto flex flex-col shadow-2xl mb-6">
+                        <div class="text-neutral-500">> [SYSTEM]: MAT READY...</div>
+                    </div>
+                    
+                    <div id="position-badge" class="heavyweight-font text-4xl text-neutral-800 italic tracking-[0.2em]">NEUTRAL</div>
                 </div>
-                <button onclick="stopSim()" class="absolute top-4 right-4 bg-red-600 text-white font-black px-6 py-2 text-[10px] tracking-widest">END MATCH</button>
-                <div id="position-badge" class="heavyweight-font text-4xl text-neutral-800 italic tracking-[0.2em]">NEUTRAL</div>
             </div>
 
             <div id="action-commands" class="grid grid-cols-4 gap-4 mt-6"></div>
@@ -193,6 +198,7 @@
                 btn.innerHTML = `<h3 class="heavyweight-font italic">${m}</h3>`;
                 btn.onclick = () => {
                     const log = document.getElementById('sim-log');
+                    
                     const redMsg = document.createElement('div');
                     redMsg.className = "log-red";
                     redMsg.innerText = `> RED TEAM EXECUTES ${m.toUpperCase()}`;
@@ -203,7 +209,9 @@
                     
                     log.appendChild(redMsg);
                     log.appendChild(blueMsg);
-                    if(log.childNodes.length > 10) log.removeChild(log.firstChild);
+                    
+                    // Auto-scroll to bottom
+                    log.scrollTop = log.scrollHeight;
                 };
                 container.appendChild(btn);
             });
