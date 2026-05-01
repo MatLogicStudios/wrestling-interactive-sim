@@ -20,7 +20,7 @@
             border: 1px solid #333;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column; justify-content: center;
-            height: 140px; /* Locked height to prevent footer push-down */
+            height: 120px;
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
@@ -42,15 +42,14 @@
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
 
-        /* Corrected Spacing for Taglines */
         .tagline-spacing { letter-spacing: 0.12em !important; word-spacing: 0.15em; }
 
-        .clock-pulse { animation: pulse 1s infinite; color: #ff0000; }
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
+        .clock-pulse { animation: pulse 1s infinite; color: #ff0000; }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
@@ -71,7 +70,6 @@
                     MAT LOBBY
                 </button>
                 <div class="flex-none" style="min-width: 150px;"> 
-                    <!-- Verify this filename is logo.png in your repo -->
                     <img src="logo.png" alt="Mat Logic Studios" class="h-24 md:h-32 w-auto object-contain">
                 </div>
             </div>
@@ -93,7 +91,6 @@
                 </div>
             </div>
 
-            <!-- Command Cards with fixed height to keep footer visible -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <button onclick="toggleOverlay('recruit-modal')" class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
                     <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
@@ -114,17 +111,23 @@
             </div>
         </main>
 
-        <!-- New Footer Section -->
-        <footer class="flex-none p-6 border-t border-neutral-900 bg-black flex justify-between items-center">
-            <div class="flex flex-col">
+        <footer class="flex-none p-6 border-t border-neutral-900 bg-black grid grid-cols-3 items-center">
+            <div class="text-left">
                 <div class="text-xs font-black tracking-widest text-white heavyweight-font italic">
                     MAT LOGIC <span class="text-red-600">STUDIOS</span> <span class="text-neutral-600 ml-2">v1.0.4</span>
                 </div>
                 <div class="text-[9px] text-neutral-500 uppercase tracking-widest mt-1">© 2026 ALL RIGHTS RESERVED</div>
             </div>
-            <div class="text-[10px] text-red-600 heavyweight-font italic tracking-[0.3em] uppercase">
-                Authenticity Verified: Tactical Advantage Active
+            
+            <!-- Centered Authenticity Text on Two Lines -->
+            <div class="text-center">
+                <div class="text-[10px] text-red-600 heavyweight-font italic tracking-[0.3em] uppercase leading-tight">
+                    AUTHENTICITY VERIFIED<br>
+                    TACTICAL ADVANTAGE ACTIVE
+                </div>
             </div>
+            
+            <div class="text-right"></div>
         </footer>
     </div>
 
@@ -132,9 +135,9 @@
     <div id="recruit-modal" class="modal-overlay">
         <div class="mat-border p-8 bg-black max-w-xl w-full text-center">
             <h2 class="heavyweight-font text-4xl mb-4 italic">PROSPECT SCOUTING</h2>
-            <p class="text-neutral-400 mb-8">Would you like to scout a new regional prospect for <span class="text-green-500">$150.00</span>?</p>
+            <p class="text-neutral-400 mb-8">Scout a new regional prospect for <span class="text-green-500">$150.00</span>?</p>
             <div class="flex gap-4 justify-center">
-                <button onclick="buyProspect()" class="bg-green-700 hover:bg-green-600 text-white font-black px-8 py-3 rounded-[15px]">RECRUIT ($150)</button>
+                <button onclick="buyProspect()" class="bg-green-700 hover:bg-green-600 text-white font-black px-8 py-3 rounded-[15px]">RECRUIT</button>
                 <button onclick="toggleOverlay('recruit-modal')" class="danger-btn-large px-8 py-3">CANCEL</button>
             </div>
         </div>
@@ -146,16 +149,15 @@
             <h1 class="heavyweight-font text-5xl italic">WRESTLING <span class="text-red-600">ROOM</span></h1>
             <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-3">RETURN</button>
         </div>
-        
         <h2 class="heavyweight-font text-xl mb-4 text-neutral-400 tracking-widest">ACTIVE ROSTER</h2>
         <div id="roster-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"></div>
     </div>
 
     <!-- MAT LOBBY SCREEN -->
-    <div id="mat-lobby-screen" class="screen bg-black p-12 text-center">
+    <div id="mat-lobby-screen" class="screen bg-black p-12 text-center justify-center">
         <h1 class="heavyweight-font text-6xl mb-2 italic">MAT LOBBY</h1>
-        <p class="text-red-600 heavyweight-font text-xl tracking-[0.3em] mb-12 uppercase">Authenticity: The Ultimate Tactical Advantage.</p>
-        <button onclick="showScreen('main-dashboard')" class="px-12 py-4 bg-red-700 hover:bg-red-600 text-white heavyweight-font text-sm tracking-widest rounded-[15px]">RETURN</button>
+        <p class="text-red-600 heavyweight-font text-xl tracking-[0.3em] mb-12">AUTHENTICITY: THE ULTIMATE TACTICAL ADVANTAGE.</p>
+        <button onclick="showScreen('main-dashboard')" class="px-12 py-4 bg-red-700 hover:bg-red-600 text-white heavyweight-font text-sm tracking-widest rounded-[15px] mx-auto">RETURN</button>
     </div>
 
     <!-- SIMULATION OVERLAY -->
@@ -191,12 +193,31 @@
         let credits = 500;
         let stableCount = 3;
         
-        // Roster data
         let wrestlers = [
             { name: "Caelun Sanders", tagline: "The Unbeaten One", status: "Ready" },
             { name: "Jace Burrow", tagline: "The Power Takedown Machine", status: "Ready" },
             { name: "Alexei Karelan", tagline: "The Phenom", status: "Ready" }
         ];
+
+        // RESTORED COMPLETE MOVE LIST - NO HYPHENS, NO MAT RETURN
+        const decks = {
+            neutral: [
+                { name: "Power Takedown", nextPos: "folkstyle_top", points: 2, sub: "High C" },
+                { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
+                { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
+                { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
+                { name: "Low Single", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
+                { name: "Arm Drag", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
+            ],
+            folkstyle_top: [
+                { name: "Waist Lock", nextPos: "folkstyle_top", points: 0, sub: "Control Position" },
+                { name: "Forward Trip", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
+                { name: "Tight Waist Arm Chop", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
+                { name: "Spiral Ride", nextPos: "folkstyle_top", points: 0, sub: "Pressure" },
+                { name: "Crossface", nextPos: "folkstyle_top", points: 0, sub: "Control" },
+                { name: "Half Nelson", nextPos: "folkstyle_top", points: 0, sub: "Turn Attempt" }
+            ]
+        };
 
         function renderRoster() {
             const container = document.getElementById('roster-container');
@@ -217,24 +238,8 @@
         let ridingTimeSeconds = 0;
         let currentPosition = 'neutral'; 
         let redScore = 0;
-        let blueScore = 0;
         let actionSeconds = 15;
         let actionInterval;
-
-        // Move Decks
-        const decks = {
-            neutral: [
-                { name: "Power Takedown", nextPos: "folkstyle_top", points: 2, sub: "High C" },
-                { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
-                { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
-                { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
-            ],
-            folkstyle_top: [
-                { name: "Waist Lock", nextPos: "folkstyle_top", points: 0, sub: "Control Return" },
-                { name: "Forward Trip", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
-                { name: "Tight Waist Arm Chop", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" }
-            ]
-        };
 
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
@@ -285,6 +290,7 @@
             currentPosition = move.nextPos;
             redScore += move.points;
             matchSeconds = Math.max(0, matchSeconds - 1);
+            if(currentPosition === 'folkstyle_top') ridingTimeSeconds++;
             document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
             document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
             updateClockDisplays();
