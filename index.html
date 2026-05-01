@@ -64,11 +64,12 @@
                 </h2>
             </div>
             <div class="flex items-center">
-                <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-40">
+                <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
                     MAT LOBBY
                 </button>
-                <div class="-my-6 mt-4"> 
-                    <img src="https://raw.githubusercontent.com/Deines1/KPI-Command-Center/main/MLS_LOGO.png" alt="Mat Logic Studios" class="h-24 md:h-52 w-auto object-contain">
+                <!-- FIXED LOGO PATH -->
+                <div class="flex-none" style="min-width: 150px;"> 
+                    <img src="https://raw.githubusercontent.com/Deines1/KPI-Command-Center/main/logo.png" alt="Mat Logic Studios" class="h-24 md:h-40 w-auto object-contain">
                 </div>
             </div>
         </header>
@@ -110,27 +111,37 @@
         </main>
     </div>
 
-    <!-- RECRUIT MODAL -->
+    <!-- RECRUIT MODAL UPDATED -->
     <div id="recruit-modal" class="modal-overlay">
         <div class="mat-border p-8 bg-black max-w-xl w-full text-center">
             <h2 class="heavyweight-font text-4xl mb-4 italic">PROSPECT SCOUTING</h2>
-            <p class="text-neutral-400 mb-8">Search the regional circuit for new talent.</p>
-            <button onclick="toggleOverlay('recruit-modal')" class="danger-btn-large px-8 py-3">CLOSE</button>
+            <p class="text-neutral-400 mb-8">Would you like to scout a new regional prospect for <span class="text-green-500">$150.00</span>?</p>
+            <div class="flex gap-4 justify-center">
+                <button onclick="buyProspect()" class="bg-green-700 hover:bg-green-600 text-white font-black px-8 py-3 rounded-[15px]">RECRUIT ($150)</button>
+                <button onclick="toggleOverlay('recruit-modal')" class="danger-btn-large px-8 py-3">CANCEL</button>
+            </div>
         </div>
     </div>
 
-    <!-- WRESTLING ROOM SCREEN -->
+    <!-- WRESTLING ROOM SCREEN UPDATED -->
     <div id="wrestling-room-screen" class="screen bg-[#050505] p-6">
         <div class="flex justify-between items-center mb-8">
             <h1 class="heavyweight-font text-5xl italic">WRESTLING <span class="text-red-600">ROOM</span></h1>
-            <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-3">BACK TO HUB</button>
+            <!-- BUTTON TEXT CHANGED TO RETURN -->
+            <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-3">RETURN</button>
         </div>
+        
+        <h2 class="heavyweight-font text-xl mb-4 text-neutral-400 tracking-widest">ACTIVE ROSTER</h2>
+        <div id="roster-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- WRESTLERS WILL APPEAR HERE -->
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="mat-border p-6">
+            <div class="mat-border p-6 border-l-4 border-l-red-600">
                 <h3 class="heavyweight-font text-2xl text-red-600 mb-2">Drill Session</h3>
                 <p class="text-neutral-500 text-sm italic">Improve technical execution and speed.</p>
             </div>
-            <div class="mat-border p-6">
+            <div class="mat-border p-6 border-l-4 border-l-red-600">
                 <h3 class="heavyweight-font text-2xl text-red-600 mb-2">Live Sparring</h3>
                 <p class="text-neutral-500 text-sm italic">Test your setups against active resistance.</p>
             </div>
@@ -183,6 +194,38 @@
     <script>
         let credits = 500;
         let stableCount = 3;
+        let wrestlers = [
+            { name: "Jace Barron", class: "HWT", status: "Ready" },
+            { name: "Silas Vane", class: "174", status: "Training" },
+            { name: "Kaelen Moss", class: "141", status: "Ready" }
+        ];
+
+        function buyProspect() {
+            if (credits >= 150) {
+                credits -= 150;
+                stableCount++;
+                document.getElementById('credit-display').innerText = `$${credits.toFixed(2)}`;
+                document.getElementById('stable-count').innerText = `${stableCount} / 12`;
+                alert("New prospect recruited!");
+                toggleOverlay('recruit-modal');
+            } else {
+                alert("Insufficient credits!");
+            }
+        }
+
+        function renderRoster() {
+            const container = document.getElementById('roster-container');
+            container.innerHTML = '';
+            wrestlers.forEach(w => {
+                container.innerHTML += `
+                    <div class="mat-border p-4 bg-neutral-900/50">
+                        <div class="text-red-600 heavyweight-font text-lg italic">${w.name}</div>
+                        <div class="text-[10px] text-neutral-500 uppercase font-bold">${w.class} LBS | ${w.status}</div>
+                    </div>
+                `;
+            });
+        }
+
         let isMatchRunning = false;
         let matchSeconds = 180;
         let ridingTimeSeconds = 0;
@@ -195,13 +238,13 @@
 
         const decks = {
             neutral: [
-                { name: "Power Takedown", nextPos: "folkstyle_top", points: 2, sub: "Jace Barron Style" },
+                { name: "Power Takedown", nextPos: "folkstyle_top", points: 2, sub: "High C" },
                 { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
                 { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
                 { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
             ],
             folkstyle_top: [
-                { name: "Ankle Pick", nextPos: "folkstyle_top", points: 0, sub: "Standup Counter" },
+                { name: "Mat Return", nextPos: "folkstyle_top", points: 0, sub: "Standup Counter" },
                 { name: "Waist-Lock Return", nextPos: "folkstyle_top", points: 0, sub: "Control Return" },
                 { name: "Forward Trip", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
                 { name: "Tight-Waist Chop", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" }
@@ -211,6 +254,7 @@
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(screenId).classList.add('active-screen');
+            if(screenId === 'wrestling-room-screen') renderRoster();
         }
 
         function toggleOverlay(id) {
