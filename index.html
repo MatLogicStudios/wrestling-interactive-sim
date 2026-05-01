@@ -67,8 +67,8 @@
                 <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
                     MAT LOBBY
                 </button>
-                <!-- FIXED LOGO PATH -->
                 <div class="flex-none" style="min-width: 150px;"> 
+                    <!-- Ensure logo.png is uploaded to the root of your 'main' branch -->
                     <img src="https://raw.githubusercontent.com/Deines1/KPI-Command-Center/main/logo.png" alt="Mat Logic Studios" class="h-24 md:h-40 w-auto object-contain">
                 </div>
             </div>
@@ -111,7 +111,7 @@
         </main>
     </div>
 
-    <!-- RECRUIT MODAL UPDATED -->
+    <!-- RECRUIT MODAL -->
     <div id="recruit-modal" class="modal-overlay">
         <div class="mat-border p-8 bg-black max-w-xl w-full text-center">
             <h2 class="heavyweight-font text-4xl mb-4 italic">PROSPECT SCOUTING</h2>
@@ -123,17 +123,16 @@
         </div>
     </div>
 
-    <!-- WRESTLING ROOM SCREEN UPDATED -->
-    <div id="wrestling-room-screen" class="screen bg-[#050505] p-6">
+    <!-- WRESTLING ROOM SCREEN -->
+    <div id="wrestling-room-screen" class="screen bg-[#050505] p-6 overflow-y-auto">
         <div class="flex justify-between items-center mb-8">
             <h1 class="heavyweight-font text-5xl italic">WRESTLING <span class="text-red-600">ROOM</span></h1>
-            <!-- BUTTON TEXT CHANGED TO RETURN -->
             <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-3">RETURN</button>
         </div>
         
         <h2 class="heavyweight-font text-xl mb-4 text-neutral-400 tracking-widest">ACTIVE ROSTER</h2>
         <div id="roster-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <!-- WRESTLERS WILL APPEAR HERE -->
+            <!-- WRESTLERS RENDERED BY JS -->
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -194,10 +193,12 @@
     <script>
         let credits = 500;
         let stableCount = 3;
+        
+        // Updated Wrestler Data
         let wrestlers = [
-            { name: "Jace Barron", class: "HWT", status: "Ready" },
-            { name: "Silas Vane", class: "174", status: "Training" },
-            { name: "Kaelen Moss", class: "141", status: "Ready" }
+            { name: "Jace Burrow", tagline: "The Power Takedown Machine", class: "HWT", status: "Ready" },
+            { name: "The Unbeaten One", tagline: "Regional Champion", class: "174", status: "Training" },
+            { name: "The Phenom", tagline: "Technical Specialist", class: "141", status: "Ready" }
         ];
 
         function buyProspect() {
@@ -219,7 +220,8 @@
             wrestlers.forEach(w => {
                 container.innerHTML += `
                     <div class="mat-border p-4 bg-neutral-900/50">
-                        <div class="text-red-600 heavyweight-font text-lg italic">${w.name}</div>
+                        <div class="text-red-600 heavyweight-font text-lg italic leading-tight">${w.name}</div>
+                        <div class="text-[10px] text-white font-black uppercase tracking-tighter mb-2">${w.tagline}</div>
                         <div class="text-[10px] text-neutral-500 uppercase font-bold">${w.class} LBS | ${w.status}</div>
                     </div>
                 `;
