@@ -20,7 +20,7 @@
             border: 1px solid #333;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column; justify-content: center;
-            height: 140px; /* Locked height to prevent footer push-down */
+            height: 110px;
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
@@ -29,28 +29,11 @@
             z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(8px);
         }
 
-        .danger-btn-large {
-            background-color: #dc2626 !important;
-            color: white !important;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: 0.2s;
-            border-radius: 15px !important;
-        }
-
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
 
-        /* Corrected Spacing for Taglines */
-        .tagline-spacing { letter-spacing: 0.12em !important; word-spacing: 0.15em; }
-
-        .clock-pulse { animation: pulse 1s infinite; color: #ff0000; }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+        .log-red { color: #ef4444; }
+        .log-blue { color: #3b82f6; width: 100%; display: block; }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
@@ -67,11 +50,10 @@
                 </h2>
             </div>
             <div class="flex items-center">
-                <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
+                <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
                     MAT LOBBY
                 </button>
                 <div class="flex-none" style="min-width: 150px;"> 
-                    <!-- Verify this filename is logo.png in your repo -->
                     <img src="logo.png" alt="Mat Logic Studios" class="h-24 md:h-32 w-auto object-contain">
                 </div>
             </div>
@@ -81,7 +63,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-neutral-600">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
-                    <div id="stable-count" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
+                    <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
@@ -89,157 +71,102 @@
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
-                    <div id="credit-display" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
                 </div>
             </div>
 
-            <!-- Command Cards with fixed height to keep footer visible -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <button onclick="toggleOverlay('recruit-modal')" class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
-                    <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
                 </button>
                 <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-600">
-                    <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
                 </button>
                 <button onclick="startSim()" class="command-btn p-6 text-left group border-b-4 border-b-red-900">
-                    <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
                 </button>
                 <button class="command-btn p-6 text-left group border-b-4 border-b-green-900">
-                    <h3 class="text-xl md:text-2xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
                 </button>
             </div>
         </main>
 
-        <!-- New Footer Section -->
-        <footer class="flex-none p-6 border-t border-neutral-900 bg-black flex justify-between items-center">
-            <div class="flex flex-col">
-                <div class="text-xs font-black tracking-widest text-white heavyweight-font italic">
-                    MAT LOGIC <span class="text-red-600">STUDIOS</span> <span class="text-neutral-600 ml-2">v1.0.4</span>
-                </div>
-                <div class="text-[9px] text-neutral-500 uppercase tracking-widest mt-1">© 2026 ALL RIGHTS RESERVED</div>
+        <footer class="flex-none p-6 border-t border-neutral-900 bg-black text-center">
+            <div class="text-xs font-black tracking-[0.2em] text-white heavyweight-font italic mb-1 uppercase">
+                MAT LOGIC STUDIOS // AUTHENTICITY VERIFIED
             </div>
-            <div class="text-[10px] text-red-600 heavyweight-font italic tracking-[0.3em] uppercase">
-                Authenticity Verified: Tactical Advantage Active
+            <div class="text-[10px] text-neutral-500 heavyweight-font tracking-[0.1em] uppercase">
+                © 2026 ALL RIGHTS RESERVED // VERSION 1.0.4
             </div>
         </footer>
     </div>
 
-    <!-- RECRUIT MODAL -->
-    <div id="recruit-modal" class="modal-overlay">
-        <div class="mat-border p-8 bg-black max-w-xl w-full text-center">
-            <h2 class="heavyweight-font text-4xl mb-4 italic">PROSPECT SCOUTING</h2>
-            <p class="text-neutral-400 mb-8">Would you like to scout a new regional prospect for <span class="text-green-500">$150.00</span>?</p>
-            <div class="flex gap-4 justify-center">
-                <button onclick="buyProspect()" class="bg-green-700 hover:bg-green-600 text-white font-black px-8 py-3 rounded-[15px]">RECRUIT ($150)</button>
-                <button onclick="toggleOverlay('recruit-modal')" class="danger-btn-large px-8 py-3">CANCEL</button>
-            </div>
-        </div>
-    </div>
-
     <!-- WRESTLING ROOM SCREEN -->
-    <div id="wrestling-room-screen" class="screen bg-[#050505] p-6 overflow-y-auto">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="heavyweight-font text-5xl italic">WRESTLING <span class="text-red-600">ROOM</span></h1>
-            <button onclick="showScreen('main-dashboard')" class="danger-btn-large px-8 py-3">RETURN</button>
+    <div id="wrestling-room-screen" class="screen bg-[#050505]">
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <h2 class="text-4xl heavyweight-font title-gradient italic">WRESTLING ROOM</h2>
+            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
+        </header>
+        <main class="flex-grow p-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="mat-border p-6 border-t-4 border-t-red-600">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Caelun Sanders</h3>
+                    <p class="text-red-500 text-[10px] font-black tracking-[0.2em] uppercase">The Unbeaten One</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- RECRUIT MODAL: SIDE-BY-SIDE BUTTONS -->
+    <div id="recruit-modal" class="modal-overlay">
+        <div class="mat-border bg-black p-10 max-w-2xl w-full text-center">
+            <h2 class="text-3xl heavyweight-font italic mb-4">PROSPECT SCOUTING</h2>
+            <p class="text-neutral-400 text-sm mb-8 italic">SCOUT NEW RECRUITS FOR <span class="text-green-500 font-black">$150.00</span>?</p>
+            
+            <div class="flex flex-row gap-4 justify-center">
+                <button class="bg-green-600 hover:bg-green-500 text-white font-black py-4 px-8 text-xs uppercase tracking-widest w-full">PURCHASE</button>
+                <button onclick="toggleOverlay('recruit-modal')" class="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-8 text-xs uppercase tracking-widest w-full">RETURN</button>
+            </div>
         </div>
-        
-        <h2 class="heavyweight-font text-xl mb-4 text-neutral-400 tracking-widest">ACTIVE ROSTER</h2>
-        <div id="roster-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"></div>
     </div>
 
-    <!-- MAT LOBBY SCREEN -->
-    <div id="mat-lobby-screen" class="screen bg-black p-12 text-center">
-        <h1 class="heavyweight-font text-6xl mb-2 italic">MAT LOBBY</h1>
-        <p class="text-red-600 heavyweight-font text-xl tracking-[0.3em] mb-12 uppercase">Authenticity: The Ultimate Tactical Advantage.</p>
-        <button onclick="showScreen('main-dashboard')" class="px-12 py-4 bg-red-700 hover:bg-red-600 text-white heavyweight-font text-sm tracking-widest rounded-[15px]">RETURN</button>
-    </div>
-
-    <!-- SIMULATION OVERLAY -->
+    <!-- MATCH SIMULATION: WIDE LOG & VISIBILITY FIX -->
     <div id="the-mat-sim" class="modal-overlay">
-        <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col relative">
-            <button onclick="stopSim()" class="danger-btn-large absolute top-6 right-6 px-10 py-4 text-xs z-50">END MATCH</button>
-            <div class="grid grid-cols-3 gap-4 mb-6 border-b-2 border-red-900 pb-4 pr-32">
-                <div class="text-center">
-                    <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">RED WRESTLER</div>
-                    <div id="red-score" class="text-5xl md:text-7xl heavyweight-font text-red-600">00</div>
+        <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col">
+            <div class="flex justify-between items-center border-b-2 border-red-900 pb-4 mb-6">
+                <div class="text-center w-1/3">
+                    <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">RED TEAM</div>
+                    <div id="red-score" class="text-7xl heavyweight-font text-red-600">00</div>
                 </div>
-                <div class="text-center flex flex-col justify-center">
-                    <div id="match-timer" class="text-4xl md:text-6xl heavyweight-font text-white italic">3:00</div>
-                    <div id="riding-time" class="text-xs md:text-sm text-yellow-500 font-mono mt-2 uppercase tracking-[0.2em]">RT: 0:00</div>
+                <div class="text-center w-1/3">
+                    <div class="text-6xl heavyweight-font text-white italic">3:00</div>
                 </div>
-                <div class="text-center">
-                    <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">BLUE WRESTLER</div>
-                    <div id="blue-score" class="text-5xl md:text-7xl heavyweight-font text-blue-600">00</div>
+                <div class="text-center w-1/3">
+                    <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">BLUE TEAM</div>
+                    <div id="blue-score" class="text-7xl heavyweight-font text-blue-600">00</div>
                 </div>
             </div>
-            <div class="flex-grow mat-border relative overflow-hidden bg-black flex flex-col items-center justify-center">
-                <div id="sim-log" class="absolute top-4 left-4 z-10 text-[10px] text-red-500 font-mono uppercase bg-black/60 p-2 border border-red-900/30">
-                    [SYSTEM]: READY FOR WHISTLE...
+
+            <div class="flex-grow mat-border relative bg-black flex flex-col items-center justify-center p-6">
+                <div id="sim-log" class="absolute top-4 left-4 z-10 text-[13px] font-mono uppercase bg-black/90 p-6 border border-neutral-700 w-full max-w-4xl h-64 overflow-y-hidden flex flex-col justify-end shadow-2xl">
+                    <div class="text-neutral-500">[SYSTEM]: MAT READY...</div>
                 </div>
-                <div id="action-clock" class="absolute bottom-8 right-8 text-7xl heavyweight-font text-red-600 italic">15</div>
-                <div id="position-badge" class="heavyweight-font text-2xl text-neutral-600 italic tracking-widest">NEUTRAL</div>
+                <button onclick="stopSim()" class="absolute top-4 right-4 bg-red-600 text-white font-black px-6 py-2 text-[10px] tracking-widest">END MATCH</button>
+                <div id="position-badge" class="heavyweight-font text-4xl text-neutral-800 italic tracking-[0.2em]">NEUTRAL</div>
             </div>
-            <div id="action-commands" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6"></div>
+
+            <div id="action-commands" class="grid grid-cols-4 gap-4 mt-6"></div>
         </div>
     </div>
 
     <script>
-        let credits = 500;
-        let stableCount = 3;
-        
-        // Roster data
-        let wrestlers = [
-            { name: "Caelun Sanders", tagline: "The Unbeaten One", status: "Ready" },
-            { name: "Jace Burrow", tagline: "The Power Takedown Machine", status: "Ready" },
-            { name: "Alexei Karelan", tagline: "The Phenom", status: "Ready" }
-        ];
-
-        function renderRoster() {
-            const container = document.getElementById('roster-container');
-            container.innerHTML = '';
-            wrestlers.forEach(w => {
-                container.innerHTML += `
-                    <div class="mat-border p-4 bg-neutral-900/50">
-                        <div class="text-red-600 heavyweight-font text-lg italic leading-tight">${w.name}</div>
-                        <div class="text-[10px] text-white font-black uppercase tagline-spacing mb-2">${w.tagline}</div>
-                        <div class="text-[10px] text-neutral-500 uppercase font-bold">${w.status}</div>
-                    </div>
-                `;
-            });
-        }
-
-        let isMatchRunning = false;
-        let matchSeconds = 180;
-        let ridingTimeSeconds = 0;
-        let currentPosition = 'neutral'; 
-        let redScore = 0;
-        let blueScore = 0;
-        let actionSeconds = 15;
-        let actionInterval;
-
-        // Move Decks
-        const decks = {
-            neutral: [
-                { name: "Power Takedown", nextPos: "folkstyle_top", points: 2, sub: "High C" },
-                { name: "Single Leg", nextPos: "folkstyle_top", points: 2, sub: "Attack" },
-                { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
-                { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
-            ],
-            folkstyle_top: [
-                { name: "Waist Lock", nextPos: "folkstyle_top", points: 0, sub: "Control Return" },
-                { name: "Forward Trip", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
-                { name: "Tight Waist Arm Chop", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" }
-            ]
-        };
-
-        function showScreen(screenId) {
+        function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-            document.getElementById(screenId).classList.add('active-screen');
-            if(screenId === 'wrestling-room-screen') renderRoster();
+            document.getElementById(id).classList.add('active-screen');
         }
 
         function toggleOverlay(id) {
@@ -247,60 +174,37 @@
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        function updateClockDisplays() {
-            const formatTime = (s) => `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
-            document.getElementById('match-timer').innerText = formatTime(matchSeconds);
-            document.getElementById('riding-time').innerText = `RT: ${formatTime(ridingTimeSeconds)}`;
-        }
-
         function startSim() {
-            toggleOverlay('the-mat-sim');
-            isMatchRunning = true;
-            matchSeconds = 180;
-            currentPosition = 'neutral';
-            redScore = 0;
-            updateClockDisplays();
-            renderCommands();
-            startActionClock();
+            document.getElementById('the-mat-sim').style.display = 'flex';
+            renderTestCommands();
         }
 
         function stopSim() {
-            isMatchRunning = false;
-            clearInterval(actionInterval);
-            toggleOverlay('the-mat-sim');
+            document.getElementById('the-mat-sim').style.display = 'none';
         }
 
-        function startActionClock() {
-            clearInterval(actionInterval);
-            actionSeconds = 15;
-            document.getElementById('action-clock').innerText = actionSeconds;
-            actionInterval = setInterval(() => {
-                actionSeconds--;
-                document.getElementById('action-clock').innerText = actionSeconds;
-                if(actionSeconds <= 0) clearInterval(actionInterval);
-            }, 1000);
-        }
-
-        function handleMove(move) {
-            currentPosition = move.nextPos;
-            redScore += move.points;
-            matchSeconds = Math.max(0, matchSeconds - 1);
-            document.getElementById('red-score').innerText = redScore.toString().padStart(2, '0');
-            document.getElementById('position-badge').innerText = currentPosition.replace('_', ' ').toUpperCase();
-            updateClockDisplays();
-            renderCommands();
-            startActionClock();
-        }
-
-        function renderCommands() {
+        function renderTestCommands() {
             const container = document.getElementById('action-commands');
             container.innerHTML = '';
-            const currentDeck = decks[currentPosition] || decks['neutral'];
-            currentDeck.forEach(move => {
+            const moves = ["Power Takedown", "Single Leg", "Snap Down", "Ankle Pick"];
+            moves.forEach(m => {
                 const btn = document.createElement('button');
-                btn.className = "command-btn p-4 border-b-4 border-b-red-600";
-                btn.innerHTML = `<h3 class="text-xl heavyweight-font italic">${move.name}</h3><p class="text-[8px] text-neutral-500 font-bold uppercase tracking-widest">${move.sub}</p>`;
-                btn.onclick = () => handleMove(move);
+                btn.className = "command-btn p-4 border-b-4 border-b-red-600 text-left";
+                btn.innerHTML = `<h3 class="heavyweight-font italic">${m}</h3>`;
+                btn.onclick = () => {
+                    const log = document.getElementById('sim-log');
+                    const redMsg = document.createElement('div');
+                    redMsg.className = "log-red";
+                    redMsg.innerText = `> RED TEAM EXECUTES ${m.toUpperCase()}`;
+                    
+                    const blueMsg = document.createElement('div');
+                    blueMsg.className = "log-blue";
+                    blueMsg.innerText = `> BLUE TEAM COUNTERS WITH SPRAWL`;
+                    
+                    log.appendChild(redMsg);
+                    log.appendChild(blueMsg);
+                    if(log.childNodes.length > 10) log.removeChild(log.firstChild);
+                };
                 container.appendChild(btn);
             });
         }
