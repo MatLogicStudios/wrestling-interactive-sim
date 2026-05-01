@@ -42,6 +42,9 @@
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
 
+        /* Fix for the compressed tagline spacing */
+        .tagline-spacing { letter-spacing: 0.15em !important; word-spacing: 0.2em; }
+
         .clock-pulse { animation: pulse 1s infinite; color: #ff0000; }
         @keyframes pulse {
             0% { opacity: 1; }
@@ -68,8 +71,8 @@
                     MAT LOBBY
                 </button>
                 <div class="flex-none" style="min-width: 150px;"> 
-                    <!-- Updated GitHub Raw Link to MatLogicStudios repository -->
-                    <img src="https://raw.githubusercontent.com/MatLogicStudios/wrestling-interactive-sim/main/logo.png" alt="Mat Logic Studios" class="h-24 md:h-40 w-auto object-contain">
+                    <!-- Corrected Logo Path -->
+                    <img src="logo.png" alt="Mat Logic Studios" class="h-24 md:h-40 w-auto object-contain">
                 </div>
             </div>
         </header>
@@ -192,6 +195,7 @@
         let credits = 500;
         let stableCount = 3;
         
+        // Roster updated: No weights
         let wrestlers = [
             { name: "Caelun Sanders", tagline: "The Unbeaten One", status: "Ready" },
             { name: "Jace Burrow", tagline: "The Power Takedown Machine", status: "Ready" },
@@ -218,7 +222,8 @@
                 container.innerHTML += `
                     <div class="mat-border p-4 bg-neutral-900/50">
                         <div class="text-red-600 heavyweight-font text-lg italic leading-tight">${w.name}</div>
-                        <div class="text-[10px] text-white font-black uppercase tracking-widest mb-2">${w.tagline}</div>
+                        <!-- Applied tagline-spacing class for better readability -->
+                        <div class="text-[10px] text-white font-black uppercase tagline-spacing mb-2">${w.tagline}</div>
                         <div class="text-[10px] text-neutral-500 uppercase font-bold">${w.status}</div>
                     </div>
                 `;
@@ -242,11 +247,11 @@
                 { name: "Snap Down", nextPos: "neutral", points: 0, sub: "Handfighting" },
                 { name: "Ankle Pick", nextPos: "folkstyle_top", points: 2, sub: "Attack" }
             ],
+            // Updated move names: Mat Return removed, Waist Lock Return removed return, added Arm before Chop, no hyphens
             folkstyle_top: [
-                { name: "Mat Return", nextPos: "folkstyle_top", points: 0, sub: "Standup Counter" },
-                { name: "Waist-Lock Return", nextPos: "folkstyle_top", points: 0, sub: "Control Return" },
+                { name: "Waist Lock", nextPos: "folkstyle_top", points: 0, sub: "Control Return" },
                 { name: "Forward Trip", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" },
-                { name: "Tight-Waist Chop", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" }
+                { name: "Tight Waist Arm Chop", nextPos: "folkstyle_top", points: 0, sub: "Breakdown" }
             ]
         };
 
