@@ -45,23 +45,18 @@
         .log-red { color: #ef4444; }
         .log-blue { color: #3b82f6; }
 
-        /* Centered Footer Logic */
         .footer-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            position: relative;
-        }
-        .footer-center {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            justify-content: center;
             text-align: center;
         }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
 
+    <!-- MAIN DASHBOARD -->
     <div id="main-dashboard" class="screen active-screen">
         <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
             <div class="flex flex-col justify-center">
@@ -73,7 +68,7 @@
                 </h2>
             </div>
             <div class="flex items-center">
-                <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
+                <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
                     MAT LOBBY
                 </button>
                 <div class="flex-none" style="min-width: 150px;"> 
@@ -119,22 +114,64 @@
         </main>
 
         <footer class="flex-none p-6 border-t border-neutral-900 bg-black footer-container">
-            <div class="text-left">
-                <div class="text-xs font-black tracking-widest text-white heavyweight-font italic">
-                    MAT LOGIC <span class="text-red-600">STUDIOS</span> <span class="text-neutral-600 ml-2">v1.0.4</span>
-                </div>
-                <div class="text-[9px] text-neutral-500 uppercase tracking-widest mt-1">© 2026 ALL RIGHTS RESERVED</div>
+            <div class="text-xs font-black tracking-widest text-white heavyweight-font italic mb-1">
+                MAT LOGIC STUDIOS // V 1.04
             </div>
-            
-            <div class="footer-center">
-                <div class="text-[10px] text-red-600 heavyweight-font italic tracking-[0.3em] uppercase leading-tight">
-                    AUTHENTICITY VERIFIED<br>
-                    TACTICAL ADVANTAGE ACTIVE
-                </div>
+            <div class="text-[10px] text-red-600 heavyweight-font italic tracking-[0.2em] uppercase">
+                AUTHENTICITY VERIFIED © 2026 ALL RIGHTS RESERVED
             </div>
-            
-            <div class="w-32"></div> 
         </footer>
+    </div>
+
+    <!-- WRESTLING ROOM SCREEN -->
+    <div id="wrestling-room-screen" class="screen bg-[#050505]">
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <h2 class="text-4xl heavyweight-font title-gradient italic">WRESTLING ROOM</h2>
+            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-neutral-800 text-white px-6 py-2 rounded-full text-xs tracking-widest">BACK TO DASHBOARD</button>
+        </header>
+        <main class="flex-grow p-8 overflow-y-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <!-- Wrestler 1 -->
+                <div class="mat-border p-6 border-t-4 border-t-red-600">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Caelun Sanders</h3>
+                    <p class="text-red-500 text-[10px] font-black tracking-[0.2em] uppercase mb-4">The Unbeaten One</p>
+                    <div class="bg-white/5 p-3 rounded text-[10px] uppercase tracking-widest text-neutral-400">Status: Active</div>
+                </div>
+                <!-- Wrestler 2 -->
+                <div class="mat-border p-6 border-t-4 border-t-blue-600">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Jace Burrow</h3>
+                    <p class="text-blue-500 text-[10px] font-black tracking-[0.2em] uppercase mb-4">The Power Takedown Machine</p>
+                    <div class="bg-white/5 p-3 rounded text-[10px] uppercase tracking-widest text-neutral-400">Status: Active</div>
+                </div>
+                <!-- Wrestler 3 -->
+                <div class="mat-border p-6 border-t-4 border-t-green-600">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Alexei Karelan</h3>
+                    <p class="text-green-500 text-[10px] font-black tracking-[0.2em] uppercase mb-4">The Phenom</p>
+                    <div class="bg-white/5 p-3 rounded text-[10px] uppercase tracking-widest text-neutral-400">Status: Active</div>
+                </div>
+            </div>
+            
+            <h3 class="text-xl heavyweight-font italic text-neutral-500 mb-4 tracking-widest">TRAINING MODULES</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="mat-border p-6 text-center border-b-4 border-b-red-600 bg-red-900/10">
+                    <h4 class="heavyweight-font text-lg italic text-white">DRILLING</h4>
+                    <p class="text-[9px] text-neutral-400 font-bold uppercase tracking-widest mt-1">Muscle Memory</p>
+                </div>
+                <div class="mat-border p-6 text-center border-b-4 border-b-yellow-600 bg-yellow-900/10">
+                    <h4 class="heavyweight-font text-lg italic text-white">TECHNIQUE</h4>
+                    <p class="text-[9px] text-neutral-400 font-bold uppercase tracking-widest mt-1">Skill Refinement</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- RECRUIT MODAL (Placeholder) -->
+    <div id="recruit-modal" class="modal-overlay">
+        <div class="mat-border bg-black p-10 max-w-lg w-full text-center">
+            <h2 class="text-3xl heavyweight-font italic mb-4">PROSPECT SCOUTING</h2>
+            <p class="text-neutral-400 text-sm mb-8">No new recruits available at this time. Check back after your next simulation.</p>
+            <button onclick="toggleOverlay('recruit-modal')" class="danger-btn-large px-8 py-3 text-xs">CLOSE</button>
+        </div>
     </div>
 
     <!-- SIMULATION OVERLAY -->
