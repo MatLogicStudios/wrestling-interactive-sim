@@ -61,17 +61,19 @@
 
         <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <!-- ID: roster-display -->
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-neutral-600">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
-                    <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
+                    <div id="roster-display" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
                 </div>
+                <!-- ID: credit-display -->
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
-                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+                    <div id="credit-display" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
                 </div>
             </div>
 
@@ -121,20 +123,20 @@
         </main>
     </div>
 
-    <!-- RECRUIT MODAL: SIDE-BY-SIDE BUTTONS -->
+    <!-- RECRUIT MODAL -->
     <div id="recruit-modal" class="modal-overlay">
         <div class="mat-border bg-black p-10 max-w-2xl w-full text-center">
             <h2 class="text-3xl heavyweight-font italic mb-4">PROSPECT SCOUTING</h2>
             <p class="text-neutral-400 text-sm mb-8 italic">SCOUT NEW RECRUITS FOR <span class="text-green-500 font-black">$150.00</span>?</p>
             
             <div class="flex flex-row gap-4 justify-center">
-                <button class="bg-green-600 hover:bg-green-500 text-white font-black py-4 px-8 text-xs uppercase tracking-widest w-full">PURCHASE</button>
+                <button onclick="confirmPurchase()" class="bg-green-600 hover:bg-green-500 text-white font-black py-4 px-8 text-xs uppercase tracking-widest w-full">PURCHASE</button>
                 <button onclick="toggleOverlay('recruit-modal')" class="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-8 text-xs uppercase tracking-widest w-full">RETURN</button>
             </div>
         </div>
     </div>
 
-    <!-- MATCH SIMULATION: WIDE LOG & VISIBILITY FIX -->
+    <!-- MATCH SIMULATION -->
     <div id="the-mat-sim" class="modal-overlay">
         <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col">
             <div class="flex justify-between items-center border-b-2 border-red-900 pb-4 mb-6">
@@ -155,11 +157,9 @@
                 <button onclick="stopSim()" class="absolute top-4 right-4 bg-red-600 text-white font-black px-6 py-2 text-[10px] tracking-widest z-50">END MATCH</button>
                 
                 <div class="flex flex-col items-center justify-center h-full w-full">
-                    <!-- STRETCHED SIM LOG -->
                     <div id="sim-log" class="text-[13px] font-mono uppercase bg-black/90 p-6 border border-neutral-700 w-full max-w-4xl h-80 overflow-y-auto flex flex-col shadow-2xl mb-6">
                         <div class="text-neutral-500">> [SYSTEM]: MAT READY...</div>
                     </div>
-                    
                     <div id="position-badge" class="heavyweight-font text-4xl text-neutral-800 italic tracking-[0.2em]">NEUTRAL</div>
                 </div>
             </div>
@@ -169,6 +169,16 @@
     </div>
 
     <script>
+        // --- INITIAL STATE ---
+        let currentCredits = 500.00;
+        let currentRosterSize = 3;
+
+        // --- DASHBOARD UPDATES ---
+        function updateUI() {
+            document.getElementById('credit-display').innerText = `$${currentCredits.toFixed(2)}`;
+            document.getElementById('roster-display').innerText = `${currentRosterSize} / 12`;
+        }
+
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(id).classList.add('active-screen');
@@ -177,6 +187,18 @@
         function toggleOverlay(id) {
             const el = document.getElementById(id);
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        // --- RECRUITMENT LOGIC (THE NEXT FIX) ---
+        function confirmPurchase() {
+            if (currentCredits >= 150) {
+                currentCredits -= 150;
+                currentRosterSize += 1;
+                updateUI();
+                toggleOverlay('recruit-modal');
+            } else {
+                alert("INSUFFICIENT CREDITS");
+            }
         }
 
         function startSim() {
@@ -198,19 +220,10 @@
                 btn.innerHTML = `<h3 class="heavyweight-font italic">${m}</h3>`;
                 btn.onclick = () => {
                     const log = document.getElementById('sim-log');
-                    
                     const redMsg = document.createElement('div');
                     redMsg.className = "log-red";
                     redMsg.innerText = `> RED TEAM EXECUTES ${m.toUpperCase()}`;
-                    
-                    const blueMsg = document.createElement('div');
-                    blueMsg.className = "log-blue";
-                    blueMsg.innerText = `> BLUE TEAM COUNTERS WITH SPRAWL`;
-                    
                     log.appendChild(redMsg);
-                    log.appendChild(blueMsg);
-                    
-                    // Auto-scroll to bottom
                     log.scrollTop = log.scrollHeight;
                 };
                 container.appendChild(btn);
