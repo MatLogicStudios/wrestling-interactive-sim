@@ -13,7 +13,6 @@
         
         button, .command-btn, .mat-border { border-radius: 15px !important; }
 
-        /* Enhanced Border Shadow Glows */
         .shadow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); }
         .shadow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); }
         .shadow-green { box-shadow: 0 0 20px rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); }
@@ -22,19 +21,22 @@
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
             border: 1px solid #333;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column; justify-content: center;
-            height: 110px;
+            display: flex; flex-direction: column; justify-content: center; height: 110px;
         }
-        .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
-        
+
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
+
+        /* Training Progress Bar Styles */
+        .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
+        .progress-fill { height: 100%; width: 0%; transition: width 3s linear; }
+        .training-active .progress-container { display: block; }
     </style></head><body class="border-t-4 border-red-600">
 
     <!-- MAIN DASHBOARD -->
     <div id="main-dashboard" class="screen active-screen">
         <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
-            <div class="flex flex-col justify-center overflow-visible pr-8">
+            <div class="flex flex-col justify-center">
                 <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
                     MAT LOGIC <span class="text-red-600">STUDIOS</span>
                 </h1>
@@ -93,7 +95,7 @@
                 <span class="text-white">MAT LOGIC</span> <span class="text-red-600">STUDIOS // AUTHENTICITY VERIFIED</span>
             </div>
             <div class="text-[10px] text-neutral-500 heavyweight-font tracking-[0.1em] uppercase">
-                © 2026 ALL RIGHTS RESERVED // VERSION 1.0.6
+                © 2026 ALL RIGHTS RESERVED // VERSION 1.0.8
             </div>
         </footer>
     </div>
@@ -101,8 +103,9 @@
     <!-- WRESTLING ROOM SCREEN -->
     <div id="wrestling-room-screen" class="screen bg-[#050505]">
         <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <div class="overflow-visible pr-12"> <!-- Header Cutoff Fix -->
-                <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none">WRESTLING ROOM</h2>
+            <div class="flex-grow overflow-visible">
+                <!-- Header Cutoff Fix Applied Below -->
+                <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none pr-10 inline-block">WRESTLING ROOM</h2>
             </div>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
@@ -125,26 +128,56 @@
 
             <!-- DEVELOPMENT SECTION (SMALLER CARDS) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 shadow-blue">
+                <div id="card-Drilling" class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 shadow-blue cursor-pointer transition relative overflow-hidden" onclick="runTraining('Drilling', 'blue')">
                     <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
                     <p class="text-blue-500 text-[9px] font-bold tracking-[0.1em] uppercase">Muscle Memory & Repetition</p>
+                    <div class="progress-container"><div class="progress-fill bg-blue-600"></div></div>
                 </div>
-                <div class="mat-border p-4 border-t-2 border-t-red-800 bg-red-900/10 shadow-red">
+                <div id="card-Technique" class="mat-border p-4 border-t-2 border-t-red-800 bg-red-900/10 shadow-red cursor-pointer transition relative overflow-hidden" onclick="runTraining('Technique', 'red')">
                     <h3 class="text-lg heavyweight-font italic text-red-200">Technique</h3>
                     <p class="text-red-500 text-[9px] font-bold tracking-[0.1em] uppercase">Precision & Execution</p>
+                    <div class="progress-container"><div class="progress-fill bg-red-600"></div></div>
                 </div>
-                <div class="mat-border p-4 border-t-2 border-t-green-800 bg-green-900/10 shadow-green">
+                <div id="card-Strength" class="mat-border p-4 border-t-2 border-t-green-800 bg-green-900/10 shadow-green cursor-pointer transition relative overflow-hidden" onclick="runTraining('Strength', 'green')">
                     <h3 class="text-lg heavyweight-font italic text-green-200">Strength</h3>
                     <p class="text-green-500 text-[9px] font-bold tracking-[0.1em] uppercase">Power & Explosivity</p>
+                    <div class="progress-container"><div class="progress-fill bg-green-600"></div></div>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
+        let isTraining = false;
+
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(id).classList.add('active-screen');
+        }
+
+        function runTraining(type, color) {
+            if (isTraining) return;
+            isTraining = true;
+
+            const card = document.getElementById(`card-${type}`);
+            const fill = card.querySelector('.progress-fill');
+            
+            card.classList.add('training-active');
+            card.style.opacity = "0.7";
+            
+            // Trigger animation
+            setTimeout(() => { fill.style.width = "100%"; }, 50);
+
+            // Wait for 3 seconds (Simulate training)
+            setTimeout(() => {
+                alert(`${type.toUpperCase()} SESSION COMPLETE: STABLE STATS INCREASED.`);
+                
+                // Reset UI
+                card.classList.remove('training-active');
+                fill.style.width = "0%";
+                card.style.opacity = "1";
+                isTraining = false;
+            }, 3050);
         }
     </script>
 </body></html>
