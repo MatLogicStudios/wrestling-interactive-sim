@@ -13,10 +13,10 @@
         
         button, .command-btn, .mat-border { border-radius: 15px !important; }
 
-        /* Card Shadow Borders */
-        .shadow-blue { box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.3); }
-        .shadow-red { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); }
-        .shadow-green { box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.3); }
+        /* Enhanced Border Shadow Glows */
+        .shadow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); }
+        .shadow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); }
+        .shadow-green { box-shadow: 0 0 20px rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); }
 
         .command-btn { 
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
@@ -27,11 +27,6 @@
         }
         .command-btn:hover { border-color: #ef4444; transform: translateY(-2px); }
         
-        .modal-overlay { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
-            z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(8px);
-        }
-
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
     </style></head><body class="border-t-4 border-red-600">
@@ -39,7 +34,7 @@
     <!-- MAIN DASHBOARD -->
     <div id="main-dashboard" class="screen active-screen">
         <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
-            <div class="flex flex-col justify-center">
+            <div class="flex flex-col justify-center overflow-visible pr-8">
                 <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
                     MAT LOGIC <span class="text-red-600">STUDIOS</span>
                 </h1>
@@ -61,7 +56,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-blue-600 shadow-blue">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
-                    <div id="roster-display" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
+                    <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600 shadow-red">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
@@ -69,12 +64,12 @@
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600 shadow-green">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
-                    <div id="credit-display" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button onclick="toggleOverlay('recruit-modal')" class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
+                <button class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
                 </button>
@@ -82,11 +77,11 @@
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
                 </button>
-                <button onclick="startSim()" class="command-btn p-6 text-left group border-b-4 border-b-red-900">
+                <button class="command-btn p-6 text-left group border-b-4 border-b-red-900">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
                 </button>
-                <button class="command-btn p-6 text-left group border-b-4 border-b-green-900">
+                <button class="command-btn p-6 text-left group border-b-4 border-b-green-900 shadow-green">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
                 </button>
@@ -106,7 +101,9 @@
     <!-- WRESTLING ROOM SCREEN -->
     <div id="wrestling-room-screen" class="screen bg-[#050505]">
         <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <h2 class="text-4xl heavyweight-font title-gradient italic">WRESTLING ROOM</h2>
+            <div class="overflow-visible pr-12"> <!-- Header Cutoff Fix -->
+                <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none">WRESTLING ROOM</h2>
+            </div>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto">
@@ -126,17 +123,17 @@
                 </div>
             </div>
 
-            <!-- DEVELOPMENT SECTION -->
+            <!-- DEVELOPMENT SECTION (SMALLER CARDS) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10">
+                <div class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 shadow-blue">
                     <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
                     <p class="text-blue-500 text-[9px] font-bold tracking-[0.1em] uppercase">Muscle Memory & Repetition</p>
                 </div>
-                <div class="mat-border p-4 border-t-2 border-t-red-800 bg-red-900/10">
+                <div class="mat-border p-4 border-t-2 border-t-red-800 bg-red-900/10 shadow-red">
                     <h3 class="text-lg heavyweight-font italic text-red-200">Technique</h3>
                     <p class="text-red-500 text-[9px] font-bold tracking-[0.1em] uppercase">Precision & Execution</p>
                 </div>
-                <div class="mat-border p-4 border-t-2 border-t-green-800 bg-green-900/10">
+                <div class="mat-border p-4 border-t-2 border-t-green-800 bg-green-900/10 shadow-green">
                     <h3 class="text-lg heavyweight-font italic text-green-200">Strength</h3>
                     <p class="text-green-500 text-[9px] font-bold tracking-[0.1em] uppercase">Power & Explosivity</p>
                 </div>
