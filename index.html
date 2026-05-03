@@ -13,6 +13,11 @@
         
         button, .command-btn, .mat-border { border-radius: 15px !important; }
 
+        /* Card Shadow Borders */
+        .shadow-blue { box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.3); }
+        .shadow-red { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .shadow-green { box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.3); }
+
         .command-btn { 
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
             border: 1px solid #333;
@@ -29,9 +34,6 @@
 
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
-
-        .log-red { color: #ef4444; margin-bottom: 2px; }
-        .log-blue { color: #3b82f6; margin-bottom: 2px; }
     </style></head><body class="border-t-4 border-red-600">
 
     <!-- MAIN DASHBOARD -->
@@ -57,15 +59,15 @@
 
         <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div class="mat-border p-4 md:p-6 border-l-4 border-l-neutral-600">
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-blue-600 shadow-blue">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
                     <div id="roster-display" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
                 </div>
-                <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600">
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600 shadow-red">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
                 </div>
-                <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600">
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600 shadow-green">
                     <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
                     <div id="credit-display" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
                 </div>
@@ -96,7 +98,7 @@
                 <span class="text-white">MAT LOGIC</span> <span class="text-red-600">STUDIOS // AUTHENTICITY VERIFIED</span>
             </div>
             <div class="text-[10px] text-neutral-500 heavyweight-font tracking-[0.1em] uppercase">
-                © 2026 ALL RIGHTS RESERVED // VERSION 1.0.5
+                © 2026 ALL RIGHTS RESERVED // VERSION 1.0.6
             </div>
         </footer>
     </div>
@@ -110,136 +112,42 @@
         <main class="flex-grow p-8 overflow-y-auto">
             <!-- ROSTER SECTION -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="mat-border p-6 border-t-4 border-t-red-600">
-                    <h3 class="text-2xl heavyweight-font italic text-white leading-tight">Caelun Sanders</h3>
-                    <p class="text-red-500 text-[10px] font-black tracking-[0.2em] uppercase">The Technician</p>
+                <div class="mat-border p-6 border-t-4 border-t-blue-600 shadow-blue">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Caelun Sanders</h3>
+                    <p class="text-blue-500 text-[10px] font-black tracking-[0.2em] uppercase">The Technician</p>
                 </div>
-                <div class="mat-border p-6 border-t-4 border-t-red-600">
-                    <h3 class="text-2xl heavyweight-font italic text-white leading-tight">Jace Burrell</h3>
+                <div class="mat-border p-6 border-t-4 border-t-red-600 shadow-red">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Jace Burrell</h3>
                     <p class="text-red-500 text-[10px] font-black tracking-[0.2em] uppercase">The Blast Machine</p>
                 </div>
-                <div class="mat-border p-6 border-t-4 border-t-red-600">
-                    <h3 class="text-2xl heavyweight-font italic text-white leading-tight">Aleksei Karelli</h3>
-                    <p class="text-red-500 text-[10px] font-black tracking-[0.2em] uppercase">The Phenom</p>
+                <div class="mat-border p-6 border-t-4 border-t-green-600 shadow-green">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Aleksei Karelli</h3>
+                    <p class="text-green-500 text-[10px] font-black tracking-[0.2em] uppercase">The Phenom</p>
                 </div>
             </div>
 
-            <!-- DEVELOPMENT SECTION (SMALLER CARDS) -->
+            <!-- DEVELOPMENT SECTION -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="mat-border p-4 border-t-2 border-t-neutral-500 bg-neutral-900/20">
-                    <h3 class="text-lg heavyweight-font italic text-neutral-300">Drilling</h3>
-                    <p class="text-neutral-500 text-[9px] font-bold tracking-[0.1em] uppercase">Muscle Memory & Repetition</p>
+                <div class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10">
+                    <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
+                    <p class="text-blue-500 text-[9px] font-bold tracking-[0.1em] uppercase">Muscle Memory & Repetition</p>
                 </div>
-                <div class="mat-border p-4 border-t-2 border-t-neutral-500 bg-neutral-900/20">
-                    <h3 class="text-lg heavyweight-font italic text-neutral-300">Technique</h3>
-                    <p class="text-neutral-500 text-[9px] font-bold tracking-[0.1em] uppercase">Precision & Execution</p>
+                <div class="mat-border p-4 border-t-2 border-t-red-800 bg-red-900/10">
+                    <h3 class="text-lg heavyweight-font italic text-red-200">Technique</h3>
+                    <p class="text-red-500 text-[9px] font-bold tracking-[0.1em] uppercase">Precision & Execution</p>
                 </div>
-                <div class="mat-border p-4 border-t-2 border-t-neutral-500 bg-neutral-900/20">
-                    <h3 class="text-lg heavyweight-font italic text-neutral-300">Strength</h3>
-                    <p class="text-neutral-500 text-[9px] font-bold tracking-[0.1em] uppercase">Power & Explosivity</p>
+                <div class="mat-border p-4 border-t-2 border-t-green-800 bg-green-900/10">
+                    <h3 class="text-lg heavyweight-font italic text-green-200">Strength</h3>
+                    <p class="text-green-500 text-[9px] font-bold tracking-[0.1em] uppercase">Power & Explosivity</p>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- RECRUIT MODAL -->
-    <div id="recruit-modal" class="modal-overlay">
-        <div class="mat-border bg-black p-10 max-w-2xl w-full text-center">
-            <h2 class="text-3xl heavyweight-font italic mb-4">PROSPECT SCOUTING</h2>
-            <p class="text-neutral-400 text-sm mb-8 italic">SCOUT NEW RECRUITS FOR <span class="text-green-500 font-black">$150.00</span>?</p>
-            <div class="flex flex-row gap-4 justify-center">
-                <button onclick="confirmPurchase()" class="bg-green-600 hover:bg-green-500 text-white font-black py-4 px-8 text-xs uppercase tracking-widest w-full">PURCHASE</button>
-                <button onclick="toggleOverlay('recruit-modal')" class="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-8 text-xs uppercase tracking-widest w-full">RETURN</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MATCH SIMULATION -->
-    <div id="the-mat-sim" class="modal-overlay">
-        <div class="min-h-screen w-full bg-[#050505] p-6 flex flex-col">
-            <div class="flex justify-between items-center border-b-2 border-red-900 pb-4 mb-6">
-                <div class="text-center w-1/3">
-                    <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">RED TEAM</div>
-                    <div id="red-score" class="text-7xl heavyweight-font text-red-600">00</div>
-                </div>
-                <div class="text-center w-1/3">
-                    <div class="text-6xl heavyweight-font text-white italic">3:00</div>
-                </div>
-                <div class="text-center w-1/3">
-                    <div class="text-[10px] text-neutral-500 uppercase font-black tracking-widest">BLUE TEAM</div>
-                    <div id="blue-score" class="text-7xl heavyweight-font text-blue-600">00</div>
-                </div>
-            </div>
-            <div class="flex-grow mat-border relative bg-black flex flex-col p-6 overflow-hidden">
-                <button onclick="stopSim()" class="absolute top-4 right-4 bg-red-600 text-white font-black px-6 py-2 text-[10px] tracking-widest z-50">END MATCH</button>
-                <div class="flex flex-col items-center justify-center h-full w-full">
-                    <div id="sim-log" class="text-[13px] font-mono uppercase bg-black/90 p-6 border border-neutral-700 w-full max-w-4xl h-80 overflow-y-auto flex flex-col shadow-2xl mb-6">
-                        <div class="text-neutral-500">> [SYSTEM]: MAT READY...</div>
-                    </div>
-                    <div id="position-badge" class="heavyweight-font text-4xl text-neutral-800 italic tracking-[0.2em]">NEUTRAL</div>
-                </div>
-            </div>
-            <div id="action-commands" class="grid grid-cols-4 gap-4 mt-6"></div>
-        </div>
-    </div>
-
     <script>
-        let currentCredits = 500.00;
-        let currentRosterSize = 3;
-
-        function updateUI() {
-            document.getElementById('credit-display').innerText = `$${currentCredits.toFixed(2)}`;
-            document.getElementById('roster-display').innerText = `${currentRosterSize} / 12`;
-        }
-
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(id).classList.add('active-screen');
-        }
-
-        function toggleOverlay(id) {
-            const el = document.getElementById(id);
-            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
-        }
-
-        function confirmPurchase() {
-            if (currentCredits >= 150) {
-                currentCredits -= 150;
-                currentRosterSize += 1;
-                updateUI();
-                toggleOverlay('recruit-modal');
-            } else {
-                alert("INSUFFICIENT CREDITS");
-            }
-        }
-
-        function startSim() {
-            document.getElementById('the-mat-sim').style.display = 'flex';
-            renderTestCommands();
-        }
-
-        function stopSim() {
-            document.getElementById('the-mat-sim').style.display = 'none';
-        }
-
-        function renderTestCommands() {
-            const container = document.getElementById('action-commands');
-            container.innerHTML = '';
-            const moves = ["Power Takedown", "Single Leg", "Snap Down", "Ankle Pick"];
-            moves.forEach(m => {
-                const btn = document.createElement('button');
-                btn.className = "command-btn p-4 border-b-4 border-b-red-600 text-left";
-                btn.innerHTML = `<h3 class="heavyweight-font italic">${m}</h3>`;
-                btn.onclick = () => {
-                    const log = document.getElementById('sim-log');
-                    const redMsg = document.createElement('div');
-                    redMsg.className = "log-red";
-                    redMsg.innerText = `> RED TEAM EXECUTES ${m.toUpperCase()}`;
-                    log.appendChild(redMsg);
-                    log.scrollTop = log.scrollHeight;
-                };
-                container.appendChild(btn);
-            });
         }
     </script>
 </body></html>
