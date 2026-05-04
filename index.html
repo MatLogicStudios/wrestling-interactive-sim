@@ -38,17 +38,16 @@
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
 
-        .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
-        .progress-fill { height: 100%; width: 0%; transition: width 3s linear; }
-        .training-active .progress-container { display: block; }
+        /* Selection Button States */
+        .style-btn, .opponent-btn { color: #737373; background: transparent; transition: all 0.2s ease; border: 1px solid #262626; }
+        .style-btn:hover, .opponent-btn:hover { border-color: white; color: white; }
+        
+        .active-style { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; }
+        .active-ai { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+        .active-live { background: #3b82f6 !important; border-color: #3b82f6 !important; color: white !important; font-weight: 900; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
         
         .glow-red { text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
         .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
-
-        /* Style Selection Button States */
-        .style-btn { color: #737373; background: transparent; transition: all 0.2s ease; }
-        .style-btn:hover { border-color: #ef4444; color: white; }
-        .active-style { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
@@ -74,15 +73,15 @@
         <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-blue-600 shadow-blue">
-                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest text-blue-500">Stable Strength</div>
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600 shadow-red">
-                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest text-red-500">Season Record</div>
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600 shadow-green">
-                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest text-green-500">Total Credits</div>
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
                 </div>
             </div>
@@ -108,35 +107,18 @@
         </main>
     </div>
 
-    <!-- WRESTLING ROOM SCREEN -->
-    <div id="wrestling-room-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none inline-block">WRESTLING ROOM</h2>
-            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500">RETURN</button>
-        </header>
-        <main class="flex-grow p-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div id="card-Drilling" class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 cursor-pointer" onclick="runTraining('Drilling')">
-                    <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
-                    <div class="progress-container"><div class="progress-fill bg-blue-600"></div></div>
-                </div>
-            </div>
-        </main>
-    </div>
-
     <!-- THE MAT (UNIFIED GAME SCREEN) -->
     <div id="the-mat-screen" class="screen bg-[#050505]">
         <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
             <div class="flex-grow overflow-visible">
                 <h2 class="text-3xl md:text-5xl heavyweight-font title-gradient italic leading-none inline-block pr-6">THE MAT</h2>
-                <div id="mat-style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">SELECT STYLE // READY</div>
+                <div id="mat-style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">INITIALIZING ARENA...</div>
             </div>
             
-            <!-- Style Selection Buttons -->
             <div class="flex gap-2 mr-6">
-                <button id="btn-folkstyle" onclick="setStyle('folkstyle')" class="style-btn text-[10px] font-black tracking-widest border border-neutral-800 px-6 py-2 rounded-full uppercase">Folkstyle</button>
-                <button id="btn-freestyle" onclick="setStyle('freestyle')" class="style-btn text-[10px] font-black tracking-widest border border-neutral-800 px-6 py-2 rounded-full uppercase">Freestyle</button>
-                <button id="btn-greco" onclick="setStyle('greco')" class="style-btn text-[10px] font-black tracking-widest border border-neutral-800 px-6 py-2 rounded-full uppercase">Greco Roman</button>
+                <button id="btn-folkstyle" onclick="setStyle('folkstyle')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Folkstyle</button>
+                <button id="btn-freestyle" onclick="setStyle('freestyle')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Freestyle</button>
+                <button id="btn-greco" onclick="setStyle('greco')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Greco Roman</button>
             </div>
 
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">EXIT</button>
@@ -152,7 +134,7 @@
                 <div class="mat-border flex-grow flex flex-col overflow-hidden bg-black/40">
                     <div class="p-3 border-b border-neutral-800 text-[10px] font-black tracking-widest text-neutral-500 uppercase">ATU Play-By-Play</div>
                     <div id="atu-log" class="flex-grow p-4 overflow-y-auto atu-font text-xs text-neutral-400 space-y-2">
-                        <p class="text-green-500">[0:00] MATCH INITIALIZED</p>
+                        <p class="text-green-500">[0:00] STANDBY: AWAITING SELECTION</p>
                     </div>
                 </div>
             </div>
@@ -192,10 +174,17 @@
                         <div class="text-3xl heavyweight-font text-green-500 italic">0:00</div>
                     </div>
                 </div>
+                
                 <div class="mat-border p-6 bg-neutral-900/50 flex-grow text-center flex flex-col justify-center gap-2">
-                    <h3 class="text-lg heavyweight-font italic text-white mb-2 uppercase">Opponent Selection</h3>
-                    <button class="w-full py-3 bg-red-600/20 border border-red-600 text-red-500 rounded-xl font-black text-[10px] tracking-widest uppercase hover:bg-red-600 hover:text-white transition">AI Simulation</button>
-                    <button class="w-full py-3 bg-blue-600/20 border border-blue-600 text-blue-500 rounded-xl font-black text-[10px] tracking-widest uppercase hover:bg-blue-600 hover:text-white transition">Live Challenge</button>
+                    <h3 class="text-lg heavyweight-font italic text-white mb-2 uppercase tracking-widest">Match Type</h3>
+                    
+                    <button id="btn-ai-sim" onclick="setOpponent('ai-sim')" class="opponent-btn w-full py-3 rounded-xl font-black text-[10px] tracking-widest uppercase">
+                        AI Simulation
+                    </button>
+                    
+                    <button id="btn-live-challenge" onclick="setOpponent('live-challenge')" class="opponent-btn w-full py-3 rounded-xl font-black text-[10px] tracking-widest uppercase">
+                        Live Challenge
+                    </button>
                 </div>
             </div>
         </main>
@@ -208,8 +197,23 @@
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(id).classList.add('active-screen');
-            if (id === 'the-mat-screen') startActionTimer();
-            else clearInterval(timerInterval);
+            if (id === 'the-mat-screen') {
+                resetArena(); // Ensure fresh choice every time
+                startActionTimer();
+            } else {
+                clearInterval(timerInterval);
+            }
+        }
+
+        function resetArena() {
+            // Clear all style buttons
+            document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active-style'));
+            // Clear all opponent buttons
+            document.querySelectorAll('.opponent-btn').forEach(btn => {
+                btn.classList.remove('active-ai', 'active-live');
+            });
+            document.getElementById('riding-time-container').style.display = 'none';
+            document.getElementById('mat-style-indicator').innerText = 'AWAITING SELECTIONS...';
         }
 
         function setStyle(style) {
@@ -222,9 +226,27 @@
             indicator.innerText = `${style.toUpperCase()} // READY`;
             ridingTime.style.display = (style === 'folkstyle') ? 'block' : 'none';
 
+            logATU(`RULESET UPDATED: ${style.toUpperCase()}`, 'white');
+        }
+
+        function setOpponent(type) {
+            document.getElementById('btn-ai-sim').classList.remove('active-ai');
+            document.getElementById('btn-live-challenge').classList.remove('active-live');
+            
+            if (type === 'ai-sim') {
+                document.getElementById('btn-ai-sim').classList.add('active-ai');
+                logATU("OPPONENT: MAT LOGIC ENGINE (AI)", "text-red-400");
+            } else {
+                document.getElementById('btn-live-challenge').classList.add('active-live');
+                logATU("OPPONENT: LIVE CHALLENGER SEARCHING...", "text-blue-400");
+            }
+        }
+
+        function logATU(msg, colorClass) {
             const log = document.getElementById('atu-log');
             const p = document.createElement('p');
-            p.innerText = `[SYSTEM] RULESET UPDATED: ${style.toUpperCase()}`;
+            p.className = colorClass;
+            p.innerText = `[SYSTEM] ${msg}`;
             log.appendChild(p);
             log.scrollTop = log.scrollHeight;
         }
@@ -238,12 +260,7 @@
                 document.getElementById('action-timer').innerText = actionTime;
                 if (actionTime <= 0) {
                     actionTime = 15;
-                    const log = document.getElementById('atu-log');
-                    const p = document.createElement('p');
-                    p.className = "text-red-500";
-                    p.innerText = "[!] ACTION CLOCK RESET";
-                    log.appendChild(p);
-                    log.scrollTop = log.scrollHeight;
+                    logATU("ACTION CLOCK RESET", "text-red-500");
                 }
             }, 1000);
         }
