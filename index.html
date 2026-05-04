@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wrestling Interactive Sim | Mat Logic Studios</title>
@@ -31,7 +33,9 @@
         .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
         .progress-fill { height: 100%; width: 0%; transition: width 3s linear; }
         .training-active .progress-container { display: block; }
-    </style></head><body class="border-t-4 border-red-600">
+    </style>
+</head>
+<body class="border-t-4 border-red-600">
 
     <!-- MAIN DASHBOARD -->
     <div id="main-dashboard" class="screen active-screen">
@@ -45,7 +49,7 @@
                 </h2>
             </div>
             <div class="flex items-center">
-                <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
+                <button onclick="showScreen('mat-lobby-screen')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
                     MAT LOBBY
                 </button>
                 <div class="flex-none" style="min-width: 150px;"> 
@@ -79,7 +83,7 @@
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
                 </button>
-                <button class="command-btn p-6 text-left group border-b-4 border-b-red-900">
+                <button onclick="showScreen('mat-lobby-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-900">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
                 </button>
@@ -95,7 +99,7 @@
                 <span class="text-white">MAT LOGIC</span> <span class="text-red-600">STUDIOS // AUTHENTICITY VERIFIED</span>
             </div>
             <div class="text-[10px] text-neutral-500 heavyweight-font tracking-[0.1em] uppercase">
-                © 2026 ALL RIGHTS RESERVED // VERSION 1.0.8
+                © 2026 ALL RIGHTS RESERVED // VERSION 1.1.0
             </div>
         </footer>
     </div>
@@ -104,13 +108,11 @@
     <div id="wrestling-room-screen" class="screen bg-[#050505]">
         <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
             <div class="flex-grow overflow-visible">
-                <!-- Header Cutoff Fix Applied Below -->
                 <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none pr-10 inline-block">WRESTLING ROOM</h2>
             </div>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto">
-            <!-- ROSTER SECTION -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <div class="mat-border p-6 border-t-4 border-t-blue-600 shadow-blue">
                     <h3 class="text-2xl heavyweight-font italic text-white">Caelun Sanders</h3>
@@ -126,7 +128,6 @@
                 </div>
             </div>
 
-            <!-- DEVELOPMENT SECTION (SMALLER CARDS) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div id="card-Drilling" class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 shadow-blue cursor-pointer transition relative overflow-hidden" onclick="runTraining('Drilling', 'blue')">
                     <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
@@ -143,6 +144,22 @@
                     <p class="text-green-500 text-[9px] font-bold tracking-[0.1em] uppercase">Power & Explosivity</p>
                     <div class="progress-container"><div class="progress-fill bg-green-600"></div></div>
                 </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MAT LOBBY SCREEN -->
+    <div id="mat-lobby-screen" class="screen bg-[#050505]">
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <div class="flex-grow">
+                <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none inline-block">THE MAT LOBBY</h2>
+            </div>
+            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
+        </header>
+        <main class="flex-grow p-8 flex flex-col items-center justify-center">
+            <div class="mat-border p-12 border-t-4 border-t-red-600 shadow-red text-center max-w-2xl">
+                <h3 class="text-3xl heavyweight-font italic text-white mb-2">Matchmaking Offline</h3>
+                <p class="text-neutral-400 uppercase font-black tracking-widest text-xs">Awaiting Simulation Data</p>
             </div>
         </main>
     </div>
@@ -165,14 +182,10 @@
             card.classList.add('training-active');
             card.style.opacity = "0.7";
             
-            // Trigger animation
             setTimeout(() => { fill.style.width = "100%"; }, 50);
 
-            // Wait for 3 seconds (Simulate training)
             setTimeout(() => {
                 alert(`${type.toUpperCase()} SESSION COMPLETE: STABLE STATS INCREASED.`);
-                
-                // Reset UI
                 card.classList.remove('training-active');
                 fill.style.width = "0%";
                 card.style.opacity = "1";
