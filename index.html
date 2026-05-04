@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wrestling Sim V1.1.0 | Mat Logic Studios</title>
+    <title>Wrestling Sim | Mat Logic Studios</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,7 +28,6 @@
             overflow: hidden;
         }
 
-        /* Fixed Header from V1.0.8 */
         header {
             padding: 25px 20px;
             text-align: center;
@@ -42,16 +41,14 @@
             font-size: 2.8rem;
             letter-spacing: 3px;
             color: var(--accent-blue);
-            text-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
         }
 
-        /* View Container */
         .view {
             display: none;
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            padding-bottom: 100px; /* Space for nav */
+            padding-bottom: 100px;
         }
 
         .view.active {
@@ -64,10 +61,8 @@
             margin-bottom: 25px;
             border-left: 5px solid var(--accent-blue);
             padding-left: 15px;
-            text-transform: uppercase;
         }
 
-        /* Card Grid System */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -80,29 +75,15 @@
             padding: 24px;
             border: 1px solid #333;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            transition: all 0.3s ease;
-            position: relative;
         }
 
-        /* Shadow Glow Sequence */
-        .card-blue { box-shadow: 0 0 15px rgba(0, 123, 255, 0.2); border-top: 4px solid var(--accent-blue); }
-        .card-red { box-shadow: 0 0 15px rgba(220, 53, 69, 0.2); border-top: 4px solid var(--accent-red); }
-        .card-green { box-shadow: 0 0 15px rgba(40, 167, 69, 0.2); border-top: 4px solid var(--accent-green); }
+        .card-blue { border-top: 4px solid var(--accent-blue); }
+        .card-red { border-top: 4px solid var(--accent-red); }
+        .card-green { border-top: 4px solid var(--accent-green); }
 
-        .athlete-name {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.5rem;
-            margin: 0;
-            color: var(--text-main);
-        }
+        .athlete-name { font-family: 'Bebas Neue', cursive; font-size: 1.5rem; margin: 0; }
+        .athlete-stats { color: var(--text-dim); font-size: 0.9rem; margin: 10px 0; }
 
-        .athlete-stats {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            margin: 10px 0;
-        }
-
-        /* Progress Bars */
         .progress-container {
             background: #252525;
             height: 14px;
@@ -115,7 +96,7 @@
         .progress-bar {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--accent-blue), #00bcff);
+            background: var(--accent-blue);
             transition: width 0.1s linear;
         }
 
@@ -128,32 +109,20 @@
             color: white;
             font-family: 'Bebas Neue', cursive;
             font-size: 1.1rem;
-            letter-spacing: 1px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .btn:hover:not(:disabled) {
-            background: #444;
-            transform: translateY(-2px);
-        }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        /* Navigation Bar */
         nav {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: rgba(26, 26, 26, 0.95);
+            background: #1a1a1a;
             display: flex;
             justify-content: space-around;
             border-top: 2px solid #333;
             padding: 15px 0;
-            backdrop-filter: blur(10px);
             z-index: 1000;
         }
 
@@ -163,28 +132,10 @@
             color: var(--text-dim);
             font-family: 'Bebas Neue', cursive;
             font-size: 1.3rem;
-            letter-spacing: 1.5px;
             cursor: pointer;
-            transition: 0.3s;
-            padding: 5px 15px;
         }
 
-        .nav-item.active {
-            color: var(--accent-blue);
-            border-bottom: 2px solid var(--accent-blue);
-        }
-
-        /* Lobby Specifics */
-        .empty-slot {
-            border: 2px dashed #444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-            color: #555;
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.8rem;
-        }
+        .nav-item.active { color: var(--accent-blue); border-bottom: 2px solid var(--accent-blue); }
     </style>
 </head>
 <body>
@@ -193,27 +144,22 @@
     <div class="logo-placeholder">MAT LOGIC STUDIOS</div>
 </header>
 
-<!-- Wrestling Room View -->
+<!-- Main Wrestling Room View -->
 <div id="roomView" class="view active">
     <h2>WRESTLING ROOM</h2>
     <div class="grid">
-        <!-- Caelun Sanders -->
         <div class="card card-blue">
             <p class="athlete-name">Caelun Sanders</p>
             <p class="athlete-stats">Technique: 84 | Power: 72</p>
             <div class="progress-container"><div id="bar1" class="progress-bar"></div></div>
             <button class="btn" onclick="startTraining('bar1')">Drilling Session</button>
         </div>
-
-        <!-- Jace Burrell -->
         <div class="card card-red">
             <p class="athlete-name">Jace Burrell</p>
             <p class="athlete-stats">Technique: 91 | Power: 65</p>
             <div class="progress-container"><div id="bar2" class="progress-bar"></div></div>
             <button class="btn" onclick="startTraining('bar2')">Move Refinement</button>
         </div>
-
-        <!-- Aleksei Karelli -->
         <div class="card card-green">
             <p class="athlete-name">Aleksei Karelli</p>
             <p class="athlete-stats">Technique: 70 | Power: 95</p>
@@ -223,36 +169,40 @@
     </div>
 </div>
 
+<!-- Recruitment View -->
+<div id="recruitView" class="view">
+    <h2>RECRUITMENT CENTER</h2>
+    <div class="grid">
+        <div class="card card-blue">
+            <p class="athlete-name">Scout New Talent</p>
+            <p class="athlete-stats">Availability: High</p>
+            <button class="btn" onclick="alert('Searching for prospects...')">Begin Scouting</button>
+        </div>
+    </div>
+</div>
+
 <!-- The Mat Lobby View -->
 <div id="matView" class="view">
     <h2>THE MAT LOBBY</h2>
     <div class="grid">
-        <div class="card card-blue">
-            <h3 class="athlete-name">Upcoming Bouts</h3>
-            <p class="athlete-stats">No matches scheduled for today.</p>
+        <div class="card card-red">
+            <p class="athlete-name">Match Maker</p>
+            <p class="athlete-stats">Status: Open</p>
             <button class="btn" onclick="alert('Match Engine Initializing...')">Schedule Match</button>
         </div>
-        <div class="card card-red">
-            <h3 class="athlete-name">Rankings</h3>
-            <p class="athlete-stats">Stable Rank: #14</p>
-            <button class="btn">View Board</button>
-        </div>
-        <div class="empty-slot">OPEN MAT SLOT</div>
     </div>
 </div>
 
 <nav>
-    <button id="btnRecruit" class="nav-item" onclick="alert('Recruitment Center Offline')">RECRUIT</button>
-    <button id="btnRoom" class="nav-item active" onclick="showView('roomView', 'btnRoom')">ROOM</button>
-    <button id="btnMat" class="nav-item" onclick="showView('matView', 'btnMat')">THE MAT</button>
+    <button id="navRecruit" class="nav-item" onclick="showView('recruitView', 'navRecruit')">RECRUIT</button>
+    <button id="navRoom" class="nav-item active" onclick="showView('roomView', 'navRoom')">ROOM</button>
+    <button id="navMat" class="nav-item" onclick="showView('matView', 'navMat')">THE MAT</button>
 </nav>
 
 <script>
-    // 3-Second Training Logic from V1.0.8
     function startTraining(barId) {
         const bar = document.getElementById(barId);
         const btn = bar.closest('.card').querySelector('.btn');
-        
         btn.disabled = true;
         let width = 0;
         const interval = setInterval(() => {
@@ -260,22 +210,16 @@
                 clearInterval(interval);
                 btn.disabled = false;
                 bar.style.width = '0%';
-                // Logic for potential stat increase can go here later
             } else {
                 width++;
                 bar.style.width = width + '%';
             }
-        }, 30); // 100 steps * 30ms = 3000ms (3 seconds)
+        }, 30);
     }
 
-    // New Navigation Logic
     function showView(viewId, navId) {
-        // Hide all views
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        // Reset nav buttons
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        
-        // Show selected
         document.getElementById(viewId).classList.add('active');
         document.getElementById(navId).classList.add('active');
     }
