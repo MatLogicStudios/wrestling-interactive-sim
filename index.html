@@ -1,229 +1,183 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wrestling Sim | Mat Logic Studios</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Wrestling Interactive Sim | Mat Logic Studios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --bg-dark: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --accent-blue: #007bff;
-            --accent-red: #dc3545;
-            --accent-green: #28a745;
-            --text-main: #ffffff;
-            --text-dim: #aaaaaa;
-        }
+        html, body { height: 100vh; margin: 0; overflow: hidden; } 
+        body { background-color: #0d0d0d; color: #f5f5f5; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; }
+        .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); border-radius: 15px; }
+        .title-gradient { background: linear-gradient(to right, #ffffff 20%, #ef4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        button, .command-btn, .mat-border { border-radius: 15px !important; }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
+        .shadow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); }
+        .shadow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); }
+        .shadow-green { box-shadow: 0 0 20px rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); }
 
-        header {
-            padding: 25px 20px;
-            text-align: center;
-            background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
-            border-bottom: 2px solid #333;
-            flex-shrink: 0;
-        }
-
-        .logo-placeholder {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.8rem;
-            letter-spacing: 3px;
-            color: var(--accent-blue);
-        }
-
-        .view {
-            display: none;
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            padding-bottom: 100px;
-        }
-
-        .view.active {
-            display: block;
-        }
-
-        h2 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.2rem;
-            margin-bottom: 25px;
-            border-left: 5px solid var(--accent-blue);
-            padding-left: 15px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
+        .command-btn { 
+            background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
             border: 1px solid #333;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; justify-content: center; height: 110px;
         }
 
-        .card-blue { border-top: 4px solid var(--accent-blue); }
-        .card-red { border-top: 4px solid var(--accent-red); }
-        .card-green { border-top: 4px solid var(--accent-green); }
+        .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
+        .active-screen { display: flex; }
 
-        .athlete-name { font-family: 'Bebas Neue', cursive; font-size: 1.5rem; margin: 0; }
-        .athlete-stats { color: var(--text-dim); font-size: 0.9rem; margin: 10px 0; }
+        /* Training Progress Bar Styles */
+        .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
+        .progress-fill { height: 100%; width: 0%; transition: width 3s linear; }
+        .training-active .progress-container { display: block; }
+    </style></head><body class="border-t-4 border-red-600">
 
-        .progress-container {
-            background: #252525;
-            height: 14px;
-            border-radius: 7px;
-            margin: 20px 0;
-            overflow: hidden;
-            border: 1px solid #444;
-        }
+    <!-- MAIN DASHBOARD -->
+    <div id="main-dashboard" class="screen active-screen">
+        <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
+            <div class="flex flex-col justify-center">
+                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
+                    MAT LOGIC <span class="text-red-600">STUDIOS</span>
+                </h1>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
+                    WRESTLING INTERACTIVE SIM
+                </h2>
+            </div>
+            <div class="flex items-center">
+                <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xs tracking-[0.2em] transition border border-red-500 shadow-lg mr-4 md:mr-10">
+                    MAT LOBBY
+                </button>
+                <div class="flex-none" style="min-width: 150px;"> 
+                    <img src="logo.png" alt="Mat Logic Studios" class="h-24 md:h-32 w-auto object-contain">
+                </div>
+            </div>
+        </header>
 
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-blue);
-            transition: width 0.1s linear;
-        }
+        <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-blue-600 shadow-blue">
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
+                    <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
+                </div>
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600 shadow-red">
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
+                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
+                </div>
+                <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600 shadow-green">
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
+                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+                </div>
+            </div>
 
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 6px;
-            background: #333;
-            color: white;
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.1rem;
-            cursor: pointer;
-        }
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
+                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
+                </button>
+                <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-600">
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
+                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
+                </button>
+                <button class="command-btn p-6 text-left group border-b-4 border-b-red-900">
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
+                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations</p>
+                </button>
+                <button class="command-btn p-6 text-left group border-b-4 border-b-green-900 shadow-green">
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
+                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
+                </button>
+            </div>
+        </main>
 
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-        nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: #1a1a1a;
-            display: flex;
-            justify-content: space-around;
-            border-top: 2px solid #333;
-            padding: 15px 0;
-            z-index: 1000;
-        }
-
-        .nav-item {
-            background: none;
-            border: none;
-            color: var(--text-dim);
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.3rem;
-            cursor: pointer;
-        }
-
-        .nav-item.active { color: var(--accent-blue); border-bottom: 2px solid var(--accent-blue); }
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="logo-placeholder">MAT LOGIC STUDIOS</div>
-</header>
-
-<!-- Main Wrestling Room View -->
-<div id="roomView" class="view active">
-    <h2>WRESTLING ROOM</h2>
-    <div class="grid">
-        <div class="card card-blue">
-            <p class="athlete-name">Caelun Sanders</p>
-            <p class="athlete-stats">Technique: 84 | Power: 72</p>
-            <div class="progress-container"><div id="bar1" class="progress-bar"></div></div>
-            <button class="btn" onclick="startTraining('bar1')">Drilling Session</button>
-        </div>
-        <div class="card card-red">
-            <p class="athlete-name">Jace Burrell</p>
-            <p class="athlete-stats">Technique: 91 | Power: 65</p>
-            <div class="progress-container"><div id="bar2" class="progress-bar"></div></div>
-            <button class="btn" onclick="startTraining('bar2')">Move Refinement</button>
-        </div>
-        <div class="card card-green">
-            <p class="athlete-name">Aleksei Karelli</p>
-            <p class="athlete-stats">Technique: 70 | Power: 95</p>
-            <div class="progress-container"><div id="bar3" class="progress-bar"></div></div>
-            <button class="btn" onclick="startTraining('bar3')">Power Lifting</button>
-        </div>
+        <footer class="flex-none p-6 border-t border-neutral-900 bg-black text-center">
+            <div class="text-xs font-black tracking-[0.2em] heavyweight-font italic mb-1 uppercase">
+                <span class="text-white">MAT LOGIC</span> <span class="text-red-600">STUDIOS // AUTHENTICITY VERIFIED</span>
+            </div>
+            <div class="text-[10px] text-neutral-500 heavyweight-font tracking-[0.1em] uppercase">
+                © 2026 ALL RIGHTS RESERVED // VERSION 1.0.8
+            </div>
+        </footer>
     </div>
-</div>
 
-<!-- Recruitment View -->
-<div id="recruitView" class="view">
-    <h2>RECRUITMENT CENTER</h2>
-    <div class="grid">
-        <div class="card card-blue">
-            <p class="athlete-name">Scout New Talent</p>
-            <p class="athlete-stats">Availability: High</p>
-            <button class="btn" onclick="alert('Searching for prospects...')">Begin Scouting</button>
-        </div>
+    <!-- WRESTLING ROOM SCREEN -->
+    <div id="wrestling-room-screen" class="screen bg-[#050505]">
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <div class="flex-grow overflow-visible">
+                <!-- Header Cutoff Fix Applied Below -->
+                <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none pr-10 inline-block">WRESTLING ROOM</h2>
+            </div>
+            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
+        </header>
+        <main class="flex-grow p-8 overflow-y-auto">
+            <!-- ROSTER SECTION -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="mat-border p-6 border-t-4 border-t-blue-600 shadow-blue">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Caelun Sanders</h3>
+                    <p class="text-blue-500 text-[10px] font-black tracking-[0.2em] uppercase">The Technician</p>
+                </div>
+                <div class="mat-border p-6 border-t-4 border-t-red-600 shadow-red">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Jace Burrell</h3>
+                    <p class="text-red-500 text-[10px] font-black tracking-[0.2em] uppercase">The Blast Machine</p>
+                </div>
+                <div class="mat-border p-6 border-t-4 border-t-green-600 shadow-green">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Aleksei Karelli</h3>
+                    <p class="text-green-500 text-[10px] font-black tracking-[0.2em] uppercase">The Phenom</p>
+                </div>
+            </div>
+
+            <!-- DEVELOPMENT SECTION (SMALLER CARDS) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div id="card-Drilling" class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 shadow-blue cursor-pointer transition relative overflow-hidden" onclick="runTraining('Drilling', 'blue')">
+                    <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
+                    <p class="text-blue-500 text-[9px] font-bold tracking-[0.1em] uppercase">Muscle Memory & Repetition</p>
+                    <div class="progress-container"><div class="progress-fill bg-blue-600"></div></div>
+                </div>
+                <div id="card-Technique" class="mat-border p-4 border-t-2 border-t-red-800 bg-red-900/10 shadow-red cursor-pointer transition relative overflow-hidden" onclick="runTraining('Technique', 'red')">
+                    <h3 class="text-lg heavyweight-font italic text-red-200">Technique</h3>
+                    <p class="text-red-500 text-[9px] font-bold tracking-[0.1em] uppercase">Precision & Execution</p>
+                    <div class="progress-container"><div class="progress-fill bg-red-600"></div></div>
+                </div>
+                <div id="card-Strength" class="mat-border p-4 border-t-2 border-t-green-800 bg-green-900/10 shadow-green cursor-pointer transition relative overflow-hidden" onclick="runTraining('Strength', 'green')">
+                    <h3 class="text-lg heavyweight-font italic text-green-200">Strength</h3>
+                    <p class="text-green-500 text-[9px] font-bold tracking-[0.1em] uppercase">Power & Explosivity</p>
+                    <div class="progress-container"><div class="progress-fill bg-green-600"></div></div>
+                </div>
+            </div>
+        </main>
     </div>
-</div>
 
-<!-- The Mat Lobby View -->
-<div id="matView" class="view">
-    <h2>THE MAT LOBBY</h2>
-    <div class="grid">
-        <div class="card card-red">
-            <p class="athlete-name">Match Maker</p>
-            <p class="athlete-stats">Status: Open</p>
-            <button class="btn" onclick="alert('Match Engine Initializing...')">Schedule Match</button>
-        </div>
-    </div>
-</div>
+    <script>
+        let isTraining = false;
 
-<nav>
-    <button id="navRecruit" class="nav-item" onclick="showView('recruitView', 'navRecruit')">RECRUIT</button>
-    <button id="navRoom" class="nav-item active" onclick="showView('roomView', 'navRoom')">ROOM</button>
-    <button id="navMat" class="nav-item" onclick="showView('matView', 'navMat')">THE MAT</button>
-</nav>
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+            document.getElementById(id).classList.add('active-screen');
+        }
 
-<script>
-    function startTraining(barId) {
-        const bar = document.getElementById(barId);
-        const btn = bar.closest('.card').querySelector('.btn');
-        btn.disabled = true;
-        let width = 0;
-        const interval = setInterval(() => {
-            if (width >= 100) {
-                clearInterval(interval);
-                btn.disabled = false;
-                bar.style.width = '0%';
-            } else {
-                width++;
-                bar.style.width = width + '%';
-            }
-        }, 30);
-    }
+        function runTraining(type, color) {
+            if (isTraining) return;
+            isTraining = true;
 
-    function showView(viewId, navId) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById(viewId).classList.add('active');
-        document.getElementById(navId).classList.add('active');
-    }
-</script>
+            const card = document.getElementById(`card-${type}`);
+            const fill = card.querySelector('.progress-fill');
+            
+            card.classList.add('training-active');
+            card.style.opacity = "0.7";
+            
+            // Trigger animation
+            setTimeout(() => { fill.style.width = "100%"; }, 50);
 
-</body>
-</html>
+            // Wait for 3 seconds (Simulate training)
+            setTimeout(() => {
+                alert(`${type.toUpperCase()} SESSION COMPLETE: STABLE STATS INCREASED.`);
+                
+                // Reset UI
+                card.classList.remove('training-active');
+                fill.style.width = "0%";
+                card.style.opacity = "1";
+                isTraining = false;
+            }, 3050);
+        }
+    </script>
+</body></html>
