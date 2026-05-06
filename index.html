@@ -101,7 +101,7 @@
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600 shadow-green">
                     <div class="text-[10px] text-green-500 uppercase font-black tracking-widest">Total Credits</div>
-                    <div id="total-credits" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+                    <div id="total-credits" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$1000.00</div>
                 </div>
             </div>
 
@@ -313,8 +313,8 @@
     </div>
 
     <script>
-        let energy = 100;
-        let credits = 500;
+        let energy = 200; // Updated energy capacity
+        let credits = 1000; // Updated initial credits
         let stableSize = 3;
         const maxStable = 12;
         let selectedRecruitStyle = "";
@@ -327,11 +327,12 @@
         function updateEnergyUI() {
             const fill = document.getElementById('energy-fill');
             const alertIcon = document.getElementById('low-energy-alert');
-            fill.style.width = `${energy}%`;
-            if (energy > 50) fill.style.background = "#ef4444";
-            else if (energy > 15) fill.style.background = "#7f1d1d";
+            // Calculate width based on 200 capacity
+            fill.style.width = `${(energy / 200) * 100}%`;
+            if (energy > 100) fill.style.background = "#ef4444";
+            else if (energy > 30) fill.style.background = "#7f1d1d";
             else fill.style.background = "#404040";
-            alertIcon.style.display = (energy <= 15) ? "block" : "none";
+            alertIcon.style.display = (energy <= 30) ? "block" : "none";
         }
 
         function getRecruitCost() {
@@ -389,7 +390,7 @@
             if (credits < 250) { alert("INSUFFICIENT CREDITS."); return; }
             
             credits -= 250;
-            energy = 100;
+            energy = 200; // Restore to new max
             supplementSoldOut = true;
             document.getElementById('supplement-sold-out').style.display = "flex";
             document.getElementById('total-credits').innerText = `$${credits.toFixed(2)}`;
