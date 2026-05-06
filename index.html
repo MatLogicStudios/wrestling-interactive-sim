@@ -3,199 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wrestling Interactive Sim | Mat Logic Studios</title>
+    <title>The Mat | Mat Logic Studios</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html, body { height: 100vh; margin: 0; overflow: hidden; } 
-        body { background-color: #0d0d0d; color: #f5f5f5; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; }
+        html, body { height: 100vh; margin: 0; overflow: hidden; background-color: #050505; color: #f5f5f5; font-family: 'Inter', sans-serif; }
         .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
         .atu-font { font-family: 'JetBrains Mono', monospace; }
-        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); border-radius: 15px; }
         .title-gradient { background: linear-gradient(to right, #ffffff 20%, #ef4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); border-radius: 15px; }
         
-        button, .command-btn, .mat-border { border-radius: 15px !important; }
-
-        .command-btn { 
-            background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
-            border: 1px solid #333;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column; justify-content: center; height: 110px;
-        }
-
+        /* Tactical Grid Buttons */
         .move-btn { 
             background: linear-gradient(180deg, rgba(38,38,38,0.9) 0%, rgba(10,10,10,0.9) 100%);
             border: 1px solid #333;
             transition: all 0.2s ease;
-            border-radius: 12px !important;
+            border-radius: 12px;
         }
         .move-btn:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
-        .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
-        .active-screen { display: flex; }
-
-        .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
-        .progress-fill { height: 100%; width: 0%; }
-        .training-active .progress-container { display: block; }
-
-        .style-btn, .opponent-btn { color: #737373; background: transparent; transition: all 0.2s ease; border: 1px solid #262626; }
-        .style-btn:hover, .opponent-btn:hover { border-color: white; color: white; }
-        
-        .active-style { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; }
-        .active-ai { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
-        .active-live { background: #3b82f6 !important; border-color: #3b82f6 !important; color: white !important; font-weight: 900; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
-        
+        /* Timer/Scoreboard Glows */
         .glow-red { text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+        .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
     </style>
 </head>
-<body class="border-t-4 border-red-600">
+<body class="flex flex-col border-t-4 border-red-600">
 
-    <!-- MAIN DASHBOARD -->
-    <div id="main-dashboard" class="screen active-screen">
-        <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
-            <div class="flex flex-col justify-center">
-                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
-                    MAT LOGIC <span class="text-red-600">STUDIOS</span>
-                </h1>
-                <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
-                    WRESTLING INTERACTIVE SIM
-                </h2>
-            </div>
-            <div class="flex items-center">
-                <div class="flex-none" style="min-width: 150px;"> 
-                    <img src="logo.png" alt="Mat Logic Studios" class="h-24 md:h-32 w-auto object-contain">
-                </div>
-            </div>
-        </header>
+    <!-- HEADER / NAVIGATION -->
+    <header class="flex-none p-4 border-b border-neutral-900 flex justify-between items-center bg-black">
+        <div class="flex flex-col">
+            <h1 class="text-xl heavyweight-font italic leading-none">THE <span class="text-red-600">MAT</span></h1>
+            <div id="style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">FOLKSTYLE // AI SIMULATION</div>
+        </div>
+        <button onclick="window.location.reload()" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full text-xs tracking-widest border border-red-500 transition">EXIT MATCH</button>
+    </header>
 
-        <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full">
-            <!-- Corrected Roster -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div class="mat-border p-4 md:p-6 border-l-4 border-l-blue-600">
-                    <div class="text-[10px] text-blue-500 font-black tracking-widest uppercase">The Technician</div>
-                    <div class="text-3xl md:text-4xl heavyweight-font mt-1">C. SANDERS</div>
-                    <div class="text-[10px] text-neutral-500 mt-2 italic">FOLKSTYLE SPECIALIST</div>
-                </div>
-                <div class="mat-border p-4 md:p-6 border-l-4 border-l-yellow-600">
-                    <div class="text-[10px] text-yellow-500 font-black tracking-widest uppercase">The Blast Machine</div>
-                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 italic">J. BURRELL</div>
-                    <div class="text-[10px] text-neutral-500 mt-2 italic">FREESTYLE POWER</div>
-                </div>
-                <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600">
-                    <div class="text-[10px] text-red-500 font-black tracking-widest uppercase">The Phenom</div>
-                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-white">A. KARELLI</div>
-                    <div class="text-[10px] text-neutral-500 mt-2 italic">GRECO-ROMAN ELITE</div>
-                </div>
+    <main class="flex-grow grid grid-cols-12 gap-4 p-4 overflow-hidden">
+        
+        <!-- LEFT: ATU CHAT & ACTION TIMER -->
+        <div class="col-span-3 flex flex-col gap-4 overflow-hidden">
+            <!-- 15s Action Timer -->
+            <div class="mat-border p-6 text-center bg-red-950/10 border-red-900/50">
+                <div class="text-[10px] text-red-500 font-black tracking-widest uppercase mb-1">Action Clock</div>
+                <div id="action-timer" class="text-6xl heavyweight-font text-white glow-red">15</div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button onclick="showScreen('recruit-screen')" class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
-                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
-                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
+            <!-- ATU Chat Log -->
+            <div class="mat-border flex-grow flex flex-col overflow-hidden bg-black/40">
+                <div class="p-3 border-b border-neutral-800 text-[10px] font-black tracking-widest text-neutral-500 uppercase">ATU Play-By-Play</div>
+                <div id="atu-log" class="flex-grow p-4 overflow-y-auto atu-font text-xs text-neutral-400 space-y-2">
+                    <p class="text-green-500">[0:00] MATCH STARTED</p>
+                    <p>[0:05] Caelun Sanders enters neutral stance.</p>
+                    <p>[0:08] Awaiting player action...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTER: VISUAL BAY (MOVE IMAGES) -->
+        <div class="col-span-6 flex flex-col gap-4">
+            <div class="mat-border flex-grow relative overflow-hidden bg-gradient-to-b from-neutral-900 to-black flex items-center justify-center">
+                <!-- Move Image Placeholder -->
+                <div class="text-center opacity-20">
+                    <div class="text-6xl heavyweight-font italic mb-4">VISUAL BAY</div>
+                    <p class="uppercase tracking-[0.5em] text-sm font-black">Move Visualization Placeholder</p>
+                </div>
+                
+                <!-- Overlay: Current Move Being Executed -->
+                <div class="absolute bottom-6 left-6 right-6 p-4 bg-black/80 border border-neutral-700 rounded-xl">
+                    <div class="text-[10px] text-red-600 font-black tracking-widest uppercase">Current Move</div>
+                    <div class="text-2xl heavyweight-font italic">NEUTRAL PUMMELING</div>
+                </div>
+            </div>
+
+            <!-- Tactical Move Grid -->
+            <div class="h-1/3 mat-border p-4 grid grid-cols-3 gap-3 bg-black/40">
+                <button class="move-btn p-3 text-left">
+                    <span class="block text-white heavyweight-font italic text-lg">Single Leg</span>
+                    <span class="block text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Offense // High Energy</span>
                 </button>
-                <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-600">
-                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
-                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
+                <button class="move-btn p-3 text-left">
+                    <span class="block text-white heavyweight-font italic text-lg">Sprawl</span>
+                    <span class="block text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Defense // Counter</span>
                 </button>
-                <button onclick="showScreen('the-mat-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-900">
-                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
-                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations & Live</p>
+                <button class="move-btn p-3 text-left border-red-900">
+                    <span class="block text-red-600 heavyweight-font italic text-lg">Snap Down</span>
+                    <span class="block text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Offense // Setup</span>
                 </button>
-                <button onclick="showScreen('shop-screen')" class="command-btn p-6 text-left group border-b-4 border-b-green-900">
-                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
-                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits $500</p>
+                <button class="move-btn p-3 text-left">
+                    <span class="block text-white heavyweight-font italic text-lg">Double Leg</span>
+                    <span class="block text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Offense // Power</span>
+                </button>
+                <button class="move-btn p-3 text-left">
+                    <span class="block text-white heavyweight-font italic text-lg">Pummel</span>
+                    <span class="block text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Neutral // Control</span>
+                </button>
+                <button class="move-btn p-3 text-left border-blue-900">
+                    <span class="block text-blue-500 heavyweight-font italic text-lg">Ankle Pick</span>
+                    <span class="block text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Offense // Finesse</span>
                 </button>
             </div>
-        </main>
-    </div>
+        </div>
 
-    <!-- WRESTLING ROOM SCREEN -->
-    <div id="wrestling-room-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none inline-block">WRESTLING ROOM</h2>
-            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500">RETURN</button>
-        </header>
-        <main class="flex-grow p-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div id="card-Conditioning" class="mat-border p-6 border-t-2 border-t-blue-800 bg-blue-900/10 cursor-pointer" onclick="runTraining('Conditioning')">
-                    <h3 class="text-2xl heavyweight-font italic text-blue-200">Conditioning</h3>
-                    <p class="text-[10px] text-neutral-500 uppercase tracking-widest mb-4">+Stamina / +Agility</p>
-                    <div class="progress-container"><div id="progress-Conditioning" class="progress-fill bg-blue-600" style="transition: width 3s linear;"></div></div>
+        <!-- RIGHT: SCOREBOARD & STATS -->
+        <div class="col-span-3 flex flex-col gap-4">
+            <!-- Global Scoreboard -->
+            <div class="mat-border p-6 bg-black flex flex-col gap-6">
+                <div class="flex justify-between items-center text-center">
+                    <div>
+                        <div class="text-blue-500 font-black text-[10px] tracking-widest uppercase">Blue</div>
+                        <div class="text-5xl heavyweight-font glow-blue">0</div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="text-neutral-500 font-black text-[10px] tracking-widest uppercase">Period</div>
+                        <div class="text-3xl heavyweight-font italic">1</div>
+                    </div>
+                    <div>
+                        <div class="text-red-500 font-black text-[10px] tracking-widest uppercase">Red</div>
+                        <div class="text-5xl heavyweight-font glow-red">0</div>
+                    </div>
                 </div>
-                <div id="card-Technique" class="mat-border p-6 border-t-2 border-t-red-800 bg-red-900/10 cursor-pointer" onclick="runTraining('Technique')">
-                    <h3 class="text-2xl heavyweight-font italic text-red-200">Technique</h3>
-                    <p class="text-[10px] text-neutral-500 uppercase tracking-widest mb-4">+Technical Score</p>
-                    <div class="progress-container"><div id="progress-Technique" class="progress-fill bg-red-600" style="transition: width 4s linear;"></div></div>
-                </div>
-                <div id="card-Strength" class="mat-border p-6 border-t-2 border-t-green-800 bg-green-900/10 cursor-pointer" onclick="runTraining('Strength')">
-                    <h3 class="text-2xl heavyweight-font italic text-green-200">Strength</h3>
-                    <p class="text-[10px] text-neutral-500 uppercase tracking-widest mb-4">+Power / +Explosiveness</p>
-                    <div class="progress-container"><div id="progress-Strength" class="progress-fill bg-green-600" style="transition: width 5s linear;"></div></div>
-                </div>
-            </div>
-        </main>
-    </div>
 
-    <!-- THE MAT SCREEN (Placeholder UI elements retained) -->
-    <div id="the-mat-screen" class="screen bg-black">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center">
-            <h2 class="text-4xl heavyweight-font title-gradient italic">THE MAT</h2>
-            <div class="flex gap-2">
-                <button id="btn-folkstyle" onclick="setStyle('folkstyle')" class="style-btn px-6 py-2 rounded-full text-[10px] font-black uppercase">Folkstyle</button>
-                <button id="btn-freestyle" onclick="setStyle('freestyle')" class="style-btn px-6 py-2 rounded-full text-[10px] font-black uppercase">Freestyle</button>
-                <button id="btn-greco" onclick="setStyle('greco')" class="style-btn px-6 py-2 rounded-full text-[10px] font-black uppercase">Greco Roman</button>
-            </div>
-            <button onclick="showScreen('main-dashboard')" class="bg-red-600 px-8 py-2 rounded-full text-xs">EXIT</button>
-        </header>
-        <main class="flex-grow p-4 grid grid-cols-12 gap-4">
-            <div class="col-span-3 mat-border p-4 bg-neutral-900/40">
-                <div id="atu-log" class="atu-font text-[10px] text-neutral-500 overflow-y-auto h-full">
-                    [SYSTEM] AWAITING SELECTION...
+                <div class="border-t border-neutral-800 pt-4 text-center">
+                    <div class="text-neutral-500 font-black text-[10px] tracking-widest uppercase">Match Clock</div>
+                    <div class="text-4xl heavyweight-font italic tracking-tighter">2:00</div>
+                </div>
+
+                <!-- Style Specific: Riding Time (Folkstyle Only) -->
+                <div id="riding-time-container" class="border-t border-neutral-800 pt-4 text-center">
+                    <div class="text-neutral-500 font-black text-[10px] tracking-widest uppercase">Riding Time</div>
+                    <div class="text-3xl heavyweight-font text-green-500 italic">0:00</div>
                 </div>
             </div>
-            <div class="col-span-6 mat-border flex items-center justify-center bg-neutral-900/20">
-                <h3 class="heavyweight-font text-6xl opacity-10">VISUAL BAY</h3>
-            </div>
-            <div class="col-span-3 flex flex-col gap-4">
-                <div class="mat-border p-4 bg-black text-center">
-                    <div class="text-[10px] text-red-500 uppercase">Match Type</div>
-                    <button id="btn-ai-sim" onclick="setOpponent('ai-sim')" class="opponent-btn w-full py-2 mt-2 rounded-xl text-[10px] uppercase">AI Simulation</button>
-                    <button id="btn-live-challenge" onclick="setOpponent('live-challenge')" class="opponent-btn w-full py-2 mt-2 rounded-xl text-[10px] uppercase">Live Challenge</button>
+
+            <!-- Opponent Profile -->
+            <div class="mat-border p-6 bg-gradient-to-br from-neutral-900 to-black flex-grow">
+                <div class="text-[10px] text-neutral-500 font-black tracking-widest uppercase mb-4">Opponent Data</div>
+                <h3 class="text-2xl heavyweight-font italic text-white mb-1">AI_LOGIC_V1</h3>
+                <p class="text-red-600 text-[10px] font-black tracking-widest uppercase">Difficulty: Advanced</p>
+                <div class="mt-8 space-y-4">
+                    <div class="w-full bg-neutral-800 h-1 rounded-full overflow-hidden">
+                        <div class="bg-blue-500 h-full w-3/4"></div>
+                    </div>
+                    <div class="text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Stamina Reservoir</div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script>
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-            document.getElementById(id).classList.add('active-screen');
-        }
+        // Placeholder for the 15-second Action Timer logic
+        let actionTime = 15;
+        const timerDisplay = document.getElementById('action-timer');
+        
+        const actionClock = setInterval(() => {
+            actionTime--;
+            timerDisplay.innerText = actionTime;
+            if (actionTime <= 0) {
+                actionTime = 15; // Reset for logic testing
+                const log = document.getElementById('atu-log');
+                const p = document.createElement('p');
+                p.className = "text-red-500";
+                p.innerText = "[!] STALLING WARNING: ACTION CLOCK EXPIRED";
+                log.appendChild(p);
+                log.scrollTop = log.scrollHeight;
+            }
+        }, 1000);
 
-        function runTraining(type) {
-            const card = document.getElementById(`card-${type}`);
-            const bar = document.getElementById(`progress-${type}`);
-            card.classList.add('training-active');
-            bar.parentElement.style.display = 'block';
-            bar.style.width = '100%';
-            setTimeout(() => {
-                bar.style.width = '0%';
-                card.classList.remove('training-active');
-                bar.parentElement.style.display = 'none';
-                alert(`${type} Training Complete!`);
-            }, 3000);
-        }
-
-        function setStyle(style) {
-            document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active-style'));
-            document.getElementById(`btn-${style}`).classList.add('active-style');
-        }
-
-        function setOpponent(type) {
-            document.getElementById('btn-ai-sim').classList.remove('active-ai');
-            document.getElementById('btn-live-challenge').classList.remove('active-live');
-            if (type === 'ai-sim') document.getElementById('btn-ai-sim').classList.add('active-ai');
-            else document.getElementById('btn-live-challenge').classList.add('active-live');
+        // Function to toggle Riding Time based on Style
+        function setStyle(isFolkstyle) {
+            document.getElementById('riding-time-container').style.display = isFolkstyle ? 'block' : 'none';
         }
     </script>
 </body>
