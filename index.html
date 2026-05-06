@@ -52,6 +52,13 @@
         
         .glow-red { text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
         .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+
+        /* Energy Bar Styles */
+        #energy-bar-container { width: 300px; height: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; border: 1px solid #333; position: relative; }
+        #energy-fill { height: 100%; width: 100%; background: #ef4444; transition: all 0.5s ease; }
+        
+        @keyframes strobe { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .low-energy-flash { color: #ef4444; animation: strobe 1s infinite; display: none; }
     </style>
 </head>
 <body class="border-t-4 border-red-600">
@@ -66,6 +73,13 @@
                 <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
                     WRESTLING INTERACTIVE SIM
                 </h2>
+                <!-- New Energy Bar on Dashboard -->
+                <div class="mt-4 flex items-center gap-3">
+                    <div id="energy-bar-container">
+                        <div id="energy-fill"></div>
+                    </div>
+                    <span id="low-energy-alert" class="low-energy-flash font-black text-[10px] tracking-widest uppercase">⚠️ LOW CAPACITY</span>
+                </div>
             </div>
             <div class="flex items-center">
                 <div class="flex-none" style="min-width: 150px;"> 
@@ -78,7 +92,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-blue-600 shadow-blue">
                     <div class="text-[10px] text-blue-500 uppercase font-black tracking-widest">Stable Strength</div>
-                    <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
+                    <div id="stable-count" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600 shadow-red">
                     <div class="text-[10px] text-red-500 uppercase font-black tracking-widest">Season Record</div>
@@ -86,14 +100,14 @@
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600 shadow-green">
                     <div class="text-[10px] text-green-500 uppercase font-black tracking-widest">Total Credits</div>
-                    <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
+                    <div id="total-credits" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
+                <button onclick="recruitWrestler()" class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
-                    <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Find Prospects</p>
+                    <p id="recruit-cost-label" class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Cost: $100.00</p>
                 </button>
                 <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-600">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
@@ -129,7 +143,8 @@
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <!-- Stable Display Area -->
+            <div id="stable-roster" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <div class="mat-border p-6 border-t-4 border-t-blue-600 shadow-blue">
                     <h3 class="text-2xl heavyweight-font italic text-white">Caelun Sanders</h3>
                     <p class="text-blue-500 text-[10px] font-black tracking-[0.2em] uppercase">The Technician</p>
@@ -234,10 +249,104 @@
     </div>
 
     <script>
+        // NEW STATE VARIABLES
+        let energy = 100;
+        let credits = 500;
+        let stableSize = 3;
+        const maxStable = 12;
+
         let isTraining = false;
         let actionTime = 15;
         let timerInterval;
 
+        // ENERGY SYSTEM
+        function updateEnergyUI() {
+            const fill = document.getElementById('energy-fill');
+            const alertIcon = document.getElementById('low-energy-alert');
+            
+            fill.style.width = `${energy}%`;
+
+            // Fatigue Color Shift
+            if (energy > 50) {
+                fill.style.background = "#ef4444"; // Mat Logic Red
+            } else if (energy > 15) {
+                fill.style.background = "#7f1d1d"; // Dim Orange/Dark Red
+            } else {
+                fill.style.background = "#404040"; // Fatigued Grey
+            }
+
+            // Warning Light Strobe
+            alertIcon.style.display = (energy <= 15) ? "block" : "none";
+        }
+
+        // TIERED RECRUITMENT SYSTEM
+        function getRecruitCost() {
+            if (stableSize < 4) return 100;
+            if (stableSize < 9) return 250;
+            return 500;
+        }
+
+        function recruitWrestler() {
+            const cost = getRecruitCost();
+            if (stableSize >= maxStable) {
+                alert("STABLE AT MAXIMUM CAPACITY (12/12)");
+                return;
+            }
+            if (credits < cost) {
+                alert("INSUFFICIENT CREDITS FOR RECRUITMENT.");
+                return;
+            }
+
+            const name = prompt("ENTER PROSPECT NAME:");
+            if (!name) return;
+
+            credits -= cost;
+            stableSize++;
+            
+            // Update UI
+            document.getElementById('total-credits').innerText = `$${credits.toFixed(2)}`;
+            document.getElementById('stable-count').innerText = `${stableSize} / 12`;
+            document.getElementById('recruit-cost-label').innerText = `Cost: $${getRecruitCost().toFixed(2)}`;
+            
+            // Add to roster display
+            const roster = document.getElementById('stable-roster');
+            const card = document.createElement('div');
+            card.className = "mat-border p-6 border-t-4 border-t-neutral-600 shadow-neutral animate-pulse";
+            card.innerHTML = `<h3 class="text-2xl heavyweight-font italic text-white">${name}</h3><p class="text-neutral-500 text-[10px] font-black tracking-[0.2em] uppercase">New Recruit</p>`;
+            roster.appendChild(card);
+
+            alert(`RECRUITMENT SUCCESSFUL: ${name.toUpperCase()} HAS JOINED THE STABLE.`);
+        }
+
+        // UPDATED TRAINING WITH ENERGY COST
+        function runTraining(type) {
+            if (isTraining) return;
+            if (energy < 10) {
+                alert("STABLE FATIGUED: WAIT FOR MONTHLY ENERGY RECHARGE.");
+                return;
+            }
+
+            isTraining = true;
+            energy -= 10;
+            updateEnergyUI();
+
+            const card = document.getElementById(`card-${type}`);
+            const fill = card.querySelector('.progress-fill');
+            card.classList.add('training-active');
+            card.style.opacity = "0.7";
+            
+            setTimeout(() => { fill.style.width = "100%"; }, 50);
+            
+            setTimeout(() => {
+                alert(`${type.toUpperCase()} SESSION COMPLETE: STABLE STATS INCREASED.`);
+                card.classList.remove('training-active');
+                fill.style.width = "0%";
+                card.style.opacity = "1";
+                isTraining = false;
+            }, 3050);
+        }
+
+        // ORIGINAL SCREEN LOGIC
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(id).classList.add('active-screen');
@@ -275,22 +384,8 @@
             }, 1000);
         }
 
-        function runTraining(type) {
-            if (isTraining) return;
-            isTraining = true;
-            const card = document.getElementById(`card-${type}`);
-            const fill = card.querySelector('.progress-fill');
-            card.classList.add('training-active');
-            card.style.opacity = "0.7";
-            setTimeout(() => { fill.style.width = "100%"; }, 50);
-            setTimeout(() => {
-                alert(`${type.toUpperCase()} SESSION COMPLETE: STABLE STATS INCREASED.`);
-                card.classList.remove('training-active');
-                fill.style.width = "0%";
-                card.style.opacity = "1";
-                isTraining = false;
-            }, 3050);
-        }
+        // Initial UI Update
+        updateEnergyUI();
     </script>
 </body>
 </html>
