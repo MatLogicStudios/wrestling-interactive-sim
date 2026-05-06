@@ -38,13 +38,9 @@
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
         .active-screen { display: flex; }
 
-        /* Selection Button States */
-        .style-btn, .opponent-btn { color: #737373; background: transparent; transition: all 0.2s ease; border: 1px solid #262626; }
-        .style-btn:hover, .opponent-btn:hover { border-color: white; color: white; }
-        
-        .active-style { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; }
-        .active-ai { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
-        .active-live { background: #3b82f6 !important; border-color: #3b82f6 !important; color: white !important; font-weight: 900; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
+        .progress-fill { height: 100%; width: 0%; transition: width 3s linear; }
+        .training-active .progress-container { display: block; }
         
         .glow-red { text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
         .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
@@ -64,6 +60,7 @@
                 </h2>
             </div>
             <div class="flex items-center">
+                <!-- Mat Lobby button removed as requested -->
                 <div class="flex-none" style="min-width: 150px;"> 
                     <img src="logo.png" alt="Mat Logic Studios" class="h-24 md:h-32 w-auto object-contain">
                 </div>
@@ -73,15 +70,15 @@
         <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-blue-600 shadow-blue">
-                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest text-blue-500">Stable Strength</div>
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Stable Strength</div>
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600 shadow-red">
-                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest text-red-500">Season Record</div>
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Season Record</div>
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
                 </div>
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600 shadow-green">
-                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest text-green-500">Total Credits</div>
+                    <div class="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Total Credits</div>
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$500.00</div>
                 </div>
             </div>
@@ -105,6 +102,59 @@
                 </button>
             </div>
         </main>
+
+        <footer class="flex-none p-6 border-t border-neutral-900 bg-black text-center">
+            <div class="text-xs font-black tracking-[0.2em] heavyweight-font italic mb-1 uppercase">
+                <span class="text-white">MAT LOGIC</span> <span class="text-red-600">STUDIOS // AUTHENTICITY VERIFIED</span>
+            </div>
+            <div class="text-[10px] text-neutral-500 heavyweight-font tracking-[0.1em] uppercase">
+                © 2026 ALL RIGHTS RESERVED // VERSION 1.1.0
+            </div>
+        </footer>
+    </div>
+
+    <!-- WRESTLING ROOM SCREEN -->
+    <div id="wrestling-room-screen" class="screen bg-[#050505]">
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <div class="flex-grow overflow-visible">
+                <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none pr-10 inline-block">WRESTLING ROOM</h2>
+            </div>
+            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
+        </header>
+        <main class="flex-grow p-8 overflow-y-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="mat-border p-6 border-t-4 border-t-blue-600 shadow-blue">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Caelun Sanders</h3>
+                    <p class="text-blue-500 text-[10px] font-black tracking-[0.2em] uppercase">The Technician</p>
+                </div>
+                <div class="mat-border p-6 border-t-4 border-t-red-600 shadow-red">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Jace Burrell</h3>
+                    <p class="text-red-500 text-[10px] font-black tracking-[0.2em] uppercase">The Blast Machine</p>
+                </div>
+                <div class="mat-border p-6 border-t-4 border-t-green-600 shadow-green">
+                    <h3 class="text-2xl heavyweight-font italic text-white">Aleksei Karelli</h3>
+                    <p class="text-green-500 text-[10px] font-black tracking-[0.2em] uppercase">The Phenom</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div id="card-Drilling" class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 shadow-blue cursor-pointer transition relative overflow-hidden" onclick="runTraining('Drilling', 'blue')">
+                    <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
+                    <p class="text-blue-500 text-[9px] font-bold tracking-[0.1em] uppercase">Muscle Memory & Repetition</p>
+                    <div class="progress-container"><div class="progress-fill bg-blue-600"></div></div>
+                </div>
+                <div id="card-Technique" class="mat-border p-4 border-t-2 border-t-red-800 bg-red-900/10 shadow-red cursor-pointer transition relative overflow-hidden" onclick="runTraining('Technique', 'red')">
+                    <h3 class="text-lg heavyweight-font italic text-red-200">Technique</h3>
+                    <p class="text-red-500 text-[9px] font-bold tracking-[0.1em] uppercase">Precision & Execution</p>
+                    <div class="progress-container"><div class="progress-fill bg-red-600"></div></div>
+                </div>
+                <div id="card-Strength" class="mat-border p-4 border-t-2 border-t-green-800 bg-green-900/10 shadow-green cursor-pointer transition relative overflow-hidden" onclick="runTraining('Strength', 'green')">
+                    <h3 class="text-lg heavyweight-font italic text-green-200">Strength</h3>
+                    <p class="text-green-500 text-[9px] font-bold tracking-[0.1em] uppercase">Power & Explosivity</p>
+                    <div class="progress-container"><div class="progress-fill bg-green-600"></div></div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- THE MAT (UNIFIED GAME SCREEN) -->
@@ -112,16 +162,13 @@
         <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
             <div class="flex-grow overflow-visible">
                 <h2 class="text-3xl md:text-5xl heavyweight-font title-gradient italic leading-none inline-block pr-6">THE MAT</h2>
-                <div id="mat-style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">INITIALIZING ARENA...</div>
+                <div id="mat-style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">FOLKSTYLE // READY</div>
             </div>
-            
-            <div class="flex gap-2 mr-6">
-                <button id="btn-folkstyle" onclick="setStyle('folkstyle')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Folkstyle</button>
-                <button id="btn-freestyle" onclick="setStyle('freestyle')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Freestyle</button>
-                <button id="btn-greco" onclick="setStyle('greco')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Greco Roman</button>
+            <div class="flex gap-4">
+                <button onclick="toggleStyle(true)" class="text-[10px] font-black tracking-widest border border-neutral-800 px-4 py-2 rounded-full hover:border-red-600 transition">FOLK</button>
+                <button onclick="toggleStyle(false)" class="text-[10px] font-black tracking-widest border border-neutral-800 px-4 py-2 rounded-full hover:border-red-600 transition">FREE/GRECO</button>
+                <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">EXIT</button>
             </div>
-
-            <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">EXIT</button>
         </header>
 
         <main class="flex-grow grid grid-cols-12 gap-4 p-4 overflow-hidden">
@@ -134,20 +181,21 @@
                 <div class="mat-border flex-grow flex flex-col overflow-hidden bg-black/40">
                     <div class="p-3 border-b border-neutral-800 text-[10px] font-black tracking-widest text-neutral-500 uppercase">ATU Play-By-Play</div>
                     <div id="atu-log" class="flex-grow p-4 overflow-y-auto atu-font text-xs text-neutral-400 space-y-2">
-                        <p class="text-green-500">[0:00] STANDBY: AWAITING SELECTION</p>
+                        <p class="text-green-500">[0:00] MATCH INITIALIZED</p>
                     </div>
                 </div>
             </div>
 
             <!-- CENTER: VISUAL BAY -->
             <div class="col-span-6 flex flex-col gap-4">
-                <div class="mat-border flex-grow relative overflow-hidden bg-gradient-to-b from-neutral-900 to-black flex items-center justify-center text-center">
-                    <div class="opacity-20">
+                <div class="mat-border flex-grow relative overflow-hidden bg-gradient-to-b from-neutral-900 to-black flex items-center justify-center">
+                    <div class="text-center opacity-20">
                         <div class="text-6xl heavyweight-font italic mb-4">VISUAL BAY</div>
                         <p class="uppercase tracking-[0.5em] text-sm font-black">Move Visualization</p>
                     </div>
                 </div>
-                <div id="move-selection-grid" class="h-1/3 mat-border p-4 grid grid-cols-3 gap-3 bg-black/40">
+                <!-- MOVE SELECTION GRID -->
+                <div class="h-1/3 mat-border p-4 grid grid-cols-3 gap-3 bg-black/40">
                     <button class="move-btn p-3 text-left"><span class="block text-white heavyweight-font italic text-lg">Single Leg</span></button>
                     <button class="move-btn p-3 text-left"><span class="block text-white heavyweight-font italic text-lg">Sprawl</span></button>
                     <button class="move-btn p-3 text-left"><span class="block text-red-600 heavyweight-font italic text-lg">Snap Down</span></button>
@@ -169,101 +217,78 @@
                         <div class="text-neutral-500 font-black text-[10px] tracking-widest uppercase">Match Clock</div>
                         <div class="text-4xl heavyweight-font italic">2:00</div>
                     </div>
-                    <div id="riding-time-container" class="border-t border-neutral-800 pt-4 text-center" style="display:none;">
+                    <!-- RIDING TIME: FOLKSTYLE ONLY -->
+                    <div id="riding-time-container" class="border-t border-neutral-800 pt-4 text-center">
                         <div class="text-neutral-500 font-black text-[10px] tracking-widest uppercase">Riding Time</div>
                         <div class="text-3xl heavyweight-font text-green-500 italic">0:00</div>
                     </div>
                 </div>
-                
-                <div class="mat-border p-6 bg-neutral-900/50 flex-grow text-center flex flex-col justify-center gap-2">
-                    <h3 class="text-lg heavyweight-font italic text-white mb-2 uppercase tracking-widest">Match Type</h3>
-                    
-                    <button id="btn-ai-sim" onclick="setOpponent('ai-sim')" class="opponent-btn w-full py-3 rounded-xl font-black text-[10px] tracking-widest uppercase">
-                        AI Simulation
-                    </button>
-                    
-                    <button id="btn-live-challenge" onclick="setOpponent('live-challenge')" class="opponent-btn w-full py-3 rounded-xl font-black text-[10px] tracking-widest uppercase">
-                        Live Challenge
-                    </button>
+                <div class="mat-border p-6 bg-neutral-900/50 flex-grow text-center flex flex-col justify-center">
+                    <h3 class="text-lg heavyweight-font italic text-white mb-2">OPPONENT SELECT</h3>
+                    <button class="w-full py-3 mb-2 bg-red-600/20 border border-red-600 text-red-500 rounded-xl font-black text-[10px] tracking-widest uppercase hover:bg-red-600 hover:text-white transition">AI SIMULATION</button>
+                    <button class="w-full py-3 bg-blue-600/20 border border-blue-600 text-blue-500 rounded-xl font-black text-[10px] tracking-widest uppercase hover:bg-blue-600 hover:text-white transition">LIVE CHALLENGE</button>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
+        let isTraining = false;
         let actionTime = 15;
         let timerInterval;
 
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(id).classList.add('active-screen');
+            
+            // Start Action Timer if entering The Mat
             if (id === 'the-mat-screen') {
-                resetArena(); // Ensure fresh choice every time
                 startActionTimer();
             } else {
                 clearInterval(timerInterval);
             }
         }
 
-        function resetArena() {
-            // Clear all style buttons
-            document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active-style'));
-            // Clear all opponent buttons
-            document.querySelectorAll('.opponent-btn').forEach(btn => {
-                btn.classList.remove('active-ai', 'active-live');
-            });
-            document.getElementById('riding-time-container').style.display = 'none';
-            document.getElementById('mat-style-indicator').innerText = 'AWAITING SELECTIONS...';
-        }
-
-        function setStyle(style) {
-            document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active-style'));
-            document.getElementById(`btn-${style}`).classList.add('active-style');
-            
-            const indicator = document.getElementById('mat-style-indicator');
-            const ridingTime = document.getElementById('riding-time-container');
-            
-            indicator.innerText = `${style.toUpperCase()} // READY`;
-            ridingTime.style.display = (style === 'folkstyle') ? 'block' : 'none';
-
-            logATU(`RULESET UPDATED: ${style.toUpperCase()}`, 'white');
-        }
-
-        function setOpponent(type) {
-            document.getElementById('btn-ai-sim').classList.remove('active-ai');
-            document.getElementById('btn-live-challenge').classList.remove('active-live');
-            
-            if (type === 'ai-sim') {
-                document.getElementById('btn-ai-sim').classList.add('active-ai');
-                logATU("OPPONENT: MAT LOGIC ENGINE (AI)", "text-red-400");
-            } else {
-                document.getElementById('btn-live-challenge').classList.add('active-live');
-                logATU("OPPONENT: LIVE CHALLENGER SEARCHING...", "text-blue-400");
-            }
-        }
-
-        function logATU(msg, colorClass) {
-            const log = document.getElementById('atu-log');
-            const p = document.createElement('p');
-            p.className = colorClass;
-            p.innerText = `[SYSTEM] ${msg}`;
-            log.appendChild(p);
-            log.scrollTop = log.scrollHeight;
-        }
-
         function startActionTimer() {
             clearInterval(timerInterval);
             actionTime = 15;
             document.getElementById('action-timer').innerText = actionTime;
+            
             timerInterval = setInterval(() => {
                 actionTime--;
                 document.getElementById('action-timer').innerText = actionTime;
                 if (actionTime <= 0) {
                     actionTime = 15;
-                    logATU("ACTION CLOCK RESET", "text-red-500");
+                    const log = document.getElementById('atu-log');
+                    const p = document.createElement('p');
+                    p.className = "text-red-500";
+                    p.innerText = "[!] ACTION CLOCK EXPIRED: SELECT MOVE";
+                    log.appendChild(p);
+                    log.scrollTop = log.scrollHeight;
                 }
             }, 1000);
         }
+
+        function toggleStyle(isFolkstyle) {
+            document.getElementById('riding-time-container').style.display = isFolkstyle ? 'block' : 'none';
+            document.getElementById('mat-style-indicator').innerText = isFolkstyle ? 'FOLKSTYLE // READY' : 'FREESTYLE/GRECO // READY';
+        }
+
+        function runTraining(type, color) {
+            if (isTraining) return;
+            isTraining = true;
+            const card = document.getElementById(`card-${type}`);
+            const fill = card.querySelector('.progress-fill');
+            card.classList.add('training-active');
+            card.style.opacity = "0.7";
+            setTimeout(() => { fill.style.width = "100%"; }, 50);
+            setTimeout(() => {
+                alert(`${type.toUpperCase()} SESSION COMPLETE: STABLE STATS INCREASED.`);
+                card.classList.remove('training-active');
+                fill.style.width = "0%";
+                card.style.opacity = "1";
+                isTraining = false;
+            }, 3050);
+        }
     </script>
-</body>
-</html>
+</body></html>
