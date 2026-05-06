@@ -58,7 +58,6 @@
         @keyframes strobe { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         .low-energy-flash { color: #ef4444; animation: strobe 1s infinite; display: none; }
 
-        /* Sold Out Stamp */
         .sold-out-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10; border-radius: 15px; }
         .sold-out-stamp { border: 4px solid #ef4444; color: #ef4444; padding: 10px 20px; font-size: 24px; font-weight: 900; transform: rotate(-15deg); text-transform: uppercase; }
     </style>
@@ -135,10 +134,10 @@
         </footer>
     </div>
 
-    <!-- SCOUTING BUREAU (RECRUIT SCREEN) -->
+    <!-- RECRUIT SCREEN -->
     <div id="recruit-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none">SCOUTING BUREAU</h2>
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black overflow-visible">
+            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none px-1">RECRUIT</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto max-w-4xl mx-auto w-full">
@@ -169,10 +168,10 @@
         </main>
     </div>
 
-    <!-- THE PRO SHOP (SHOP SCREEN) -->
+    <!-- THE SHOP SCREEN -->
     <div id="shop-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none text-green-600">THE PRO SHOP</h2>
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black overflow-visible">
+            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none text-green-600 px-1">THE SHOP</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <div class="flex-none p-4 flex gap-4 bg-black/60 border-b border-neutral-900 justify-center">
@@ -313,8 +312,8 @@
     </div>
 
     <script>
-        let energy = 200; // Updated energy capacity
-        let credits = 1000; // Updated initial credits
+        let energy = 200; 
+        let credits = 1000; 
         let stableSize = 3;
         const maxStable = 12;
         let selectedRecruitStyle = "";
@@ -327,7 +326,6 @@
         function updateEnergyUI() {
             const fill = document.getElementById('energy-fill');
             const alertIcon = document.getElementById('low-energy-alert');
-            // Calculate width based on 200 capacity
             fill.style.width = `${(energy / 200) * 100}%`;
             if (energy > 100) fill.style.background = "#ef4444";
             else if (energy > 30) fill.style.background = "#7f1d1d";
@@ -390,7 +388,7 @@
             if (credits < 250) { alert("INSUFFICIENT CREDITS."); return; }
             
             credits -= 250;
-            energy = 200; // Restore to new max
+            energy = 200; 
             supplementSoldOut = true;
             document.getElementById('supplement-sold-out').style.display = "flex";
             document.getElementById('total-credits').innerText = `$${credits.toFixed(2)}`;
