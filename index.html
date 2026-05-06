@@ -105,26 +105,20 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <!-- RECRUIT: Fixed to transition to White on hover like the others -->
                 <button onclick="showScreen('recruit-screen')" class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
-                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-neutral-400 group-hover:text-white transition-colors">RECRUIT</h3>
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
                     <p id="recruit-cost-label" class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Cost: $100.00</p>
                 </button>
-                
-                <!-- WRESTLING ROOM: Fixed to hover White to Red like Recruit/Shop -->
                 <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-600">
-                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-white group-hover:text-red-600 transition-colors">WRESTLING ROOM</h3>
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
                 </button>
-
                 <button onclick="showScreen('the-mat-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-900">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations & Live</p>
                 </button>
-                
-                <!-- SHOP: Fixed to transition White to Green -->
                 <button onclick="showScreen('shop-screen')" class="command-btn p-6 text-left group border-b-4 border-b-green-900 shadow-green">
-                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-white group-hover:text-green-600 transition-colors">THE SHOP</h3>
+                    <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
                 </button>
             </div>
@@ -142,9 +136,8 @@
 
     <!-- RECRUIT SCREEN -->
     <div id="recruit-screen" class="screen bg-[#050505]">
-        <!-- Added horizontal padding (px-8) to header to prevent cutoff -->
-        <header class="flex-none p-6 px-8 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none">RECRUIT</h2>
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black overflow-visible">
+            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none px-1">RECRUIT</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto max-w-4xl mx-auto w-full">
@@ -166,14 +159,19 @@
                     <button onclick="confirmRecruit()" class="w-full bg-red-600 hover:bg-red-700 py-4 heavyweight-font italic text-xl tracking-widest">FINALIZE RECRUITMENT</button>
                 </div>
             </div>
+            <div class="mat-border p-6 bg-black/20">
+                <h3 class="text-[10px] font-black tracking-widest text-neutral-500 uppercase mb-4">Recruitment History</h3>
+                <div id="recruit-history-log" class="atu-font text-xs text-neutral-400 space-y-2">
+                    <p>[LOG] STABLE INITIALIZED WITH GOAT BENCHMARKS</p>
+                </div>
+            </div>
         </main>
     </div>
 
     <!-- THE SHOP SCREEN -->
     <div id="shop-screen" class="screen bg-[#050505]">
-        <!-- Added horizontal padding (px-8) to header to prevent cutoff -->
-        <header class="flex-none p-6 px-8 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none">THE SHOP</h2>
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black overflow-visible">
+            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none px-1">THE SHOP</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <div class="flex-none p-4 flex gap-4 bg-black/60 border-b border-neutral-900 justify-center">
@@ -189,13 +187,23 @@
                     <button onclick="buySupplement()" class="w-full bg-green-900/40 border border-green-600 p-3 text-white font-black text-xs tracking-widest uppercase hover:bg-green-600 transition">Buy - $250.00</button>
                 </div>
             </div>
+            <div id="shop-lifestyle" class="grid grid-cols-1 md:grid-cols-3 gap-6" style="display:none;">
+                <div class="mat-border p-6 bg-black/40 relative">
+                    <span class="absolute top-2 right-2 bg-blue-600 text-[8px] font-black px-2 py-1 uppercase rounded">New Arrival</span>
+                    <h3 class="text-xl heavyweight-font italic text-white">MLS Warm-up Hoodie</h3>
+                    <p class="text-neutral-500 text-[10px] font-black tracking-widest uppercase mb-4">Mat Logic Studios Brand</p>
+                    <button class="w-full border border-neutral-700 p-2 text-neutral-400 font-black text-[10px] uppercase cursor-not-allowed">Sold Individually</button>
+                </div>
+            </div>
         </main>
     </div>
 
     <!-- WRESTLING ROOM SCREEN -->
     <div id="wrestling-room-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 px-8 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none">WRESTLING ROOM</h2>
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <div class="flex-grow overflow-visible">
+                <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none px-1">WRESTLING ROOM</h2>
+            </div>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto">
@@ -213,7 +221,7 @@
                     <p class="text-green-500 text-[10px] font-black tracking-[0.2em] uppercase">The Phenom</p>
                 </div>
             </div>
-            <!-- Training Cards... -->
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div id="card-Drilling" class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 shadow-blue cursor-pointer transition relative overflow-hidden" onclick="runTraining('Drilling')">
                     <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
@@ -236,13 +244,13 @@
 
     <!-- THE MAT SCREEN -->
     <div id="the-mat-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 px-8 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <div class="flex flex-col">
-                <h2 class="text-3xl md:text-5xl heavyweight-font title-gradient italic leading-none">THE MAT</h2>
+        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <div class="flex-grow overflow-visible">
+                <h2 class="text-3xl md:text-5xl heavyweight-font title-gradient italic leading-none inline-block pr-6 px-1">THE MAT</h2>
                 <div id="mat-style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">INITIALIZING ARENA...</div>
             </div>
             
-            <div class="flex gap-2 mx-6">
+            <div class="flex gap-2 mr-6">
                 <button id="btn-folkstyle" onclick="setStyle('folkstyle')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Folkstyle</button>
                 <button id="btn-freestyle" onclick="setStyle('freestyle')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Freestyle</button>
                 <button id="btn-greco" onclick="setStyle('greco')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Greco Roman</button>
@@ -372,6 +380,7 @@
             document.querySelectorAll('.shop-tab-btn').forEach(b => b.classList.remove('active-shop-tab'));
             document.getElementById(`tab-${tab}`).classList.add('active-shop-tab');
             document.getElementById('shop-supplements').style.display = (tab === 'supplements') ? 'grid' : 'none';
+            document.getElementById('shop-lifestyle').style.display = (tab === 'lifestyle') ? 'grid' : 'none';
         }
 
         function buySupplement() {
