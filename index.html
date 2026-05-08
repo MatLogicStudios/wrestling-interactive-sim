@@ -35,7 +35,7 @@
         }
         .move-btn:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
-        .screen { display: none; width: 100%; height: 100%; flex-direction: column; }
+        .screen { display: none; width: 100%; height: 100%; flex-direction: column; border-top: 4px solid #dc2626; }
         .active-screen { display: flex; }
 
         .style-btn, .opponent-btn, .shop-tab-btn { color: #737373; background: transparent; transition: all 0.2s ease; border: 1px solid #262626; }
@@ -62,9 +62,8 @@
         .sold-out-stamp { border: 4px solid #ef4444; color: #ef4444; padding: 10px 20px; font-size: 24px; font-weight: 900; transform: rotate(-15deg); text-transform: uppercase; }
     </style>
 </head>
-<body class="border-t-4 border-red-600">
+<body>
 
-    <!-- MAIN DASHBOARD -->
     <div id="main-dashboard" class="screen active-screen">
         <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
             <div class="flex flex-col justify-center">
@@ -134,10 +133,9 @@
         </footer>
     </div>
 
-    <!-- RECRUIT SCREEN -->
     <div id="recruit-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black overflow-visible">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none px-1">RECRUIT</h2>
+        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">RECRUIT</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto max-w-4xl mx-auto w-full">
@@ -168,10 +166,9 @@
         </main>
     </div>
 
-    <!-- THE SHOP SCREEN -->
     <div id="shop-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black overflow-visible">
-            <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none text-green-600 px-1">THE SHOP</h2>
+        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">THE SHOP</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <div class="flex-none p-4 flex gap-4 bg-black/60 border-b border-neutral-900 justify-center">
@@ -198,12 +195,9 @@
         </main>
     </div>
 
-    <!-- WRESTLING ROOM SCREEN -->
     <div id="wrestling-room-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <div class="flex-grow">
-                <h2 class="text-4xl md:text-5xl heavyweight-font title-gradient italic leading-none">WRESTLING ROOM</h2>
-            </div>
+        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">WRESTLING ROOM</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
         <main class="flex-grow p-8 overflow-y-auto">
@@ -242,11 +236,10 @@
         </main>
     </div>
 
-    <!-- THE MAT SCREEN -->
     <div id="the-mat-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-6 border-b border-neutral-900 flex justify-between items-center bg-black">
-            <div class="flex-grow overflow-visible">
-                <h2 class="text-3xl md:text-5xl heavyweight-font title-gradient italic leading-none inline-block pr-6">THE MAT</h2>
+        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black">
+            <div class="flex-grow">
+                <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">THE MAT</h2>
                 <div id="mat-style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">INITIALIZING ARENA...</div>
             </div>
             
