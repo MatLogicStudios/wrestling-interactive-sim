@@ -35,7 +35,7 @@
         }
         .move-btn:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
-        .screen { display: none; width: 100%; height: 100%; flex-direction: column; border-top: 4px solid #404040; transition: border-color 0.5s ease; }
+        .screen { display: none; width: 100%; height: 100%; flex-direction: column; border-top: 4px solid #404040; transition: border-color 0.8s ease; }
         .active-screen { display: flex; }
         .screen-red-alert { border-top-color: #ef4444 !important; }
 
@@ -66,7 +66,7 @@
 <body>
 
     <div id="main-dashboard" class="screen active-screen">
-        <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-start bg-black relative">
+        <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-start bg-black relative px-4">
             <div class="flex flex-col justify-center flex-grow overflow-visible">
                 <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight whitespace-nowrap">
                     MAT LOGIC <span class="text-red-600">STUDIOS</span>
@@ -133,7 +133,7 @@
     </div>
 
     <div id="recruit-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black">
+        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black px-4">
             <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">RECRUIT</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
@@ -166,7 +166,7 @@
     </div>
 
     <div id="shop-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black">
+        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black px-4">
             <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">THE SHOP</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
@@ -195,7 +195,7 @@
     </div>
 
     <div id="wrestling-room-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black">
+        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black px-4">
             <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">WRESTLING ROOM</h2>
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
         </header>
@@ -236,7 +236,7 @@
     </div>
 
     <div id="the-mat-screen" class="screen bg-[#050505]">
-        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black">
+        <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black px-4">
             <div class="flex-grow">
                 <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">THE MAT</h2>
                 <div id="mat-style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">INITIALIZING ARENA...</div>
@@ -412,13 +412,18 @@
             const activeScreen = document.getElementById(id);
             activeScreen.classList.add('active-screen');
 
-            // Handle "The Mat" red border transition
-            if (id === 'the-mat-screen') {
-                activeScreen.classList.add('screen-red-alert');
-                startActionTimer();
-            } else {
-                clearInterval(timerInterval);
-            }
+            // Force reflow and add red alert for sub-screens
+            setTimeout(() => {
+                if (id !== 'main-dashboard') {
+                    activeScreen.classList.add('screen-red-alert');
+                }
+                
+                if (id === 'the-mat-screen') {
+                    startActionTimer();
+                } else {
+                    clearInterval(timerInterval);
+                }
+            }, 10);
         }
 
         function setStyle(style) {
