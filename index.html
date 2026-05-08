@@ -18,7 +18,7 @@
 
         .shadow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); }
         .shadow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); }
-        .shadow-green { box-shadow: 0 0 20px rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); }
+        .shadow-green { box-shadow: 0 0 20px rgba(34, 197, 10, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); }
 
         .command-btn { 
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
@@ -35,8 +35,9 @@
         }
         .move-btn:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
-        .screen { display: none; width: 100%; height: 100%; flex-direction: column; border-top: 4px solid #dc2626; }
+        .screen { display: none; width: 100%; height: 100%; flex-direction: column; border-top: 4px solid #404040; transition: border-color 0.5s ease; }
         .active-screen { display: flex; }
+        .screen-red-alert { border-top-color: #ef4444 !important; }
 
         .style-btn, .opponent-btn, .shop-tab-btn { color: #737373; background: transparent; transition: all 0.2s ease; border: 1px solid #262626; }
         .style-btn:hover, .opponent-btn:hover, .shop-tab-btn:hover { border-color: white; color: white; }
@@ -52,7 +53,7 @@
         .glow-red { text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
         .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
 
-        #energy-bar-container { width: 300px; height: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; border: 1px solid #333; position: relative; }
+        #energy-bar-container { width: 250px; height: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; border: 1px solid #333; position: relative; }
         #energy-fill { height: 100%; width: 100%; background: #ef4444; transition: all 0.5s ease; }
         
         @keyframes strobe { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -65,12 +66,12 @@
 <body>
 
     <div id="main-dashboard" class="screen active-screen">
-        <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-center bg-black relative">
-            <div class="flex flex-col justify-center">
-                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
+        <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-start bg-black relative">
+            <div class="flex flex-col justify-center flex-grow overflow-visible">
+                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight whitespace-nowrap">
                     MAT LOGIC <span class="text-red-600">STUDIOS</span>
                 </h1>
-                <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
+                <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none whitespace-nowrap overflow-visible">
                     WRESTLING INTERACTIVE SIM
                 </h2>
                 <div class="mt-4 flex items-center gap-3">
@@ -80,10 +81,8 @@
                     <span id="low-energy-alert" class="low-energy-flash font-black text-[10px] tracking-widest uppercase">⚠️ LOW CAPACITY</span>
                 </div>
             </div>
-            <div class="flex items-center">
-                <div class="flex-none" style="min-width: 150px;"> 
-                    <img src="logo.png" alt="Mat Logic Studios" class="h-24 md:h-32 w-auto object-contain">
-                </div>
+            <div class="flex-none ml-4">
+                <img src="logo.png" alt="Mat Logic Studios" class="h-20 md:h-28 w-auto object-contain max-w-[150px]">
             </div>
         </header>
 
@@ -104,19 +103,19 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button onclick="showScreen('recruit-screen')" class="command-btn p-6 text-left group border-b-4 border-b-neutral-800">
+                <button onclick="showScreen('recruit-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-neutral-800">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
                     <p id="recruit-cost-label" class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Cost: $100.00</p>
                 </button>
-                <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-600">
+                <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-red-600">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
                 </button>
-                <button onclick="showScreen('the-mat-screen')" class="command-btn p-6 text-left group border-b-4 border-b-red-900">
+                <button onclick="showScreen('the-mat-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-red-900">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations & Live</p>
                 </button>
-                <button onclick="showScreen('shop-screen')" class="command-btn p-6 text-left group border-b-4 border-b-green-900 shadow-green">
+                <button onclick="showScreen('shop-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-green-900 shadow-green">
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
                 </button>
@@ -407,9 +406,19 @@
         }
 
         function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-            document.getElementById(id).classList.add('active-screen');
-            if (id === 'the-mat-screen') { startActionTimer(); } else { clearInterval(timerInterval); }
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active-screen', 'screen-red-alert');
+            });
+            const activeScreen = document.getElementById(id);
+            activeScreen.classList.add('active-screen');
+
+            // Handle "The Mat" red border transition
+            if (id === 'the-mat-screen') {
+                activeScreen.classList.add('screen-red-alert');
+                startActionTimer();
+            } else {
+                clearInterval(timerInterval);
+            }
         }
 
         function setStyle(style) {
