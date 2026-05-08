@@ -1,923 +1,459 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Wrestling Interactive Sim | Mat Logic Studios</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
-
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
-
-        html, body { height: 100vh; margin: 0; overflow: hidden; } 
-
-        body { background-color: #0d0d0d; color: #f5f5f5; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; }
-
-        .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
-
-        .atu-font { font-family: 'JetBrains Mono', monospace; }
-
-        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); border-radius: 15px; }
-
-        .title-gradient { background: linear-gradient(to right, #ffffff 20%, #ef4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
+        /* FIX: Allow scrolling and natural height to prevent cutoffs */
+        html, body { min-height: 100vh; margin: 0; } 
+        body { background-color: #0d0d0d; color: #f5f5f5; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; overflow-x: hidden; }
         
-
+        .heavyweight-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        .atu-font { font-family: 'JetBrains Mono', monospace; }
+        .mat-border { border: 1px solid #262626; background: rgba(255,255,255,0.02); backdrop-filter: blur(2px); border-radius: 15px; }
+        
+        /* FIX: Title Gradient now allows wrapping so it doesn't get clipped */
+        .title-gradient { 
+            background: linear-gradient(to right, #ffffff 20%, #ef4444 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            white-space: normal !important;
+        }
+        
         button, .command-btn, .mat-border { border-radius: 15px !important; }
 
-
-
         .shadow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); }
-
         .shadow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); }
-
         .shadow-green { box-shadow: 0 0 20px rgba(34, 197, 10, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); }
 
-
-
         .command-btn { 
-
             background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.9) 100%);
-
             border: 1px solid #333;
-
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
             display: flex; flex-direction: column; justify-content: center; height: 110px;
-
         }
-
-
 
         .move-btn { 
-
             background: linear-gradient(180deg, rgba(38,38,38,0.9) 0%, rgba(10,10,10,0.9) 100%);
-
             border: 1px solid #333;
-
             transition: all 0.2s ease;
-
             border-radius: 12px !important;
-
         }
-
         .move-btn:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
-
-
-        .screen { display: none; width: 100%; height: 100%; flex-direction: column; border-top: 4px solid #404040; transition: border-color 0.8s ease; }
-
+        /* FIX: Set screen to min-height and overflow:visible to stop the cutoff issue */
+        .screen { display: none; width: 100%; min-height: 100vh; flex-direction: column; border-top: 6px solid #404040; transition: border-top-color 0.8s ease; overflow-y: auto; }
         .active-screen { display: flex; }
-
         .screen-red-alert { border-top-color: #ef4444 !important; }
 
-
-
         .style-btn, .opponent-btn, .shop-tab-btn { color: #737373; background: transparent; transition: all 0.2s ease; border: 1px solid #262626; }
-
         .style-btn:hover, .opponent-btn:hover, .shop-tab-btn:hover { border-color: white; color: white; }
-
         
-
         .active-style, .active-shop-tab { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; }
-
         .active-ai { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; font-weight: 900; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
-
         .active-live { background: #3b82f6 !important; border-color: #3b82f6 !important; color: white !important; font-weight: 900; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
 
-
-
         .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
-
         .progress-fill { height: 100%; width: 0%; transition: width 3s linear; }
-
         .training-active .progress-container { display: block; }
-
         
-
         .glow-red { text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
-
         .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
 
-
-
         #energy-bar-container { width: 250px; height: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; border: 1px solid #333; position: relative; }
-
         #energy-fill { height: 100%; width: 100%; background: #ef4444; transition: all 0.5s ease; }
-
         
-
         @keyframes strobe { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
         .low-energy-flash { color: #ef4444; animation: strobe 1s infinite; display: none; }
 
-
-
         .sold-out-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10; border-radius: 15px; }
-
         .sold-out-stamp { border: 4px solid #ef4444; color: #ef4444; padding: 10px 20px; font-size: 24px; font-weight: 900; transform: rotate(-15deg); text-transform: uppercase; }
-
     </style>
-
 </head>
-
 <body>
 
-
-
     <div id="main-dashboard" class="screen active-screen">
-
         <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-start bg-black relative px-4">
-
-            <div class="flex flex-col justify-center flex-grow overflow-visible">
-
-                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight whitespace-nowrap">
-
+            <div class="flex flex-col justify-center flex-grow">
+                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
                     MAT LOGIC <span class="text-red-600">STUDIOS</span>
-
                 </h1>
-
-                <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none whitespace-nowrap overflow-visible">
-
+                <h2 class="text-3xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-none">
                     WRESTLING INTERACTIVE SIM
-
                 </h2>
-
                 <div class="mt-4 flex items-center gap-3">
-
                     <div id="energy-bar-container">
-
                         <div id="energy-fill"></div>
-
                     </div>
-
                     <span id="low-energy-alert" class="low-energy-flash font-black text-[10px] tracking-widest uppercase">⚠️ LOW CAPACITY</span>
-
                 </div>
-
             </div>
-
             <div class="flex-none ml-4">
-
                 <img src="logo.png" alt="Mat Logic Studios" class="h-20 md:h-28 w-auto object-contain max-w-[150px]">
-
             </div>
-
         </header>
-
-
 
         <main class="flex-grow flex flex-col justify-center p-4 md:p-6 max-w-7xl mx-auto w-full">
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-blue-600 shadow-blue">
-
                     <div class="text-[10px] text-blue-500 uppercase font-black tracking-widest">Stable Strength</div>
-
                     <div id="stable-count" class="text-3xl md:text-4xl heavyweight-font mt-1">3 / 12</div>
-
                 </div>
-
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-red-600 shadow-red">
-
                     <div class="text-[10px] text-red-500 uppercase font-black tracking-widest">Season Record</div>
-
                     <div class="text-3xl md:text-4xl heavyweight-font mt-1 text-red-600 italic">0 - 0</div>
-
                 </div>
-
                 <div class="mat-border p-4 md:p-6 border-l-4 border-l-green-600 shadow-green">
-
                     <div class="text-[10px] text-green-500 uppercase font-black tracking-widest">Total Credits</div>
-
                     <div id="total-credits" class="text-3xl md:text-4xl heavyweight-font mt-1 text-green-500">$1000.00</div>
-
                 </div>
-
             </div>
-
-
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-
                 <button onclick="showScreen('recruit-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-neutral-800">
-
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic group-hover:text-white">RECRUIT</h3>
-
                     <p id="recruit-cost-label" class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Cost: $100.00</p>
-
                 </button>
-
                 <button onclick="showScreen('wrestling-room-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-red-600">
-
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">WRESTLING ROOM</h3>
-
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Train & Level Up</p>
-
                 </button>
-
                 <button onclick="showScreen('the-mat-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-red-900">
-
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-red-600 group-hover:text-red-500">THE MAT</h3>
-
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Simulations & Live</p>
-
                 </button>
-
                 <button onclick="showScreen('shop-screen')" class="command-btn p-4 md:p-6 text-left group border-b-4 border-b-green-900 shadow-green">
-
                     <h3 class="text-lg md:text-xl heavyweight-font mb-1 italic text-green-600 group-hover:text-green-500">THE SHOP</h3>
-
                     <p class="text-neutral-400 text-[10px] font-bold uppercase tracking-widest leading-tight">Gear & Credits</p>
-
                 </button>
-
             </div>
-
         </main>
-
-
 
         <footer class="flex-none p-6 border-t border-neutral-900 bg-black text-center">
-
             <div class="text-xs font-black tracking-[0.2em] heavyweight-font italic mb-1 uppercase">
-
                 <span class="text-white">MAT LOGIC</span> <span class="text-red-600">STUDIOS // AUTHENTICITY VERIFIED</span>
-
             </div>
-
             <div class="text-[10px] text-neutral-500 heavyweight-font tracking-[0.1em] uppercase">
-
                 © 2026 ALL RIGHTS RESERVED // VERSION 1.1.0
-
             </div>
-
         </footer>
-
     </div>
-
-
 
     <div id="recruit-screen" class="screen bg-[#050505]">
-
         <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black px-4">
-
             <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">RECRUIT</h2>
-
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
-
         </header>
-
-        <main class="flex-grow p-8 overflow-y-auto max-w-4xl mx-auto w-full">
-
+        <main class="flex-grow p-8 max-w-4xl mx-auto w-full">
             <div class="mat-border p-8 bg-black/40 mb-8">
-
                 <h3 class="text-xl heavyweight-font italic mb-6">NEW PROSPECT SIGNING</h3>
-
                 <div class="space-y-6">
-
                     <div>
-
                         <label class="text-[10px] font-black tracking-widest text-neutral-500 uppercase block mb-2">Prospect Name</label>
-
                         <input type="text" id="recruit-name-input" class="w-full bg-neutral-900 border border-neutral-800 p-4 heavyweight-font text-2xl italic text-white focus:outline-none focus:border-red-600" placeholder="ENTER NAME...">
-
                     </div>
-
                     <div>
-
                         <label class="text-[10px] font-black tracking-widest text-neutral-500 uppercase block mb-2">Discipline Style</label>
-
                         <div class="grid grid-cols-3 gap-3">
-
                             <button onclick="selectRecruitStyle('Folkstyle', this)" class="recruit-style-btn py-3 border border-neutral-800 font-black text-[10px] tracking-widest uppercase">Folkstyle</button>
-
                             <button onclick="selectRecruitStyle('Freestyle', this)" class="recruit-style-btn py-3 border border-neutral-800 font-black text-[10px] tracking-widest uppercase">Freestyle</button>
-
                             <button onclick="selectRecruitStyle('Greco-Roman', this)" class="recruit-style-btn py-3 border border-neutral-800 font-black text-[10px] tracking-widest uppercase">Greco-Roman</button>
-
                         </div>
-
                     </div>
-
                     <button onclick="confirmRecruit()" class="w-full bg-red-600 hover:bg-red-700 py-4 heavyweight-font italic text-xl tracking-widest">FINALIZE RECRUITMENT</button>
-
                 </div>
-
             </div>
-
             <div class="mat-border p-6 bg-black/20">
-
                 <h3 class="text-[10px] font-black tracking-widest text-neutral-500 uppercase mb-4">Recruitment History</h3>
-
                 <div id="recruit-history-log" class="atu-font text-xs text-neutral-400 space-y-2">
-
                     <p>[LOG] STABLE INITIALIZED WITH GOAT BENCHMARKS</p>
-
                 </div>
-
             </div>
-
         </main>
-
     </div>
-
-
 
     <div id="shop-screen" class="screen bg-[#050505]">
-
         <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black px-4">
-
             <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">THE SHOP</h2>
-
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
-
         </header>
-
         <div class="flex-none p-4 flex gap-4 bg-black/60 border-b border-neutral-900 justify-center">
-
             <button onclick="switchShopTab('supplements')" id="tab-supplements" class="shop-tab-btn active-shop-tab px-8 py-2 text-[10px] font-black tracking-widest uppercase">Supplements & Boosts</button>
-
             <button onclick="switchShopTab('lifestyle')" id="tab-lifestyle" class="shop-tab-btn px-8 py-2 text-[10px] font-black tracking-widest uppercase">Lifestyle Gear</button>
-
         </div>
-
-        <main class="flex-grow p-8 overflow-y-auto">
-
+        <main class="flex-grow p-8">
             <div id="shop-supplements" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                 <div class="mat-border p-6 relative bg-black/40">
-
                     <div id="supplement-sold-out" class="sold-out-overlay" style="display:none;"><div class="sold-out-stamp">Sold Out</div></div>
-
                     <h3 class="text-2xl heavyweight-font italic text-green-500">Monthly Vitality Pack</h3>
-
                     <p class="text-neutral-500 text-[10px] font-black tracking-widest uppercase mb-4">Refills Energy Bar to 100%</p>
-
                     <button onclick="buySupplement()" class="w-full bg-green-900/40 border border-green-600 p-3 text-white font-black text-xs tracking-widest uppercase hover:bg-green-600 transition">Buy - $250.00</button>
-
                 </div>
-
             </div>
-
             <div id="shop-lifestyle" class="grid grid-cols-1 md:grid-cols-3 gap-6" style="display:none;">
-
                 <div class="mat-border p-6 bg-black/40 relative">
-
                     <span class="absolute top-2 right-2 bg-blue-600 text-[8px] font-black px-2 py-1 uppercase rounded">New Arrival</span>
-
                     <h3 class="text-xl heavyweight-font italic text-white">MLS Warm-up Hoodie</h3>
-
                     <p class="text-neutral-500 text-[10px] font-black tracking-widest uppercase mb-4">Mat Logic Studios Brand</p>
-
                     <button class="w-full border border-neutral-700 p-2 text-neutral-400 font-black text-[10px] uppercase cursor-not-allowed">Sold Individually</button>
-
                 </div>
-
             </div>
-
         </main>
-
     </div>
-
-
 
     <div id="wrestling-room-screen" class="screen bg-[#050505]">
-
         <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black px-4">
-
             <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">WRESTLING ROOM</h2>
-
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">RETURN</button>
-
         </header>
-
-        <main class="flex-grow p-8 overflow-y-auto">
-
+        <main class="flex-grow p-8">
             <div id="stable-roster" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-
                 <div class="mat-border p-6 border-t-4 border-t-blue-600 shadow-blue">
-
                     <h3 class="text-2xl heavyweight-font italic text-white">Caelun Sanders</h3>
-
                     <p class="text-blue-500 text-[10px] font-black tracking-[0.2em] uppercase">The Technician</p>
-
                 </div>
-
                 <div class="mat-border p-6 border-t-4 border-t-red-600 shadow-red">
-
                     <h3 class="text-2xl heavyweight-font italic text-white">Jace Burrell</h3>
-
                     <p class="text-red-500 text-[10px] font-black tracking-[0.2em] uppercase">The Blast Machine</p>
-
                 </div>
-
                 <div class="mat-border p-6 border-t-4 border-t-green-600 shadow-green">
-
                     <h3 class="text-2xl heavyweight-font italic text-white">Aleksei Karelli</h3>
-
                     <p class="text-green-500 text-[10px] font-black tracking-[0.2em] uppercase">The Phenom</p>
-
                 </div>
-
             </div>
-
-
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
                 <div id="card-Drilling" class="mat-border p-4 border-t-2 border-t-blue-800 bg-blue-900/10 shadow-blue cursor-pointer transition relative overflow-hidden" onclick="runTraining('Drilling')">
-
                     <h3 class="text-lg heavyweight-font italic text-blue-200">Drilling</h3>
-
                     <p class="text-blue-500 text-[9px] font-bold tracking-[0.1em] uppercase">Muscle Memory & Repetition</p>
-
                     <div class="progress-container"><div class="progress-fill bg-blue-600"></div></div>
-
                 </div>
-
                 <div id="card-Technique" class="mat-border p-4 border-t-2 border-t-red-800 bg-red-900/10 shadow-red cursor-pointer transition relative overflow-hidden" onclick="runTraining('Technique')">
-
                     <h3 class="text-lg heavyweight-font italic text-red-200">Technique</h3>
-
                     <p class="text-red-500 text-[9px] font-bold tracking-[0.1em] uppercase">Precision & Execution</p>
-
                     <div class="progress-container"><div class="progress-fill bg-red-600"></div></div>
-
                 </div>
-
                 <div id="card-Strength" class="mat-border p-4 border-t-2 border-t-green-800 bg-green-900/10 shadow-green cursor-pointer transition relative overflow-hidden" onclick="runTraining('Strength')">
-
                     <h3 class="text-lg heavyweight-font italic text-green-200">Strength</h3>
-
                     <p class="text-green-500 text-[9px] font-bold tracking-[0.1em] uppercase">Power & Explosivity</p>
-
                     <div class="progress-container"><div class="progress-fill bg-green-600"></div></div>
-
                 </div>
-
             </div>
-
         </main>
-
     </div>
-
-
 
     <div id="the-mat-screen" class="screen bg-[#050505]">
-
         <header class="flex-none p-4 md:p-8 border-b border-neutral-900 flex justify-between items-center bg-black px-4">
-
             <div class="flex-grow">
-
                 <h2 class="text-4xl md:text-6xl heavyweight-font title-gradient italic leading-none">THE MAT</h2>
-
                 <div id="mat-style-indicator" class="text-[10px] font-bold text-neutral-500 tracking-widest uppercase mt-1">INITIALIZING ARENA...</div>
-
             </div>
-
-            
-
             <div class="flex gap-2 mr-6">
-
                 <button id="btn-folkstyle" onclick="setStyle('folkstyle')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Folkstyle</button>
-
                 <button id="btn-freestyle" onclick="setStyle('freestyle')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Freestyle</button>
-
                 <button id="btn-greco" onclick="setStyle('greco')" class="style-btn text-[10px] font-black tracking-widest px-6 py-2 rounded-full uppercase">Greco Roman</button>
-
             </div>
-
-
-
             <button onclick="showScreen('main-dashboard')" class="heavyweight-font bg-red-600 hover:bg-red-700 text-white px-10 py-2 rounded-full text-xs tracking-[0.2em] border border-red-500 shadow-lg">EXIT</button>
-
         </header>
 
-
-
-        <main class="flex-grow grid grid-cols-12 gap-4 p-4 overflow-hidden">
-
-            <div class="col-span-3 flex flex-col gap-4 overflow-hidden">
-
+        <main class="flex-grow grid grid-cols-12 gap-4 p-4">
+            <div class="col-span-3 flex flex-col gap-4">
                 <div class="mat-border p-6 text-center bg-red-950/10 border-red-900/50">
-
                     <div class="text-[10px] text-red-500 font-black tracking-widest uppercase mb-1">Action Clock</div>
-
                     <div id="action-timer" class="text-6xl heavyweight-font text-white glow-red">15</div>
-
                 </div>
-
-                <div class="mat-border flex-grow flex flex-col overflow-hidden bg-black/40">
-
+                <div class="mat-border flex-grow flex flex-col bg-black/40 min-h-[300px]">
                     <div class="p-3 border-b border-neutral-800 text-[10px] font-black tracking-widest text-neutral-500 uppercase">ATU Play-By-Play</div>
-
                     <div id="atu-log" class="flex-grow p-4 overflow-y-auto atu-font text-xs text-neutral-400 space-y-2">
-
                         <p class="text-green-500">[0:00] STANDBY: AWAITING SELECTION</p>
-
                     </div>
-
                 </div>
-
             </div>
-
-
 
             <div class="col-span-6 flex flex-col gap-4">
-
-                <div class="mat-border flex-grow relative overflow-hidden bg-gradient-to-b from-neutral-900 to-black flex items-center justify-center text-center">
-
+                <div class="mat-border flex-grow relative bg-gradient-to-b from-neutral-900 to-black flex items-center justify-center text-center min-h-[300px]">
                     <div class="opacity-20">
-
                         <div class="text-6xl heavyweight-font italic mb-4">VISUAL BAY</div>
-
                         <p class="uppercase tracking-[0.5em] text-sm font-black">Move Visualization</p>
-
                     </div>
-
                 </div>
-
                 <div id="move-selection-grid" class="h-1/3 mat-border p-4 grid grid-cols-3 gap-3 bg-black/40">
-
                     <button class="move-btn p-3 text-left"><span class="block text-white heavyweight-font italic text-lg">Single Leg</span></button>
-
                     <button class="move-btn p-3 text-left"><span class="block text-white heavyweight-font italic text-lg">Sprawl</span></button>
-
                     <button class="move-btn p-3 text-left"><span class="block text-red-600 heavyweight-font italic text-lg">Snap Down</span></button>
-
                     <button class="move-btn p-3 text-left"><span class="block text-white heavyweight-font italic text-lg">Double Leg</span></button>
-
                     <button class="move-btn p-3 text-left"><span class="block text-white heavyweight-font italic text-lg">Pummel</span></button>
-
                     <button class="move-btn p-3 text-left"><span class="block text-blue-500 heavyweight-font italic text-lg">Stand Up</span></button>
-
                 </div>
-
             </div>
-
-
 
             <div class="col-span-3 flex flex-col gap-4">
-
                 <div class="mat-border p-6 bg-black flex flex-col gap-6">
-
                     <div class="flex justify-between items-center text-center">
-
                         <div><div class="text-blue-500 font-black text-[10px] tracking-widest uppercase">Blue</div><div class="text-5xl heavyweight-font glow-blue">0</div></div>
-
                         <div><div class="text-neutral-500 font-black text-[10px] tracking-widest uppercase">Period</div><div class="text-3xl heavyweight-font italic">1</div></div>
-
                         <div><div class="text-red-500 font-black text-[10px] tracking-widest uppercase">Red</div><div class="text-5xl heavyweight-font glow-red">0</div></div>
-
                     </div>
-
                     <div id="riding-time-container" class="border-t border-neutral-800 pt-4 text-center" style="display:none;">
-
                         <div class="text-neutral-500 font-black text-[10px] tracking-widest uppercase">Riding Time</div>
-
                         <div class="text-3xl heavyweight-font text-green-500 italic">0:00</div>
-
                     </div>
-
                 </div>
-
                 <div class="mat-border p-6 bg-neutral-900/50 flex-grow text-center flex flex-col justify-center gap-3">
-
                     <h3 class="text-lg heavyweight-font italic text-white">OPPONENT SELECT</h3>
-
                     <button id="btn-ai" onclick="setOpponent('ai')" class="opponent-btn w-full py-3 rounded-xl font-black text-[10px] tracking-widest uppercase">AI SIMULATION</button>
-
                     <button id="btn-live" onclick="setOpponent('live')" class="opponent-btn w-full py-3 rounded-xl font-black text-[10px] tracking-widest uppercase">LIVE CHALLENGE</button>
-
                 </div>
-
             </div>
-
         </main>
-
     </div>
 
-
-
     <script>
-
         let energy = 200; 
-
         let credits = 1000; 
-
         let stableSize = 3;
-
         const maxStable = 12;
-
         let selectedRecruitStyle = "";
-
         let supplementSoldOut = false;
-
-
-
         let isTraining = false;
-
         let actionTime = 15;
-
         let timerInterval;
 
-
-
         function updateEnergyUI() {
-
             const fill = document.getElementById('energy-fill');
-
             const alertIcon = document.getElementById('low-energy-alert');
-
             fill.style.width = `${(energy / 200) * 100}%`;
-
             if (energy > 100) fill.style.background = "#ef4444";
-
             else if (energy > 30) fill.style.background = "#7f1d1d";
-
             else fill.style.background = "#404040";
-
             alertIcon.style.display = (energy <= 30) ? "block" : "none";
-
         }
-
-
 
         function getRecruitCost() {
-
             if (stableSize < 4) return 100;
-
             if (stableSize < 9) return 250;
-
             return 500;
-
         }
-
-
 
         function selectRecruitStyle(style, btn) {
-
             document.querySelectorAll('.recruit-style-btn').forEach(b => b.classList.remove('active-style'));
-
             btn.classList.add('active-style');
-
             selectedRecruitStyle = style;
-
         }
-
-
 
         function confirmRecruit() {
-
             const name = document.getElementById('recruit-name-input').value;
-
             const cost = getRecruitCost();
-
-
-
             if (!name || !selectedRecruitStyle) { alert("ENTER NAME AND SELECT STYLE."); return; }
-
             if (stableSize >= maxStable) { alert("STABLE AT CAPACITY."); return; }
-
             if (credits < cost) { alert("INSUFFICIENT CREDITS."); return; }
-
-
-
             credits -= cost;
-
             stableSize++;
-
-            
-
             document.getElementById('total-credits').innerText = `$${credits.toFixed(2)}`;
-
             document.getElementById('stable-count').innerText = `${stableSize} / 12`;
-
             document.getElementById('recruit-cost-label').innerText = `Cost: $${getRecruitCost().toFixed(2)}`;
-
-            
-
             const log = document.getElementById('recruit-history-log');
-
             const p = document.createElement('p');
-
             p.innerText = `[${new Date().toLocaleDateString()}] ${name.toUpperCase()} (${selectedRecruitStyle}) SIGNED.`;
-
             log.prepend(p);
-
-
-
             const roster = document.getElementById('stable-roster');
-
             const card = document.createElement('div');
-
-            card.className = "mat-border p-6 border-t-4 border-t-neutral-600 shadow-neutral animate-pulse";
-
+            card.className = "mat-border p-6 border-t-4 border-t-neutral-600 shadow-neutral";
             card.innerHTML = `<h3 class="text-2xl heavyweight-font italic text-white">${name}</h3><p class="text-neutral-500 text-[10px] font-black tracking-[0.2em] uppercase">${selectedRecruitStyle}</p>`;
-
             roster.appendChild(card);
-
-
-
             document.getElementById('recruit-name-input').value = "";
-
             showScreen('main-dashboard');
-
             alert(`SUCCESSFUL SIGNING: ${name}`);
-
         }
-
-
 
         function switchShopTab(tab) {
-
             document.querySelectorAll('.shop-tab-btn').forEach(b => b.classList.remove('active-shop-tab'));
-
             document.getElementById(`tab-${tab}`).classList.add('active-shop-tab');
-
             document.getElementById('shop-supplements').style.display = (tab === 'supplements') ? 'grid' : 'none';
-
             document.getElementById('shop-lifestyle').style.display = (tab === 'lifestyle') ? 'grid' : 'none';
-
         }
-
-
 
         function buySupplement() {
-
             if (supplementSoldOut) return;
-
             if (credits < 250) { alert("INSUFFICIENT CREDITS."); return; }
-
-            
-
             credits -= 250;
-
             energy = 200; 
-
             supplementSoldOut = true;
-
             document.getElementById('supplement-sold-out').style.display = "flex";
-
             document.getElementById('total-credits').innerText = `$${credits.toFixed(2)}`;
-
             updateEnergyUI();
-
             alert("VITALITY PACK APPLIED: ENERGY RESTORED.");
-
         }
-
-
 
         function runTraining(type) {
-
             if (isTraining) return;
-
             if (energy < 10) { alert("STABLE FATIGUED."); return; }
-
             isTraining = true;
-
             energy -= 10;
-
             updateEnergyUI();
-
             const card = document.getElementById(`card-${type}`);
-
             const fill = card.querySelector('.progress-fill');
-
             card.classList.add('training-active');
-
             setTimeout(() => { fill.style.width = "100%"; }, 50);
-
             setTimeout(() => {
-
                 card.classList.remove('training-active');
-
                 fill.style.width = "0%";
-
                 isTraining = false;
-
             }, 3050);
-
         }
-
-
 
         function showScreen(id) {
-
             document.querySelectorAll('.screen').forEach(s => {
-
                 s.classList.remove('active-screen', 'screen-red-alert');
-
             });
-
             const activeScreen = document.getElementById(id);
-
             activeScreen.classList.add('active-screen');
-
-
-
-            // Force reflow and add red alert for sub-screens
-
+            // FIX: Delay added to allow browser to trigger transition for red alert border
             setTimeout(() => {
-
                 if (id !== 'main-dashboard') {
-
                     activeScreen.classList.add('screen-red-alert');
-
                 }
-
-                
-
                 if (id === 'the-mat-screen') {
-
                     startActionTimer();
-
                 } else {
-
                     clearInterval(timerInterval);
-
                 }
-
-            }, 10);
-
+            }, 50);
         }
-
-
 
         function setStyle(style) {
-
             document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active-style'));
-
             document.getElementById(`btn-${style}`).classList.add('active-style');
-
             document.getElementById('mat-style-indicator').innerText = `${style.toUpperCase()} // READY`;
-
             document.getElementById('riding-time-container').style.display = (style === 'folkstyle') ? 'block' : 'none';
-
         }
-
-
 
         function setOpponent(type) {
-
             document.querySelectorAll('.opponent-btn').forEach(b => b.classList.remove('active-ai', 'active-live'));
-
             document.getElementById(`btn-${type}`).classList.add(type === 'ai' ? 'active-ai' : 'active-live');
-
         }
-
-
 
         function startActionTimer() {
-
             clearInterval(timerInterval);
-
             actionTime = 15;
-
             document.getElementById('action-timer').innerText = actionTime;
-
             timerInterval = setInterval(() => {
-
                 actionTime--;
-
                 document.getElementById('action-timer').innerText = actionTime;
-
                 if (actionTime <= 0) {
-
                     actionTime = 15;
-
                     const log = document.getElementById('atu-log');
-
                     const p = document.createElement('p');
-
                     p.className = "text-red-500";
-
                     p.innerText = "[!] ACTION CLOCK EXPIRED";
-
                     log.appendChild(p);
-
                     log.scrollTop = log.scrollHeight;
-
                 }
-
             }, 1000);
-
         }
-
         updateEnergyUI();
-
     </script>
-
 </body>
-
 </html>
