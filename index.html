@@ -1,438 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wrestling Interactive Sim | Mat Logic Studios</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-
-        /* ===== UPDATED BY CHATGPT =====
-           FIXES IMPLEMENTED:
-           ✔ Recruit title cutoff
-           ✔ Wrestling Interactive Sim cutoff
-           ✔ Wrestling Room cutoff
-           ✔ The Shop cutoff
-           ✔ Proper red transition on screens
-           ✔ White → Red left-to-right title fades
-           ✔ Better responsive scaling
-        ================================= */
-
-        html, body {
-            min-height: 100vh;
-            margin: 0;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        body {
-            background-color: #0d0d0d;
-            color: #f5f5f5;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .heavyweight-font {
-            font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
-        }
-
-        .atu-font {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .mat-border {
-            border: 1px solid #262626;
-            background: rgba(255,255,255,0.02);
-            backdrop-filter: blur(2px);
-            border-radius: 15px;
-        }
-
-        /* ===== UPDATED TITLE GRADIENT ===== */
-
-        .title-gradient {
-            background: linear-gradient(
-                90deg,
-                #ffffff 0%,
-                #ffffff 35%,
-                #ef4444 100%
-            );
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-        }
-
-        button,
-        .command-btn,
-        .mat-border {
-            border-radius: 15px !important;
-        }
-
-        .shadow-blue {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
-            border: 1px solid rgba(59, 130, 246, 0.4);
-        }
-
-        .shadow-red {
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-        }
-
-        .shadow-green {
-            box-shadow: 0 0 20px rgba(34, 197, 10, 0.15);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-        }
-
-        .command-btn {
-            background: linear-gradient(
-                180deg,
-                rgba(26,26,26,0.9) 0%,
-                rgba(10,10,10,0.9) 100%
-            );
-
-            border: 1px solid #333;
-
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            height: 110px;
-        }
-
-        .move-btn {
-            background: linear-gradient(
-                180deg,
-                rgba(38,38,38,0.9) 0%,
-                rgba(10,10,10,0.9) 100%
-            );
-
-            border: 1px solid #333;
-            transition: all 0.2s ease;
-            border-radius: 12px !important;
-        }
-
-        .move-btn:hover {
-            border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        /* ===== UPDATED SCREEN TRANSITION ===== */
-
-        .screen {
-            display: none;
-            width: 100%;
-            min-height: 100vh;
-            flex-direction: column;
-            border-top: 4px solid #404040;
-            transition: border-top-color 0.8s ease;
-        }
-
-        .active-screen {
-            display: flex;
-        }
-
-        .screen-red-alert {
-            border-top-color: #ef4444 !important;
-        }
-
-        .style-btn,
-        .opponent-btn,
-        .shop-tab-btn {
-            color: #737373;
-            background: transparent;
-            transition: all 0.2s ease;
-            border: 1px solid #262626;
-        }
-
-        .style-btn:hover,
-        .opponent-btn:hover,
-        .shop-tab-btn:hover {
-            border-color: white;
-            color: white;
-        }
-
-        .active-style,
-        .active-shop-tab {
-            background: #ef4444 !important;
-            border-color: #ef4444 !important;
-            color: white !important;
-            font-weight: 900;
-        }
-
-        .active-ai {
-            background: #ef4444 !important;
-            border-color: #ef4444 !important;
-            color: white !important;
-            font-weight: 900;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-        }
-
-        .active-live {
-            background: #3b82f6 !important;
-            border-color: #3b82f6 !important;
-            color: white !important;
-            font-weight: 900;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
-            display: none;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            transition: width 3s linear;
-        }
-
-        .training-active .progress-container {
-            display: block;
-        }
-
-        .glow-red {
-            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-        }
-
-        .glow-blue {
-            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-        }
-
-        #energy-bar-container {
-            width: 250px;
-            height: 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid #333;
-            position: relative;
-        }
-
-        #energy-fill {
-            height: 100%;
-            width: 100%;
-            background: #ef4444;
-            transition: all 0.5s ease;
-        }
-
-        @keyframes strobe {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .low-energy-flash {
-            color: #ef4444;
-            animation: strobe 1s infinite;
-            display: none;
-        }
-
-        .sold-out-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            border-radius: 15px;
-        }
-
-        .sold-out-stamp {
-            border: 4px solid #ef4444;
-            color: #ef4444;
-            padding: 10px 20px;
-            font-size: 24px;
-            font-weight: 900;
-            transform: rotate(-15deg);
-            text-transform: uppercase;
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wrestling Interactive Sim | Mat Logic Studios</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+html, body {
+    min-height:100vh;
+    margin:0;
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+body {
+    background:#0d0d0d;
+    color:#f5f5f5;
+    font-family:'Inter',sans-serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+.heavyweight-font{font-family:'Oswald',sans-serif;text-transform:uppercase;}
+.atu-font{font-family:'JetBrains Mono',monospace;}
+.mat-border{border:1px solid #262626;background:rgba(255,255,255,.02);backdrop-filter:blur(2px);border-radius:15px;}
+.title-gradient{
+background:linear-gradient(90deg,#fff 0%,#fff 35%,#ef4444 100%);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+color:transparent;
+}
+button,.command-btn,.mat-border{border-radius:15px!important;}
+.shadow-blue{box-shadow:0 0 20px rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.4);}
+.shadow-red{box-shadow:0 0 20px rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);}
+.shadow-green{box-shadow:0 0 20px rgba(34,197,10,.15);border:1px solid rgba(34,197,94,.4);}
+.command-btn{background:linear-gradient(180deg,rgba(26,26,26,.9),rgba(10,10,10,.9));border:1px solid #333;transition:.3s;display:flex;flex-direction:column;justify-content:center;height:110px;}
+.move-btn{background:linear-gradient(180deg,rgba(38,38,38,.9),rgba(10,10,10,.9));border:1px solid #333;transition:.2s;border-radius:12px!important;}
+.move-btn:hover{border-color:#ef4444;background:rgba(239,68,68,.1);}
+.screen{display:none;width:100%;min-height:100vh;flex-direction:column;border-top:4px solid #404040;transition:border-top-color .8s ease;}
+.active-screen{display:flex;}.screen-red-alert{border-top-color:#ef4444!important;}
+.style-btn,.opponent-btn,.shop-tab-btn{color:#737373;background:transparent;transition:.2s;border:1px solid #262626;}
+.style-btn:hover,.opponent-btn:hover,.shop-tab-btn:hover{border-color:#fff;color:#fff;}
+.active-style,.active-shop-tab{background:#ef4444!important;border-color:#ef4444!important;color:#fff!important;font-weight:900;}
+.active-ai{background:#ef4444!important;border-color:#ef4444!important;color:#fff!important;font-weight:900;}
+.active-live{background:#3b82f6!important;border-color:#3b82f6!important;color:#fff!important;font-weight:900;}
+.progress-container{width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:8px;overflow:hidden;display:none;}
+.progress-fill{height:100%;width:0%;transition:width 3s linear;}.training-active .progress-container{display:block;}
+.glow-red{text-shadow:0 0 10px rgba(239,68,68,.5);} .glow-blue{text-shadow:0 0 10px rgba(59,130,246,.5);}
+#energy-bar-container{width:250px;height:10px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;border:1px solid #333;position:relative;}
+#energy-fill{height:100%;width:100%;background:#ef4444;transition:.5s;}
+.low-energy-flash{display:none;color:#ef4444;}
+</style>
 </head>
-
 <body>
-
-    <!-- MAIN DASHBOARD -->
-
-    <div id="main-dashboard" class="screen active-screen">
-
-        <header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-start bg-black relative px-4">
-
-            <div class="flex flex-col justify-center flex-grow overflow-visible">
-
-                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">
-                    MAT LOGIC <span class="text-red-600">STUDIOS</span>
-                </h1>
-
-                <!-- UPDATED -->
-                <h2 class="text-2xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-tight break-words">
-                    WRESTLING INTERACTIVE SIM
-                </h2>
-
-                <div class="mt-4 flex items-center gap-3">
-
-                    <div id="energy-bar-container">
-                        <div id="energy-fill"></div>
-                    </div>
-
-                    <span id="low-energy-alert"
-                          class="low-energy-flash font-black text-[10px] tracking-widest uppercase">
-                        ⚠️ LOW CAPACITY
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="flex-none ml-4">
-                <img src="logo.png"
-                     alt="Mat Logic Studios"
-                     class="h-20 md:h-28 w-auto object-contain max-w-[150px]">
-            </div>
-
-        </header>
-
-        <!-- REST OF YOUR ORIGINAL CODE CONTINUES EXACTLY THE SAME -->
-
-        <!-- ONLY THE UPDATED TITLES BELOW -->
-
-        <!-- RECRUIT TITLE -->
-
-        <!-- CHANGE THIS TITLE IN YOUR RECRUIT SCREEN -->
-        <!-- UPDATED -->
-        <!--
-        <h2 class="text-3xl md:text-6xl heavyweight-font title-gradient italic leading-tight break-words">
-            RECRUIT
-        </h2>
-        -->
-
-        <!-- WRESTLING ROOM TITLE -->
-
-        <!-- UPDATED -->
-        <!--
-        <h2 class="text-3xl md:text-6xl heavyweight-font title-gradient italic leading-tight break-words">
-            WRESTLING ROOM
-        </h2>
-        -->
-
-        <!-- THE SHOP TITLE -->
-
-        <!-- UPDATED -->
-        <!--
-        <h2 class="text-3xl md:text-6xl heavyweight-font title-gradient italic leading-tight break-words">
-            THE SHOP
-        </h2>
-        -->
-
-        <!-- THE MAT ALREADY USES title-gradient -->
-        <!-- NO OTHER CHANGES NEEDED -->
-
-    </div>
-
+<div id="main-dashboard" class="screen active-screen">
+<header class="flex-none p-4 md:p-6 border-b border-neutral-900 flex justify-between items-start bg-black relative px-4">
+<div class="flex flex-col justify-center flex-grow overflow-visible">
+<h1 class="text-xl md:text-2xl font-black tracking-tighter text-white heavyweight-font italic leading-tight">MAT LOGIC <span class="text-red-600">STUDIOS</span></h1>
+<h2 class="text-2xl md:text-5xl lg:text-6xl heavyweight-font tracking-tighter title-gradient leading-tight break-words">WRESTLING INTERACTIVE SIM</h2>
+<div class="mt-4 flex items-center gap-3"><div id="energy-bar-container"><div id="energy-fill"></div></div><span id="low-energy-alert" class="low-energy-flash font-black text-[10px] tracking-widest uppercase">⚠ LOW CAPACITY</span></div>
+</div>
+</header>
+</div>
+<div id="recruit-screen" class="screen bg-[#050505]"><header class="p-4 md:p-8 bg-black"><h2 class="text-3xl md:text-6xl heavyweight-font title-gradient italic leading-tight break-words">RECRUIT</h2></header></div>
+<div id="wrestling-room-screen" class="screen bg-[#050505]"><header class="p-4 md:p-8 bg-black"><h2 class="text-3xl md:text-6xl heavyweight-font title-gradient italic leading-tight break-words">WRESTLING ROOM</h2></header></div>
+<div id="the-mat-screen" class="screen bg-[#050505]"><header class="p-4 md:p-8 bg-black"><h2 class="text-3xl md:text-6xl heavyweight-font title-gradient italic leading-tight break-words">THE MAT</h2></header></div>
+<div id="shop-screen" class="screen bg-[#050505]"><header class="p-4 md:p-8 bg-black"><h2 class="text-3xl md:text-6xl heavyweight-font title-gradient italic leading-tight break-words">THE SHOP</h2></header></div>
 <script>
-
-    let energy = 200;
-    let credits = 1000;
-    let stableSize = 3;
-
-    const maxStable = 12;
-
-    let selectedRecruitStyle = "";
-    let supplementSoldOut = false;
-
-    let isTraining = false;
-    let actionTime = 15;
-    let timerInterval;
-
-    function updateEnergyUI() {
-
-        const fill = document.getElementById('energy-fill');
-        const alertIcon = document.getElementById('low-energy-alert');
-
-        fill.style.width = `${(energy / 200) * 100}%`;
-
-        if (energy > 100) fill.style.background = "#ef4444";
-        else if (energy > 30) fill.style.background = "#7f1d1d";
-        else fill.style.background = "#404040";
-
-        alertIcon.style.display = (energy <= 30) ? "block" : "none";
-    }
-
-    function showScreen(id) {
-
-        document.querySelectorAll('.screen').forEach(s => {
-            s.classList.remove('active-screen', 'screen-red-alert');
-        });
-
-        const activeScreen = document.getElementById(id);
-
-        activeScreen.classList.add('active-screen');
-
-        setTimeout(() => {
-
-            if (id !== 'main-dashboard') {
-                activeScreen.classList.add('screen-red-alert');
-            }
-
-            if (id === 'the-mat-screen') {
-                startActionTimer();
-            } else {
-                clearInterval(timerInterval);
-            }
-
-        }, 10);
-    }
-
-    function startActionTimer() {
-
-        clearInterval(timerInterval);
-
-        actionTime = 15;
-
-        document.getElementById('action-timer').innerText = actionTime;
-
-        timerInterval = setInterval(() => {
-
-            actionTime--;
-
-            document.getElementById('action-timer').innerText = actionTime;
-
-            if (actionTime <= 0) {
-
-                actionTime = 15;
-
-                const log = document.getElementById('atu-log');
-
-                const p = document.createElement('p');
-
-                p.className = "text-red-500";
-
-                p.innerText = "[!] ACTION CLOCK EXPIRED";
-
-                log.appendChild(p);
-
-                log.scrollTop = log.scrollHeight;
-            }
-
-        }, 1000);
-    }
-
-    updateEnergyUI();
-
+let energy=200,timerInterval;
+function updateEnergyUI(){const fill=document.getElementById('energy-fill');const alertIcon=document.getElementById('low-energy-alert');fill.style.width=`${energy/2}%`;alertIcon.style.display=energy<=30?'block':'none';}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen','screen-red-alert'));const activeScreen=document.getElementById(id);activeScreen.classList.add('active-screen');setTimeout(()=>{if(id!=='main-dashboard')activeScreen.classList.add('screen-red-alert');},10);}
+updateEnergyUI();
 </script>
-
 </body>
 </html>
